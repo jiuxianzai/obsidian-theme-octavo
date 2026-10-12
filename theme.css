@@ -613,11 +613,31 @@ body {
   font-size: var(--code-size);
   color: var(--folio-ink-soft);
 }
-.markdown-rendered pre,
-.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+/* 阅读视图：整块就是一个 <pre>，圆角一次到位 */
+.markdown-rendered pre {
   background: var(--code-background);
   border-radius: 6px;
   line-height: 1.55;
+}
+
+/* 编辑器：一个代码块是一串 .cm-line.HyperMD-codeblock，
+   逐行加圆角会把整块切成一节一节 —— 只在首/末行圆角。 */
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  background: var(--code-background);
+  border-radius: 0;
+  line-height: 1.55;
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-codeblock + .HyperMD-codeblock),
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock-begin + .cm-line.HyperMD-codeblock {
+  border-start-start-radius: 6px;
+  border-start-end-radius: 6px;
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(:has(+ .HyperMD-codeblock)),
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-end,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:has(+ .HyperMD-codeblock-end) {
+  border-end-start-radius: 6px;
+  border-end-end-radius: 6px;
 }
 .markdown-rendered pre {
   padding: 0.9em 1.1em;
@@ -789,13 +809,13 @@ select {
   font-family: var(--folio-tree-font);
 }
 
-/* 用 Obsidian 自己的导航变量统一控制行距、圆角、缩进、字号 */
+/* —— 用 Obsidian 的导航变量统一控制行距 / 圆角 / 缩进 / 字号 —— */
 .nav-files-container {
   padding: 10px 10px 20px;
-  --nav-item-padding: 6px 8px 6px 24px; /* 上 右 下 左：竖向比默认更松 */
-  --nav-item-margin-bottom: 2px;        /* 行与行之间留缝 */
+  --nav-item-padding: 5px 8px;          /* 上下 5px，左右 8px */
+  --nav-item-margin-bottom: 1px;        /* 行与行之间留一点缝 */
   --nav-item-radius: 6px;
-  --nav-item-size: 14px;
+  --nav-item-size: 13.5px;
   --nav-item-color: var(--folio-ink-soft);
   --nav-item-color-hover: var(--text-normal);
   --nav-item-color-active: var(--text-normal);
@@ -803,9 +823,10 @@ select {
   --nav-item-background-active: var(--background-modifier-active-hover);
   --nav-item-background-selected: var(--background-modifier-active-hover);
   --nav-item-weight-active: 600;
-  --nav-item-children-margin-start: 14px; /* 缩进 */
+  /* 缩进 = 图标 15px + 间距 7px = 22px，子项文件名才能与父文件夹名对齐 */
+  --nav-item-children-margin-start: 16px;
   --nav-item-children-padding-start: 6px;
-  --nav-indentation-guide-width: 0px;     /* 去掉引导线 */
+  --nav-indentation-guide-width: 0px;
   --nav-indentation-guide-color: transparent;
 }
 
@@ -828,10 +849,41 @@ select {
   position: relative;
 }
 
-/* 文件夹：略重字重 + 更深的墨色 */
-.nav-folder-title,
+/* —— 折叠箭头 → 文件夹「开 / 关」SVG 图标 ——
+   用 mask 而不是 background-image，这样图标颜色能跟随 currentColor / 主题墨色。 */
+.nav-folder-title .collapse-icon {
+  display: none;
+}
+.nav-folder-title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-inline-end: 7px;
+  background-color: var(--folio-ink-faint);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: background-color 100ms ease;
+}
+/* 展开状态：换成「打开的文件夹」 */
+.tree-item.nav-folder:not(.is-collapsed) > .nav-folder-title::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
+}
+/* 根目录（vault）不显示图标 */
+.nav-folder.mod-root > .nav-folder-title::before {
+  display: none;
+}
+.nav-folder-title:hover::before {
+  background-color: var(--folio-ink-soft);
+}
+.nav-folder-title.is-active::before {
+  background-color: var(--text-accent);
+}
+
+/* 文件夹文字：中等字重 + 更深的墨色 */
 .nav-folder-title-content {
-  font-weight: 600;
+  font-weight: 550;
   color: var(--folio-ink);
 }
 
@@ -840,21 +892,15 @@ select {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
-  inset-block: 6px;
+  inset-block: 5px;
   width: 3px;
   border-radius: 3px;
   background: var(--text-accent);
 }
 
-/* 折叠箭头 / 图标 */
-.nav-folder-title .collapse-icon,
-.tree-item-icon {
-  color: var(--folio-ink-faint);
-}
-
 /* 可选：紧凑行距 */
 body.folio-tree-compact .nav-files-container {
-  --nav-item-padding: 3px 8px 3px 24px;
+  --nav-item-padding: 2px 8px;
   --nav-item-margin-bottom: 0px;
 }
 
