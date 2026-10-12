@@ -620,24 +620,31 @@ body {
   line-height: 1.55;
 }
 
+/* 编辑器：把 --code-radius 归零，杜绝任何来源的逐行圆角 */
+.markdown-source-view.mod-cm6 {
+  --code-radius: 0px;
+}
+
 /* 编辑器：一个代码块是一串 .cm-line.HyperMD-codeblock，
-   逐行加圆角会把整块切成一节一节 —— 只在首/末行圆角。 */
-.markdown-source-view.mod-cm6 .HyperMD-codeblock {
-  background: var(--code-background);
-  border-radius: 0;
+   逐行加圆角会把整块切成一节一节 —— 中间行一律直角。
+   围栏行（```）本身也保持直角，否则它和相邻代码行之间会出现缺口。 */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  background: var(--code-background) !important;
+  border-radius: 0 !important;
   line-height: 1.55;
 }
+
+/* 首行：前面不是代码行（无围栏），或紧跟 begin 围栏（围栏被 Obsidian 隐藏） */
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-codeblock + .HyperMD-codeblock),
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin,
 .markdown-source-view.mod-cm6 .HyperMD-codeblock-begin + .cm-line.HyperMD-codeblock {
-  border-start-start-radius: 6px;
-  border-start-end-radius: 6px;
+  border-start-start-radius: 6px !important;
+  border-start-end-radius: 6px !important;
 }
+/* 末行：后面不是代码行，或后面紧接 end 围栏 */
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(:has(+ .HyperMD-codeblock)),
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-end,
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:has(+ .HyperMD-codeblock-end) {
-  border-end-start-radius: 6px;
-  border-end-end-radius: 6px;
+  border-end-start-radius: 6px !important;
+  border-end-end-radius: 6px !important;
 }
 .markdown-rendered pre {
   padding: 0.9em 1.1em;
