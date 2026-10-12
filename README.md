@@ -1,0 +1,135 @@
+# Folio · 纸感 Obsidian 主题
+
+一款偏「纸质书」的 Obsidian 主题：浅白纸面、墨色宋体正文、当代书籍排版、克制的界面，以及接近 VSCode 的文件树。
+
+独立仓库，独立版本管理。
+
+## 仓库结构
+
+```
+obsidian-theme-folio/
+├── manifest.json     ← 主题元信息（Obsidian 读取）
+├── theme.css         ← 主题全部样式 + Style Settings 配置
+├── versions.json     ← 主题版本 → 最低 Obsidian 版本
+├── install.sh        ← 软链到某个 vault
+├── preview.html      ← 本地预览页（浏览器打开即可看排版，开发用）
+├── LICENSE
+└── README.md
+```
+
+主题以软链方式接入 vault：`<vault>/.obsidian/themes/Folio -> 本仓库`。
+Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常被 vault 的
+`.gitignore` 忽略；把主题独立成仓库再软链进去，就能脱离 vault 独立做版本管理、备份与发布。
+
+## 安装 / 恢复
+
+```bash
+./install.sh                       # 默认链接到同级的 obsidian-library vault
+./install.sh /path/to/your/vault   # 或指定 vault
+```
+
+然后在 Obsidian：`Settings → Appearance → Themes → Folio`。
+
+> 新装了字体后，**需要完全退出并重启 Obsidian** 才会生效（Chromium 只在启动时枚举系统字体）。
+
+## 字体方案
+
+配套三套字体，缺失的已下载安装到 `~/Library/Fonts/`：
+
+| 用途 | 字体 | 来源 |
+| --- | --- | --- |
+| 正文 / 标题 | **Iowan Old Style**（西文）+ **思源宋体 Noto Serif CJK SC**（中文） | Iowan 系统自带；思源宋体已安装 |
+| 目录 / 文件树 | **Bear Sans UI** + **Noto Sans SC** + 苹方 | 本机已有 |
+| 代码 | **Maple Mono**（中文友好） | 本机已有 |
+
+新增字体文件：
+
+```
+~/Library/Fonts/NotoSerifCJKsc-Regular.otf   思源宋体 常规
+~/Library/Fonts/NotoSerifCJKsc-Bold.otf      思源宋体 粗体
+~/Library/Fonts/LXGWWenKai-Regular.ttf       霞鹜文楷（备选「纸感」正文字体）
+```
+
+三套字体都可在 `Style Settings → Folio` 里一键切换（各有一组预设）。
+
+## 调参（Style Settings）
+
+已接入 `obsidian-style-settings`。在 `Settings → Style Settings → Folio`：
+
+- **排版**：正文字体、目录字体、代码字体、行高、段距、正文栏宽
+- **标题**：H1~H6 字号、标题上方留白
+- **表格**：最小列宽
+- **版面**：取消居中栏宽、**标题居中**、**标题分隔线**、**两端对齐**、**首行缩进**、聚焦模式
+- **专注**：隐藏滚动条、隐藏状态栏
+- **编辑器**：**当前行高亮**、**隐藏 Markdown 语法**（见下）
+- **文件树**：紧凑行高、显示缩进引导线
+
+> 正文字号不在此处，请用 `Appearance → Font size`（推荐 17）。原因是 Obsidian 把字号写在
+> `body` 的行内样式上，主题无法在不破坏原生滑杆的前提下覆盖它。
+
+## 书籍排版（默认开启）
+
+参考当代书籍排版，以下四项**默认开启**，都能在 `Style Settings → Folio → 版面` 一键关掉：
+
+| 项 | 效果 |
+| --- | --- |
+| 标题居中（书名式） | 笔记标题（文件名）居中，像书页的章名 |
+| 标题分隔线 | H1–H3 下方一条细线，**阅读视图与实时预览都生效** |
+| 正文两端对齐 | 中文书籍常见的齐行 |
+| 段落首行缩进两字 | 中文书籍正文的段落起首缩进（编辑区只对纯段落行生效） |
+
+主题整体为**浅色**：浅白纸面（`#fcfbf8`）+ 墨色宋体。请在
+`Appearance → Base color` 选择 **Light**。
+
+## 隐藏 Markdown 语法
+
+参考 Minimal 的 *Hide Markdown syntax*，在实时预览里隐藏 `**`、`*`、`~~`、`==`、`[[ ]]`、`#`
+等标记（`cm-formatting-*`），让编辑区看起来更像成稿。
+
+- 开启：`Style Settings → Folio → 隐藏 Markdown 语法`
+- 注意：字符仍然存在，只是不显示；光标停在该行时也**不会**显示出来（与 Minimal 行为一致）
+
+## 设计取向（对应需求）
+
+| 需求 | 落地方式 |
+| --- | --- |
+| 标题字号递减且大于正文 | `--h1-size`…`--h6-size` 用 `em`，均 > 1em；由 1.9em 递减到 1.02em |
+| 标题颜色区分正文 | 独立的 `--folio-heading-*` 墨色，比正文更深/更亮 + 更重字重 |
+| 标题上下留白 | `--heading-spacing`（默认 1.7em）+ 每级 `margin-block` |
+| 复杂文档不费力 | 行高 1.75、段距 1.05em、栏宽 42rem（约 30~45 汉字/行） |
+| 纸质书感 | 浅白纸面 + 墨色宋体正文、两端对齐、首行缩进、居中书名、标题分隔线、居中短分隔线 |
+| 去除干扰 | 收敛侧栏/标签栏描边、可隐藏状态栏与滚动条、聚焦模式 |
+| VSCode 式文件树 | 用 `--nav-item-*` 变量控制：行距 6px + 行缝 2px、圆角 6px、字号 14px、缩进加宽、去掉引导线、选中左侧强调竖条 |
+| 表格 | 默认全宽、列宽平分（`table-layout: fixed`，不随内容变化）、长内容换行；平分后小于「最小列宽」时表格变宽并可横向滚动 |
+| 当前行 / 加粗 | 光标所在行铺一层浅底，用一叠 `box-shadow`（每段平移量为行宽的 0.7 倍，保证互相咬合）横向铺满编辑区；底色不透明，避免半透明叠加出现色阶。加粗文字为红色（`--bold-color`） |
+| 引用块 | 浅色圆角背景（`--folio-quote-bg`）+ 一条灰色左边线。编辑器里多行引用由逐行底拼成整段，只在首/末行圆角；左边线改 `--blockquote-border-color` 且不再自加边框，避免与 Obsidian 默认的主体色竖线叠成两条 |
+| 行内代码 | 用专门的 `--folio-code-bg` 加深底色（原来沿用 `--folio-paper-2` 太接近纸面，看不清） |
+
+## 注意
+
+- 旧 snippet `hide-tree-lines.css` / `edit-css.css` 与主题的文件树样式重叠，建议在
+  `Settings → Appearance → CSS snippets` 里**关闭这两个**，避免 `!important` 打架。
+- 主题显式接管正文与代码字体（`--font-text` / `--font-monospace`），所以 `Appearance` 里的
+  「Text font / Monospace font」下拉会被主题覆盖；改字体请用 Style Settings。
+- 深色模式保留了一套配套的「炭墨」配色，但本主题以浅色为主；不切到深色就不会生效。
+
+## 开发
+
+改 `theme.css` 后，Obsidian 会自动重载（软链指向本仓库，无需复制）。
+`preview.html` 可直接用浏览器打开看排版，或用无头 Chrome 截图：
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --disable-gpu --screenshot=out.png \
+  --window-size=900,1200 "file://$PWD/preview.html"
+```
+
+## 发布到社区主题
+
+仓库根目录已具备上架所需文件：`manifest.json`、`theme.css`、`versions.json`、`README.md`、`LICENSE`。
+还差：
+
+1. 一张 `screenshot.png`（Obsidian 社区页展示图）
+2. 推到 GitHub，向 [obsidianmd/obsidian-releases](https://github.com/obsidianmd/obsidian-releases) 提 PR
+
+版本号同时更新 `manifest.json` 与 `versions.json`。

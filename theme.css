@@ -1,0 +1,938 @@
+/* ==========================================================================
+   FOLIO  ·  一款纸感 / 书卷气的 Obsidian 主题
+   --------------------------------------------------------------------------
+   设计目标
+     1. 标题字号层层递减，且始终大于正文；颜色与正文区分；上下留白充足
+     2. 复杂文档不费力：行高、段距、栏宽都按「阅读舒适区」调过
+     3. 纸质书感：暖色纸面 / 墨色文字，衬线正文，克制的装饰
+     4. 专注：压低界面噪音，可选「聚焦模式」把非当前行调暗
+     5. 文件树：去掉缩进引导线，紧凑行高，悬浮/选中高亮，接近 VSCode
+
+   用法：Settings → Appearance → Themes 选择「Folio」
+   调参：需要 obsidian-style-settings 插件（已安装），在 Style Settings 里调
+   ========================================================================== */
+
+/* @settings
+
+name: Folio
+id: folio
+settings:
+  -
+    id: folio-typography
+    title: 排版 · Typography
+    type: heading
+    level: 1
+  -
+    id: folio-text-font
+    title: 正文字体
+    description: 正文与标题的字体
+    type: variable-select
+    default: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif'
+    options:
+      -
+        label: 思源宋体 · 书卷（推荐）
+        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif'
+      -
+        label: 霞鹜文楷 · 纸感
+        value: '"LXGW WenKai", "Noto Serif CJK SC", "Songti SC", serif'
+      -
+        label: 方正雅宋
+        value: '"Iowan Old Style", "FZYaSongS-R-GB", "Songti SC", serif'
+      -
+        label: 系统宋体 Songti SC
+        value: '"Songti SC", "Iowan Old Style", Georgia, serif'
+      -
+        label: 系统无衬线
+        value: '-apple-system, "SF Pro Text", "PingFang SC", sans-serif'
+  -
+    id: folio-tree-font
+    title: 目录 / 文件树字体
+    description: 左侧文件树与侧栏面板的字体
+    type: variable-select
+    default: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif'
+    options:
+      -
+        label: Bear Sans UI（推荐）
+        value: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif'
+      -
+        label: 系统无衬线
+        value: '-apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif'
+      -
+        label: 思源宋体 · 书卷
+        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", serif'
+      -
+        label: 霞鹜文楷 · 纸感
+        value: '"LXGW WenKai", "Noto Sans SC", sans-serif'
+      -
+        label: Maple Mono · 等宽
+        value: '"Maple Mono", ui-monospace, monospace'
+  -
+    id: folio-mono-font
+    title: 代码字体
+    description: 代码块与行内代码的字体
+    type: variable-select
+    default: '"Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace'
+    options:
+      -
+        label: Maple Mono · 中文友好（推荐）
+        value: '"Maple Mono", "JetBrainsMono NFM", ui-monospace, monospace'
+      -
+        label: IBM Plex Mono
+        value: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace'
+      -
+        label: JetBrains Mono NF
+        value: '"JetBrainsMono NFM", ui-monospace, Menlo, monospace'
+      -
+        label: SF Mono
+        value: '"SF Mono", ui-monospace, Menlo, monospace'
+  -
+    id: folio-line-height
+    title: 正文行高
+    description: 1.6 ~ 1.9 之间较舒适
+    type: variable-number
+    default: 1.75
+  -
+    id: folio-para-spacing
+    title: 段落间距
+    type: variable-number
+    default: 1.05
+    format: em
+  -
+    id: folio-content-width
+    title: 正文栏宽
+    description: 一行大约 30~45 个汉字最舒服
+    type: variable-number
+    default: 42
+    format: rem
+  -
+    id: folio-headings
+    title: 标题 · Headings
+    type: heading
+    level: 1
+  -
+    id: folio-h1-size
+    title: H1 字号
+    type: variable-number
+    default: 1.9
+    format: em
+  -
+    id: folio-h2-size
+    title: H2 字号
+    type: variable-number
+    default: 1.55
+    format: em
+  -
+    id: folio-h3-size
+    title: H3 字号
+    type: variable-number
+    default: 1.32
+    format: em
+  -
+    id: folio-h4-size
+    title: H4 字号
+    type: variable-number
+    default: 1.18
+    format: em
+  -
+    id: folio-h5-size
+    title: H5 字号
+    type: variable-number
+    default: 1.08
+    format: em
+  -
+    id: folio-h6-size
+    title: H6 字号
+    type: variable-number
+    default: 1.02
+    format: em
+  -
+    id: folio-heading-spacing
+    title: 标题上方留白
+    type: variable-number
+    default: 1.7
+    format: em
+  -
+    id: folio-table
+    title: 表格 · Table
+    type: heading
+    level: 1
+  -
+    id: folio-table-min-col
+    title: 最小列宽
+    description: 列宽默认平分；当平分后小于此值时，表格改为横向滚动
+    type: variable-number
+    default: 5
+    format: em
+  -
+    id: folio-layout
+    title: 版面 · Layout
+    type: heading
+    level: 1
+  -
+    id: folio-free-width
+    title: 取消居中栏宽（占满全宽）
+    description: 默认把正文约束到舒适栏宽并居中；开启后占满整个宽度
+    type: class-toggle
+    default: false
+  -
+    id: folio-title-centered
+    title: 标题居中（书名式）
+    description: 把笔记标题（文件名）居中，像书页的章名
+    type: class-toggle
+    default: true
+  -
+    id: folio-heading-rule
+    title: 标题分隔线
+    description: 在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
+    type: class-toggle
+    default: true
+  -
+    id: folio-justify
+    title: 正文两端对齐
+    description: 中文书籍排版的常见做法
+    type: class-toggle
+    default: true
+  -
+    id: folio-book-indent
+    title: 段落首行缩进两字
+    description: 中文书籍排版；关闭后改为纯段间距分隔
+    type: class-toggle
+    default: true
+  -
+    id: folio-focus-dim
+    title: 聚焦模式
+    description: 编辑时把非当前段落调暗，只突出正在写的那一行
+    type: class-toggle
+    default: false
+  -
+    id: folio-focus
+    title: 专注 · Distraction-free
+    type: heading
+    level: 1
+  -
+    id: folio-hide-scrollbars
+    title: 隐藏滚动条
+    type: class-toggle
+    default: false
+  -
+    id: folio-hide-status-bar
+    title: 隐藏底部状态栏
+    type: class-toggle
+    default: false
+  -
+    id: folio-editor
+    title: 编辑器 · Editor
+    type: heading
+    level: 1
+  -
+    id: folio-active-line
+    title: 当前行高亮
+    description: 给光标所在行加底色，标明当前位置
+    type: class-toggle
+    default: true
+  -
+    id: folio-hide-markdown
+    title: 隐藏 Markdown 语法
+    description: 参考 Minimal：在实时预览里隐藏 **、*、[[ ]]、# 等标记。字符仍存在，只是不显示
+    type: class-toggle
+    default: false
+  -
+    id: folio-tree
+    title: 文件树 · File explorer
+    type: heading
+    level: 1
+  -
+    id: folio-tree-compact
+    title: 文件树紧凑行高
+    description: 默认行距宽松舒适；开启后每行更紧凑，一屏看更多
+    type: class-toggle
+    default: false
+  -
+    id: folio-tree-lines
+    title: 显示缩进引导线
+    description: 默认关闭，接近 VSCode 的干净观感
+    type: class-toggle
+    default: false
+*/
+
+/* ==========================================================================
+   1. 字体与排版刻度
+   ========================================================================== */
+
+body {
+  /* —— 可被 Style Settings 覆盖的变量 —— */
+  --folio-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  --folio-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --folio-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
+
+  --folio-line-height: 1.75;
+  --folio-para-spacing: 1.05em;
+  --folio-content-width: 42rem;
+  --folio-heading-spacing: 1.7em;
+  --folio-table-min-col: 5em;
+
+  --folio-h1-size: 1.9em;
+  --folio-h2-size: 1.55em;
+  --folio-h3-size: 1.32em;
+  --folio-h4-size: 1.18em;
+  --folio-h5-size: 1.08em;
+  --folio-h6-size: 1.02em;
+
+  /* —— 正文字体 / 代码字体：显式接管，避免被 Appearance 里的手动字体设置压过 —— */
+  --font-text: var(--folio-text-font);
+  --font-text-theme: var(--folio-text-font);
+  --font-monospace: var(--folio-mono-font);
+  --font-monospace-theme: var(--folio-mono-font);
+
+  /* —— 行高 / 段距（字号由 Obsidian 的 Appearance → Font size 控制）—— */
+  --line-height-normal: var(--folio-line-height);
+  --line-height-tight: calc(var(--folio-line-height) - 0.2);
+  --p-spacing: var(--folio-para-spacing);
+  --heading-spacing: var(--folio-heading-spacing);
+
+  /* —— 标题刻度：层层递减，且都大于正文（1em）—— */
+  --h1-size: var(--folio-h1-size);
+  --h2-size: var(--folio-h2-size);
+  --h3-size: var(--folio-h3-size);
+  --h4-size: var(--folio-h4-size);
+  --h5-size: var(--folio-h5-size);
+  --h6-size: var(--folio-h6-size);
+
+  --h1-weight: 700;
+  --h2-weight: 650;
+  --h3-weight: 600;
+  --h4-weight: 600;
+  --h5-weight: 600;
+  --h6-weight: 600;
+
+  --h1-line-height: 1.3;
+  --h2-line-height: 1.35;
+  --h3-line-height: 1.4;
+  --h4-line-height: 1.45;
+  --h5-line-height: 1.5;
+  --h6-line-height: 1.5;
+
+  /* —— 阅读栏宽 —— */
+  --file-line-width: var(--folio-content-width);
+
+  /* —— 强调 / 字重 —— */
+  --bold-weight: 650;
+  --bold-color: var(--folio-bold-color);
+  --italic-weight: inherit;
+
+  /* —— 列表与缩进引导 —— */
+  --list-spacing: 0.2em;
+  --indentation-guide-color: transparent;
+  --indentation-guide-color-active: var(--background-modifier-border-hover);
+
+  /* —— 引用块：只保留一种颜色（灰），避免与 Obsidian 默认的主体色叠加 —— */
+  --blockquote-border-color: var(--folio-rule);
+  --blockquote-border-thickness: 3px;
+  --blockquote-background-color: transparent;
+  --blockquote-color: var(--folio-ink-soft);
+  --blockquote-font-style: italic;
+  --blockquote-style: italic;
+
+  /* —— 界面字号，略微收一点，界面更安静 —— */
+  --font-ui-small: 12px;
+  --font-ui-medium: 13px;
+
+  /* 更顺滑的字体渲染 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================================================
+   2. 调色板 —— 暖色纸面 / 墨色文字
+   ========================================================================== */
+
+/* —— 浅色：浅白纸张 —— */
+body.theme-light {
+  --folio-paper: #fcfbf8;
+  --folio-paper-2: #f4f2ec;
+  --folio-paper-3: #eae7df;
+  --folio-ink-strong: #1c1813;
+  --folio-ink: #26211a;
+  --folio-ink-soft: #514a3f;
+  --folio-ink-muted: #7d7568;
+  --folio-ink-faint: #a89f90;
+  --folio-rule: #e7e3da;
+  --folio-active-line-bg: #f2ede6;
+  --folio-bold-color: #c0392b;
+  --folio-code-bg: #e8e3d5;
+  --folio-quote-bg: #f5f2e9;
+
+  --folio-heading-strong: #14110c;
+  --folio-heading: #241f18;
+  --folio-heading-muted: #4a4237;
+
+  --background-primary: var(--folio-paper);
+  --background-primary-alt: var(--folio-paper-2);
+  --background-secondary: var(--folio-paper-2);
+  --background-secondary-alt: var(--folio-paper-3);
+  --background-modifier-border: var(--folio-rule);
+  --background-modifier-border-hover: #d9d5cc;
+  --background-modifier-hover: rgba(38, 33, 26, 0.055);
+  --background-modifier-active-hover: rgba(38, 33, 26, 0.09);
+
+  --text-normal: var(--folio-ink);
+  --text-muted: var(--folio-ink-muted);
+  --text-faint: var(--folio-ink-faint);
+  --text-accent: #8a5a2b;
+  --text-accent-hover: #a06a33;
+  --text-selection: rgba(138, 90, 43, 0.16);
+  --text-highlight-bg: rgba(214, 178, 92, 0.32);
+
+  --interactive-normal: var(--folio-paper-2);
+  --interactive-hover: var(--folio-paper-3);
+  --interactive-accent: #8a5a2b;
+  --interactive-accent-hover: #a06a33;
+
+  --divider-color: var(--folio-rule);
+  --hr-color: var(--folio-rule);
+}
+
+/* —— 深色：炭墨纸 —— */
+body.theme-dark {
+  --folio-paper: #1b1a17;
+  --folio-paper-2: #232120;
+  --folio-paper-3: #2b2926;
+  --folio-ink-strong: #f2ede2;
+  --folio-ink: #ddd7ca;
+  --folio-ink-soft: #b3ac9d;
+  --folio-ink-muted: #948d80;
+  --folio-ink-faint: #6b655b;
+  --folio-rule: #35322d;
+  --folio-active-line-bg: #322b20;
+  --folio-bold-color: #e0736a;
+  --folio-code-bg: #302d27;
+  --folio-quote-bg: #262420;
+
+  --folio-heading-strong: #fbf7ee;
+  --folio-heading: #efe9dc;
+  --folio-heading-muted: #c3bcac;
+
+  --background-primary: var(--folio-paper);
+  --background-primary-alt: var(--folio-paper-2);
+  --background-secondary: var(--folio-paper-2);
+  --background-secondary-alt: var(--folio-paper-3);
+  --background-modifier-border: var(--folio-rule);
+  --background-modifier-border-hover: #45413a;
+  --background-modifier-hover: rgba(242, 237, 226, 0.06);
+  --background-modifier-active-hover: rgba(242, 237, 226, 0.1);
+
+  --text-normal: var(--folio-ink);
+  --text-muted: var(--folio-ink-muted);
+  --text-faint: var(--folio-ink-faint);
+  --text-accent: #d9a566;
+  --text-accent-hover: #e6b87e;
+  --text-selection: rgba(217, 165, 102, 0.2);
+  --text-highlight-bg: rgba(214, 178, 92, 0.24);
+
+  --interactive-normal: var(--folio-paper-2);
+  --interactive-hover: var(--folio-paper-3);
+  --interactive-accent: #c89154;
+  --interactive-accent-hover: #d9a566;
+
+  --divider-color: var(--folio-rule);
+  --hr-color: var(--folio-rule);
+}
+
+/* 标题颜色：与正文明确区分（更深 / 更亮 + 更重字重） */
+body {
+  --h1-color: var(--folio-heading-strong);
+  --h2-color: var(--folio-heading-strong);
+  --h3-color: var(--folio-heading);
+  --h4-color: var(--folio-heading);
+  --h5-color: var(--folio-heading-muted);
+  --h6-color: var(--folio-heading-muted);
+}
+
+/* ==========================================================================
+   3. 正文排版
+   ========================================================================== */
+
+/* —— 默认约束到舒适栏宽并居中（可用「取消居中栏宽」关闭）—— */
+.markdown-source-view.mod-cm6 .cm-sizer,
+.markdown-preview-view .markdown-preview-sizer {
+  max-width: var(--folio-content-width) !important;
+  margin-inline: auto !important;
+}
+body.folio-free-width .markdown-source-view.mod-cm6 .cm-sizer,
+body.folio-free-width .markdown-preview-view .markdown-preview-sizer {
+  max-width: none !important;
+}
+
+/* —— 段落：清晰但不松散 —— */
+.markdown-rendered p,
+.markdown-source-view.mod-cm6 .cm-line {
+  letter-spacing: 0.01em;
+}
+
+.markdown-rendered p {
+  margin-block: var(--p-spacing);
+}
+
+/* —— 书籍段落：两端对齐 + 首行缩进两字（默认开启，可关）—— */
+body.folio-justify .markdown-rendered > p,
+body.folio-justify .markdown-rendered li,
+body.folio-justify .markdown-source-view.mod-cm6 .cm-line {
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+body.folio-book-indent .markdown-rendered > p {
+  text-indent: 2em;
+}
+/* 实时预览：只给纯段落行缩进；标题/列表/引用/代码/表格等 HyperMD 行不缩进 */
+body.folio-book-indent .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+  text-indent: 2em;
+}
+
+/* —— 标题：上下留白 + 层级观感 —— */
+.markdown-rendered h1,
+.markdown-rendered h2,
+.markdown-rendered h3,
+.markdown-rendered h4,
+.markdown-rendered h5,
+.markdown-rendered h6,
+.markdown-source-view.mod-cm6 .HyperMD-header {
+  letter-spacing: 0.005em;
+  margin-block-start: var(--folio-heading-spacing);
+  margin-block-end: 0.55em;
+}
+
+/* 首个标题不额外顶开 */
+.markdown-rendered > :first-child {
+  margin-block-start: 0;
+}
+
+/* H1 稍作强调：像章节起首 */
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 {
+  letter-spacing: 0.01em;
+  margin-block-end: 0.7em;
+}
+
+/* —— 标题分隔线：H1–H3，阅读视图与实时预览都生效 —— */
+body.folio-heading-rule .markdown-rendered h1,
+body.folio-heading-rule .markdown-rendered h2,
+body.folio-heading-rule .markdown-rendered h3 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--folio-rule);
+}
+body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--folio-rule);
+}
+
+/* —— 行内标题（文件名）：默认居中，像书页的章名 —— */
+.inline-title {
+  font-family: var(--folio-text-font);
+  font-size: 1.9em;
+  font-weight: 700;
+  color: var(--folio-heading-strong);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin-block-end: 0.9em;
+}
+body.folio-title-centered .inline-title {
+  text-align: center;
+  margin-block-start: 0.6em;
+}
+
+/* ==========================================================================
+   4. 列表 / 引用 / 分隔线 / 代码
+   ========================================================================== */
+
+/* —— 列表：舒服的间距，去掉默认缩进引导线 —— */
+.markdown-rendered ul,
+.markdown-rendered ol {
+  padding-inline-start: 1.6em;
+}
+.markdown-rendered li {
+  margin-block: var(--list-spacing);
+}
+.markdown-rendered li::marker {
+  color: var(--folio-ink-muted);
+}
+
+/* —— 引用：浅色圆角背景 + 单色左边线 ——
+   注意：编辑器里的线是 Obsidian 用 .HyperMD-quote:before 画的，
+   所以这里不要再加 border-inline-start，否则会出现两条线（灰 + 主体色）。 */
+.markdown-rendered blockquote,
+.markdown-source-view.mod-cm6 .HyperMD-quote {
+  color: var(--folio-ink-soft);
+  font-style: italic;
+  background-color: var(--folio-quote-bg);
+}
+
+/* 阅读视图：整块圆角背景 */
+.markdown-rendered blockquote {
+  padding: 0.6em 1.1em;
+  border-radius: 8px;
+}
+
+/* 编辑器：一段引用是多行 .cm-line，逐行铺底拼成整段，只在首/末行做圆角 */
+.markdown-source-view.mod-cm6 .HyperMD-quote {
+  padding-inline: 1em;
+}
+.markdown-source-view.mod-cm6 .HyperMD-quote:not(.HyperMD-quote + .HyperMD-quote) {
+  border-start-start-radius: 8px;
+  border-start-end-radius: 8px;
+}
+.markdown-source-view.mod-cm6 .HyperMD-quote:not(:has(+ .HyperMD-quote)) {
+  border-end-start-radius: 8px;
+  border-end-end-radius: 8px;
+}
+
+/* —— 分隔线：居中的短细线，书卷气 —— */
+.markdown-rendered hr,
+.markdown-source-view.mod-cm6 .cm-line hr {
+  border: none;
+  border-top: 1px solid var(--folio-rule);
+  width: 38%;
+  margin: 2.2em auto;
+}
+
+/* —— 代码 —— */
+body {
+  --code-background: var(--folio-code-bg);
+  --code-normal: var(--folio-ink);
+  --code-comment: var(--folio-ink-faint);
+  --code-size: 0.86em;
+}
+.markdown-rendered code,
+.cm-inline-code {
+  background: var(--code-background);
+  border-radius: 4px;
+  padding: 0.12em 0.34em;
+  font-size: var(--code-size);
+  color: var(--folio-ink-soft);
+}
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock {
+  background: var(--code-background);
+  border-radius: 6px;
+  line-height: 1.55;
+}
+.markdown-rendered pre {
+  padding: 0.9em 1.1em;
+  border: 1px solid var(--folio-rule);
+}
+.markdown-rendered pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--code-normal);
+}
+
+/* ==========================================================================
+   5. 表格 / 标签 / 链接 / 任务框
+   ========================================================================== */
+
+body {
+  --table-header-background: var(--folio-paper-2);
+  --table-header-color: var(--folio-heading);
+  --table-row-alt-background: transparent;
+  --table-border-color: var(--folio-rule);
+  --table-row-background-hover: var(--background-modifier-hover);
+  --table-white-space: normal; /* 允许换行，而不是省略号截断 */
+}
+
+/* —— 表格：默认全宽 · 列宽平分（不随内容变化）· 长内容换行 —— */
+.markdown-rendered table,
+.markdown-source-view.mod-cm6 .cm-table-widget table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+/* 单元格：把 width 当作「最小列宽」。
+   平分后仍小于该值 → 表格整体变宽 → 容器横向滚动。
+   content-box 很关键：border-box 会让最小列宽失效。 */
+.markdown-rendered th,
+.markdown-rendered td,
+.markdown-source-view.mod-cm6 .cm-table-widget th,
+.markdown-source-view.mod-cm6 .cm-table-widget td {
+  box-sizing: content-box;
+  width: var(--folio-table-min-col);
+  min-width: 0;
+  max-width: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  overflow: visible;
+  text-overflow: clip;
+  vertical-align: top;
+  border-color: var(--folio-rule);
+}
+.markdown-rendered th,
+.markdown-rendered td {
+  padding: 0.45em 0.75em;
+}
+.markdown-rendered table {
+  margin-block: var(--p-spacing);
+}
+
+/* 实时预览：表容器横向滚动 */
+.markdown-source-view.mod-cm6 .cm-table-widget {
+  overflow-x: auto;
+}
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
+  width: 100%;
+}
+
+body {
+  --tag-background: transparent;
+  --tag-color: var(--text-accent);
+  --tag-border-color: var(--folio-rule);
+}
+.tag,
+.cm-hashtag {
+  color: var(--text-accent);
+  background: transparent;
+  font-size: 0.9em;
+}
+
+body {
+  --link-color: var(--text-accent);
+  --link-color-hover: var(--text-accent-hover);
+  --link-decoration: none;
+  --link-decoration-hover: underline;
+  --link-external-color: var(--text-accent);
+  --link-unresolved-color: var(--folio-ink-muted);
+  --link-unresolved-decoration-color: var(--folio-rule);
+}
+
+/* 任务框：圆角、克制 */
+.markdown-rendered input[type="checkbox"],
+.task-list-item-checkbox {
+  border-radius: 4px;
+  border-color: var(--folio-ink-faint);
+}
+
+/* ==========================================================================
+   6. 界面外壳：安静、克制（专注）
+   ========================================================================== */
+
+/* —— 侧边栏 / 标签栏：去掉多余描边与阴影 —— */
+.workspace-tab-header-container {
+  border-bottom: 1px solid var(--folio-rule);
+}
+.workspace-tab-header.is-active {
+  background: transparent;
+  box-shadow: none;
+}
+.workspace-tab-header-inner-title {
+  font-weight: 500;
+}
+.workspace-tab-header-container-inner {
+  gap: 2px;
+}
+.workspace-tabs .workspace-leaf {
+  background-color: var(--background-secondary);
+}
+.workspace-leaf-content[data-type="markdown"] {
+  background-color: var(--background-primary);
+}
+
+/* —— 面板标题（Files / Search / Tags…）—— */
+.workspace-leaf-content .view-header,
+.view-header {
+  border-bottom: 1px solid var(--folio-rule);
+  background: transparent;
+}
+.view-header-title {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* —— 状态栏 —— */
+.status-bar {
+  border-top: 1px solid var(--folio-rule);
+  background: var(--background-secondary);
+  color: var(--text-faint);
+  font-size: var(--font-ui-small);
+}
+body.folio-hide-status-bar .status-bar {
+  display: none;
+}
+
+/* —— 隐藏滚动条（可关闭）—— */
+body.folio-hide-scrollbars ::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+body.folio-hide-scrollbars * {
+  scrollbar-width: none;
+}
+
+/* —— 搜索 / 设置里的输入框：柔化 —— */
+input[type="text"],
+input[type="search"],
+textarea,
+select {
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   7. 文件树 —— 接近 VSCode 的干净观感
+   ========================================================================== */
+
+/* —— 字体：侧栏 / 文件树使用「目录字体」—— */
+.mod-left-split .workspace-leaf-content,
+.mod-right-split .workspace-leaf-content,
+.nav-files-container {
+  font-family: var(--folio-tree-font);
+}
+
+/* 用 Obsidian 自己的导航变量统一控制行距、圆角、缩进、字号 */
+.nav-files-container {
+  padding: 10px 10px 20px;
+  --nav-item-padding: 6px 8px 6px 24px; /* 上 右 下 左：竖向比默认更松 */
+  --nav-item-margin-bottom: 2px;        /* 行与行之间留缝 */
+  --nav-item-radius: 6px;
+  --nav-item-size: 14px;
+  --nav-item-color: var(--folio-ink-soft);
+  --nav-item-color-hover: var(--text-normal);
+  --nav-item-color-active: var(--text-normal);
+  --nav-item-background-hover: var(--background-modifier-hover);
+  --nav-item-background-active: var(--background-modifier-active-hover);
+  --nav-item-background-selected: var(--background-modifier-active-hover);
+  --nav-item-weight-active: 600;
+  --nav-item-children-margin-start: 14px; /* 缩进 */
+  --nav-item-children-padding-start: 6px;
+  --nav-indentation-guide-width: 0px;     /* 去掉引导线 */
+  --nav-indentation-guide-color: transparent;
+}
+
+/* 去掉缩进引导线 / 折叠边框（兼容旧版选择器） */
+.nav-folder-children::before,
+.nav-folder-children .nav-folder-children::before,
+.nav-folder::before,
+.tree-item-children::before {
+  display: none !important;
+}
+.nav-folder-children,
+.tree-item-children {
+  border-inline-start: none !important;
+}
+
+/* 行元素需要定位，供选中竖条使用 */
+.nav-file-title,
+.nav-folder-title,
+.tree-item-self {
+  position: relative;
+}
+
+/* 文件夹：略重字重 + 更深的墨色 */
+.nav-folder-title,
+.nav-folder-title-content {
+  font-weight: 600;
+  color: var(--folio-ink);
+}
+
+/* 选中文件：左侧强调竖条 */
+.nav-file-title.is-active::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 2px;
+  inset-block: 6px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--text-accent);
+}
+
+/* 折叠箭头 / 图标 */
+.nav-folder-title .collapse-icon,
+.tree-item-icon {
+  color: var(--folio-ink-faint);
+}
+
+/* 可选：紧凑行距 */
+body.folio-tree-compact .nav-files-container {
+  --nav-item-padding: 3px 8px 3px 24px;
+  --nav-item-margin-bottom: 0px;
+}
+
+/* 可选：显示缩进引导线 */
+body.folio-tree-lines .nav-files-container {
+  --nav-indentation-guide-width: 1px;
+  --nav-indentation-guide-color: var(--folio-rule);
+}
+
+/* ==========================================================================
+   8. 专注模式：把非当前段落调暗
+   ========================================================================== */
+
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line {
+  opacity: 0.32;
+  transition: opacity 160ms ease;
+}
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line:hover,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-header {
+  opacity: 1;
+}
+
+/* —— 当前行高亮：整行底色，铺满编辑区宽度 ——
+   原理：一叠 box-shadow 沿水平方向平铺（每段是行宽的副本）。
+   关键：每段的平移量必须 < 行宽，否则段与段之间会空出缝隙。
+   原来用 50vw，屏幕一宽 50vw 就超过行宽 → 底色被断成三段。 */
+body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
+  background-color: var(--folio-active-line-bg);
+  --folio-al-step: calc(var(--folio-content-width) * 0.7);
+  box-shadow:
+    calc(-1 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(-2 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(-3 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(-4 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(-5 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(1 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(2 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(3 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(4 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
+    calc(5 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg);
+}
+
+/* ==========================================================================
+   8b. 隐藏 Markdown 语法（参考 Minimal 的 Hide Markdown syntax）
+   ========================================================================== */
+
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-code.cm-inline-code,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-em,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-strikethrough,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-strong,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-highlight,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-link,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-header,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-hmd-internal-link.cm-link-has-alias,
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-link-alias-pipe {
+  display: none;
+}
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-quote {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   9. 杂项收尾
+   ========================================================================== */
+
+/* 选中文字更柔和 */
+::selection {
+  background: var(--text-selection);
+}
+
+/* 侧边栏文件树与面板之间的分隔线收敛 */
+.workspace-split.mod-left-split .workspace-leaf-content,
+.workspace-split.mod-right-split .workspace-leaf-content {
+  border-color: var(--folio-rule);
+}
+
+/* 让「阅读/编辑」时的光标颜色跟随墨色 */
+.markdown-source-view.mod-cm6 .cm-cursor {
+  border-left-color: var(--text-accent);
+}
