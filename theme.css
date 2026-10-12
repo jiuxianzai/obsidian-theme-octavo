@@ -361,6 +361,7 @@ body.theme-light {
   --folio-active-line-bg: #f2ede6;
   --folio-bold-color: #c0392b;
   --folio-code-bg: #e8e3d5;
+  --folio-code-bg-active: #dcd6c4;
   --folio-quote-bg: #f5f2e9;
 
   --folio-heading-strong: #14110c;
@@ -407,6 +408,7 @@ body.theme-dark {
   --folio-active-line-bg: #322b20;
   --folio-bold-color: #e0736a;
   --folio-code-bg: #302d27;
+  --folio-code-bg-active: #3b362f;
   --folio-quote-bg: #262420;
 
   --folio-heading-strong: #fbf7ee;
@@ -625,24 +627,19 @@ body {
   --code-radius: 0px;
 }
 
-/* 编辑器：一个代码块是一串 .cm-line.HyperMD-codeblock，
-   逐行加圆角会把整块切成一节一节 —— 中间行一律直角。
-   围栏行（```）本身也保持直角，否则它和相邻代码行之间会出现缺口。 */
+/* 编辑器：一个代码块是一串 .cm-line.HyperMD-codeblock。
+   中间行一律直角（逐行圆角会把整块切成一节一节），只给「一整段」的首行和末行圆角。
+   注意：不要再给「围栏相邻行」额外加圆角 —— 围栏可见时那会在围栏与代码行之间留下缺口。 */
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
   background: var(--code-background) !important;
   border-radius: 0 !important;
   line-height: 1.55;
 }
-
-/* 首行：前面不是代码行（无围栏），或紧跟 begin 围栏（围栏被 Obsidian 隐藏） */
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-codeblock + .HyperMD-codeblock),
-.markdown-source-view.mod-cm6 .HyperMD-codeblock-begin + .cm-line.HyperMD-codeblock {
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-codeblock + .HyperMD-codeblock) {
   border-start-start-radius: 6px !important;
   border-start-end-radius: 6px !important;
 }
-/* 末行：后面不是代码行，或后面紧接 end 围栏 */
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(:has(+ .HyperMD-codeblock)),
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:has(+ .HyperMD-codeblock-end) {
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(:has(+ .HyperMD-codeblock)) {
   border-end-start-radius: 6px !important;
   border-end-end-radius: 6px !important;
 }
@@ -949,6 +946,13 @@ body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
     calc(3 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
     calc(4 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
     calc(5 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg);
+}
+
+/* 代码块里的当前行：不要那条横穿整块的全宽色带，
+   改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
+body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+  background-color: var(--folio-code-bg-active) !important;
+  box-shadow: none !important;
 }
 
 /* ==========================================================================
