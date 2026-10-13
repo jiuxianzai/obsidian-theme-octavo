@@ -570,6 +570,43 @@ body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   border-bottom: none !important;
 }
 
+/* —— 字号：按 ChatGPT 的层级 ——
+   正文 16px / 行高 28px（由 Appearance → Font size 控制，当前即 16）；
+   下面把标题、代码、侧边栏对齐到 GPT 的规范值。 */
+body.folio-chatgpt-mode {
+  --h1-size: 1.75em;   /* 28px @16 */
+  --h2-size: 1.375em;  /* 22px @16 */
+  --h1-weight: 700;
+  --h2-weight: 700;
+  --h1-line-height: 1.3;
+  --h2-line-height: 1.35;
+  --code-size: 0.875em;     /* 14px @16 */
+  --line-height-normal: 1.75; /* 16px 正文 / 28px 行高 */
+}
+
+/* 侧边栏会话名称：14px / 400 / 20px */
+body.folio-chatgpt-mode .nav-files-container {
+  --nav-item-size: 14px;
+  --nav-item-weight: 400;
+  --nav-item-weight-active: 500;
+  --nav-item-padding: 3px 8px;
+}
+body.folio-chatgpt-mode .nav-folder-title-content {
+  font-weight: 500;
+}
+
+/* 侧边栏分组标题：12px / 500 */
+body.folio-chatgpt-mode .view-header-title {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 顶部标签标题：14px / 500 */
+body.folio-chatgpt-mode .workspace-tab-header-inner-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* ==========================================================================
    3. 正文排版
    ========================================================================== */
