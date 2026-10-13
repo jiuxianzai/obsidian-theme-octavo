@@ -1069,14 +1069,13 @@ select {
   --nav-item-radius: 6px;
   --nav-item-size: 14px;                /* GPT：侧边栏会话名称 14px */
   --nav-item-weight: 400;
-  --nav-item-weight-active: 500;
+  --nav-item-weight-active: 600;        /* 选中：字重 + 底色，不画左侧竖条 */
   --nav-item-color: var(--folio-ink-soft);
   --nav-item-color-hover: var(--text-normal);
   --nav-item-color-active: var(--text-normal);
   --nav-item-background-hover: var(--background-modifier-hover);
   --nav-item-background-active: var(--background-modifier-active-hover);
   --nav-item-background-selected: var(--background-modifier-active-hover);
-  --nav-item-weight-active: 600;
   /* 缩进 = 图标 15px + 间距 7px = 22px，子项文件名才能与父文件夹名对齐 */
   --nav-item-children-margin-start: 16px;
   --nav-item-children-padding-start: 6px;
@@ -1141,8 +1140,10 @@ select {
   color: var(--folio-ink);
 }
 
-/* 选中文件：左侧强调竖条 */
-.nav-file-title.is-active::before {
+/* 选中文件：左侧强调竖条 —— 只有 GPT 模式画。
+   纸感模式不要它（竖条是 App 的「选中控件」，不是纸上的记号），
+   那边的选中态只靠底色 + 字重区分，见 7 节末尾的纸感文件树块。 */
+body.folio-chatgpt-mode .nav-file-title.is-active::before {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
@@ -1198,12 +1199,6 @@ body:not(.folio-chatgpt-mode) .nav-folder-title::before {
 body:not(.folio-chatgpt-mode) .nav-folder-title:hover::before,
 body:not(.folio-chatgpt-mode) .nav-folder-title.is-active::before {
   opacity: 1;
-}
-
-/* 选中：竖条贴到行首当页边标记，不再缩在色块中间 */
-body:not(.folio-chatgpt-mode) .nav-file-title.is-active::before {
-  inset-inline-start: 0;
-  inset-block: 4px;
 }
 
 /* 「文件树紧凑行高」在纸感模式下也要生效 ——
