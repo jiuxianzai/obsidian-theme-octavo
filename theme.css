@@ -98,6 +98,13 @@ settings:
     default: 1.05
     format: em
   -
+    id: folio-quote-pad
+    title: 引用块上下留白
+    description: 引用块（阅读视图与实时预览）的上下内边距
+    type: variable-number
+    default: 0.7
+    format: em
+  -
     id: folio-content-width
     title: 正文栏宽
     description: 一行大约 30~45 个汉字最舒服
@@ -171,7 +178,7 @@ settings:
   -
     id: folio-chatgpt-mode
     title: ChatGPT 模式
-    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色 #3983f7、无衬线、左对齐不缩进不居中。关掉即回到纸感书卷
+    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。关掉即回到纸感书卷
     type: class-toggle
     default: true
   -
@@ -276,10 +283,14 @@ body {
   --folio-sans-font: -apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue",
     "Noto Sans SC", sans-serif;
   --folio-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  /* 纸感模式的目录字体：书里的目录与正文同一副字。
+     想回到无衬线，把这里换成 var(--folio-sans-font) 即可。 */
+  --folio-tree-font-paper: var(--folio-text-font);
   --folio-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
 
   --folio-line-height: 1.75;
   --folio-para-spacing: 1.05em;
+  --folio-quote-pad: 0.7em; /* 引用块上下内边距：阅读视图与实时预览共用 */
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
   --folio-table-min-col: 5em;
@@ -363,7 +374,12 @@ body {
    2. 调色板 —— 暖色纸面 / 墨色文字
    ========================================================================== */
 
-/* —— 浅色：浅白纸张 —— */
+/* —— 浅色：浅白纸张 ——
+   对比度备注（on 纸面 / paper-2 / paper-3，WCAG）：
+     ink 15.4 · soft 8.5 · muted 5.2 · faint 3.7
+   muted / faint 卡在「正文 AA 以上、次要信息不隐形」的区间：
+   muted 用于列表符、未解析链接等「需要看见」的次要信息；
+   faint 只给禁用态与占位符，不要再喂给状态栏文字。 */
 body.theme-light {
   --folio-paper: #fcfbf8;
   --folio-paper-2: #f4f2ec;
@@ -371,14 +387,18 @@ body.theme-light {
   --folio-ink-strong: #1c1813;
   --folio-ink: #26211a;
   --folio-ink-soft: #514a3f;
-  --folio-ink-muted: #7d7568;
-  --folio-ink-faint: #a89f90;
+  --folio-ink-muted: #726a5c;
+  --folio-ink-faint: #8a8173;
   --folio-rule: #e7e3da;
   --folio-active-line-bg: #f2ede6;
-  --folio-bold-color: #c0392b;
-  --folio-code-block-bg: #f6f8fa;
-  --folio-code-block-border: #e5e7eb;
-  --folio-code-line-active: #eaeef2;
+  /* 朱批红：与代码 keyword（#cf222e）刻意留出差距，
+     否则「加粗」和「行内代码」共用同一支红笔，强调会被互相稀释。 */
+  --folio-bold-color: #b03a2e;
+  /* 代码块底与纸面同温（暖中性），不要再放冷蓝灰的 #f6f8fa：
+     在暖纸上那会像贴了一张网页截图。 */
+  --folio-code-block-bg: #f5f3ed;
+  --folio-code-block-border: #e8e5db;
+  --folio-code-line-active: #ece9e0;
   --folio-quote-bg: #f5f2e9;
 
   --folio-heading-strong: #14110c;
@@ -406,12 +426,18 @@ body.theme-light {
   --interactive-hover: var(--folio-paper-3);
   --interactive-accent: #8a5a2b;
   --interactive-accent-hover: #a06a33;
+  /* 压在 interactive-accent 上的前景色（复选框、按钮、日历「今天」）。
+     必须显式定义：不定义就交给 Obsidian 默认，而默认并不认识你的强调色。 */
+  --text-on-accent: #ffffff; /* on #8a5a2b = 5.87:1 */
 
   --divider-color: var(--folio-rule);
   --hr-color: var(--folio-rule);
 }
 
-/* —— 深色：炭墨纸 —— */
+/* —— 深色：炭墨纸 ——
+   对比度备注（on 纸面 / paper-2 / paper-3）：
+     ink 12.1 · soft 7.7 · muted 5.3 · faint 4.6
+   深色下 faint 极易掉到 3:1 以下，这里抬到 4.6 以保证占位符也读得出来。 */
 body.theme-dark {
   --folio-paper: #1b1a17;
   --folio-paper-2: #232120;
@@ -420,13 +446,15 @@ body.theme-dark {
   --folio-ink: #ddd7ca;
   --folio-ink-soft: #b3ac9d;
   --folio-ink-muted: #948d80;
-  --folio-ink-faint: #6b655b;
+  --folio-ink-faint: #8a8377;
   --folio-rule: #35322d;
   --folio-active-line-bg: #322b20;
   --folio-bold-color: #e0736a;
-  --folio-code-block-bg: #2b2b2b;
-  --folio-code-block-border: #3a3a3a;
-  --folio-code-line-active: #333333;
+  /* 原来用中性灰 #2b2b2b，在暖炭纸上偏冷；而且它与 paper-3 #2b2926
+     只差 1.02:1 —— 代码块和三级底同亮度，边界全靠边框。改回炭纸色。 */
+  --folio-code-block-bg: #232120;
+  --folio-code-block-border: #3a3630;
+  --folio-code-line-active: #2c2a26;
   --folio-quote-bg: #262420;
 
   --folio-heading-strong: #fbf7ee;
@@ -448,12 +476,16 @@ body.theme-dark {
   --text-accent: #d9a566;
   --text-accent-hover: #e6b87e;
   --text-selection: rgba(217, 165, 102, 0.2);
-  --text-highlight-bg: rgba(214, 178, 92, 0.24);
+  /* 深色下选区与高亮若都用同一支暖金，合成色只差 1.1:1，根本分不出来。
+     高亮改用更亮的黄（合成 #635633，与选区差 1.63:1），并配一条下划线，见 §9。 */
+  --text-highlight-bg: rgba(240, 201, 106, 0.34);
 
   --interactive-normal: var(--folio-paper-2);
   --interactive-hover: var(--folio-paper-3);
   --interactive-accent: #c89154;
   --interactive-accent-hover: #d9a566;
+  /* 深色的强调色是「浅金」，只有压深字才安全：白字压 #c89154 仅 2.75:1 */
+  --text-on-accent: #1b1a17; /* on #c89154 = 6.33:1 */
 
   --divider-color: var(--folio-rule);
   --hr-color: var(--folio-rule);
@@ -473,7 +505,7 @@ body {
    2b. 观感方案：ChatGPT 模式（默认开）
    --------------------------------------------------------------------------
    一键把「配色 + 字体 + 排版」切成 ChatGPT 网页端的观感：
-     配色 · 中性灰 + 蓝色强调色 #3983f7
+     配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
      字体 · 无衬线
      排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
    关掉 Style Settings 里的「ChatGPT 模式」即回到 Folio 的纸感书卷。
@@ -489,8 +521,8 @@ body.theme-light.folio-chatgpt-mode {
   --folio-ink-strong: #212121;
   --folio-ink: #212121;
   --folio-ink-soft: #6b6b6b;
-  --folio-ink-muted: #8f8f8f;
-  --folio-ink-faint: #b4b4b4;
+  --folio-ink-muted: #727272; /* 原 #8f8f8f 只有 3.23:1；侧边栏（paper-2）上也要 4.5:1 */
+  --folio-ink-faint: #949494; /* 原 #b4b4b4 只有 2.07:1，复选框几乎隐形 */
 
   --folio-heading-strong: #212121;
   --folio-heading: #212121;
@@ -499,23 +531,38 @@ body.theme-light.folio-chatgpt-mode {
   --folio-quote-bg: #f9f9f9;
   --folio-active-line-bg: #f4f4f4;
 
-  --text-accent: #3983f7;
-  --text-accent-hover: #2b6fd8;
-  --interactive-accent: #3983f7;
-  --interactive-accent-hover: #2b6fd8;
+  /* 代码块：GPT 模式是中性灰底，不要继承纸感的暖底 */
+  --folio-code-block-bg: #f6f6f6;
+  --folio-code-block-border: #e9e9e9;
+  --folio-code-line-active: #ededed;
+
+  /* 蓝色分两个角色：
+       文字（链接 / 标签）→ #2563eb，白底 5.17:1，够正文 AA
+       品牌亮蓝 #3983f7 白底只有 3.64:1，只配做填充 / 光标 / 图标
+     注意 hover 要比默认更深一档，原来 hover（4.81）比默认（3.64）更清楚，是反的。 */
+  --text-accent: #2563eb;
+  --text-accent-hover: #1e5fd0;
+  --interactive-accent: #2563eb;
+  --interactive-accent-hover: #1e5fd0;
+  --text-on-accent: #ffffff; /* on #2563eb = 5.17:1 */
 
   --background-modifier-border-hover: #cdcdcd;
   --background-modifier-hover: rgba(0, 0, 0, 0.045);
   --background-modifier-active-hover: rgba(0, 0, 0, 0.075);
-  --text-selection: rgba(57, 131, 247, 0.18);
-  --text-highlight-bg: rgba(57, 131, 247, 0.18);
+  /* 选区与高亮必须解耦：原来两者都是 rgba(57,131,247,.18)，
+     选中和 ==高亮== 在视觉上完全无法区分。高亮交还给「荧光笔」的暖黄。 */
+  --text-selection: rgba(57, 131, 247, 0.14);
+  --text-highlight-bg: rgba(214, 178, 92, 0.32);
 }
 
-/* —— 深色配色 —— */
+/* —— 深色配色 ——
+   三级底的语义要读清楚：#212121 正文纸面（基准）；#171717 更沉的侧边栏；
+   #262626 浮出的面板。原来 paper-3 是 #303030，比正文还亮，
+   于是 212121 → 171717 → 303030 不是一条坡道，侧边栏里嵌面板会「凸」出来。 */
 body.theme-dark.folio-chatgpt-mode {
   --folio-paper: #212121;
   --folio-paper-2: #171717;
-  --folio-paper-3: #303030;
+  --folio-paper-3: #262626;
   --folio-rule: #424242;
 
   --folio-ink-strong: #ececec;
@@ -529,18 +576,26 @@ body.theme-dark.folio-chatgpt-mode {
   --folio-heading-muted: #b4b4b4;
 
   --folio-quote-bg: #2a2a2a;
-  --folio-active-line-bg: #2a2a2a;
+  /* 原来与引用块同为 #2a2a2a：引用里的当前行、引用块本身分不出边界 */
+  --folio-active-line-bg: #2f2f2f;
 
-  --text-accent: #3983f7;
-  --text-accent-hover: #5c9bff;
-  --interactive-accent: #3983f7;
-  --interactive-accent-hover: #5c9bff;
+  /* 代码块比纸面更沉一档（凹进去），而不是浮起来 */
+  --folio-code-block-bg: #1a1a1a;
+  --folio-code-block-border: #333333;
+  --folio-code-line-active: #262626;
+
+  /* 深色底的正文链接要更亮：品牌蓝 #3983f7 on #212121 只有 4.42:1，差一口气 */
+  --text-accent: #5c9bff;
+  --text-accent-hover: #79b0ff;
+  --interactive-accent: #5c9bff;
+  --interactive-accent-hover: #79b0ff;
+  --text-on-accent: #171717; /* on #5c9bff = 6.48:1 */
 
   --background-modifier-border-hover: #565656;
   --background-modifier-hover: rgba(255, 255, 255, 0.06);
   --background-modifier-active-hover: rgba(255, 255, 255, 0.1);
-  --text-selection: rgba(57, 131, 247, 0.25);
-  --text-highlight-bg: rgba(57, 131, 247, 0.25);
+  --text-selection: rgba(57, 131, 247, 0.2); /* 合成 #273a56 */
+  --text-highlight-bg: rgba(224, 184, 94, 0.26); /* 合成 #534831，与选区靠色相区分 */
 }
 
 /* —— 字体：正文无衬线；标题沿用 Folio 纸感的衬线字体 ——
@@ -705,21 +760,30 @@ body.folio-title-centered .inline-title {
   background-color: var(--folio-quote-bg);
 }
 
-/* 阅读视图：整块圆角背景 */
+/* 阅读视图：整块圆角背景。
+   Obsidian 会把 blockquote 的 :first-child / :last-child 外边距清零，
+   所以上下留白只能靠 padding 给，否则文字会贴到圆角边上。 */
 .markdown-rendered blockquote {
-  padding: 0.6em 1.1em;
+  padding: var(--folio-quote-pad) 1.1em;
   border-radius: 8px;
 }
 
-/* 编辑器：一段引用是多行 .cm-line，逐行铺底拼成整段，只在首/末行做圆角 */
+/* 编辑器：一段引用是多行 .cm-line，逐行铺底拼成整段。
+   圆角和上下 padding 都只写在首/末行：
+     · padding-inline 写在通用规则里 → 每行各自留白，正确的；
+     · padding-block 写在通用规则里 → 每一行都被上下撑开，整段被切成一块块。
+   `.cm-line` 自带 position:relative，Obsidian 用 .HyperMD-quote:before
+   画的左边线是 top:0/bottom:0，会跟着行的 padding box 一起长高，不用额外处理。 */
 .markdown-source-view.mod-cm6 .HyperMD-quote {
   padding-inline: 1em;
 }
 .markdown-source-view.mod-cm6 .HyperMD-quote:not(.HyperMD-quote + .HyperMD-quote) {
+  padding-block-start: var(--folio-quote-pad);
   border-start-start-radius: 8px;
   border-start-end-radius: 8px;
 }
 .markdown-source-view.mod-cm6 .HyperMD-quote:not(:has(+ .HyperMD-quote)) {
+  padding-block-end: var(--folio-quote-pad);
   border-end-start-radius: 8px;
   border-end-end-radius: 8px;
 }
@@ -739,7 +803,7 @@ body.folio-title-centered .inline-title {
    所以改这一组变量，两种模式同时生效。 */
 body.theme-light {
   --code-normal: #24292f;
-  --code-comment: #6e7781;
+  --code-comment: #57606a; /* 原 #6e7781 在 #f5f3ed 上只有 4.27:1，注释是代码里最先糊掉的 */
   --code-keyword: #cf222e;
   --code-operator: #cf222e;
   --code-string: #0a3069;
@@ -753,7 +817,7 @@ body.theme-light {
 }
 body.theme-dark {
   --code-normal: #e5e5e5;
-  --code-comment: #7f848e;
+  --code-comment: #8b93a1; /* 原 #7f848e 在 #232120 上只有 3.77:1 */
   --code-keyword: #c792ea;
   --code-operator: #c792ea;
   --code-string: #c3e88d;
@@ -911,11 +975,12 @@ body {
   --link-unresolved-decoration-color: var(--folio-rule);
 }
 
-/* 任务框：圆角、克制 */
+/* 任务框：圆角、克制。
+   边框用 muted 而不是 faint —— 白底上 faint 只有 2.07:1，未勾选的框基本看不见。 */
 .markdown-rendered input[type="checkbox"],
 .task-list-item-checkbox {
   border-radius: 4px;
-  border-color: var(--folio-ink-faint);
+  border-color: var(--folio-ink-muted);
 }
 
 /* ==========================================================================
@@ -960,7 +1025,8 @@ body {
 .status-bar {
   border-top: 1px solid var(--folio-rule);
   background: var(--background-secondary);
-  color: var(--text-faint);
+  /* 状态栏是 12px 的正文，必须 ≥4.5:1；faint 是给禁用/占位用的，扛不住 */
+  color: var(--text-muted);
   font-size: var(--font-ui-small);
 }
 body.folio-hide-status-bar .status-bar {
@@ -1098,6 +1164,65 @@ body.folio-tree-lines .nav-files-container {
   --nav-indentation-guide-color: var(--folio-rule);
 }
 
+/* —— 纸感模式：把文件树做成一本书的目录 ——
+   GPT 模式（默认开）保留上面那套 VSCode 式无衬线；关掉 GPT 模式后，
+   侧栏换成正文衬线 + 更轻的印刷符号 + 页边标记式的选中态。
+   只在 :not(.folio-chatgpt-mode) 下生效，GPT 模式一个像素都不动。 */
+
+/* 目录用正文字体（书里的目录和正文同一副字），默认 Iowan + 思源宋体。
+   想改回无衬线：把 --folio-tree-font-paper 换成 var(--folio-sans-font)。 */
+body:not(.folio-chatgpt-mode) .mod-left-split .workspace-leaf-content,
+body:not(.folio-chatgpt-mode) .mod-right-split .workspace-leaf-content,
+body:not(.folio-chatgpt-mode) .nav-files-container {
+  font-family: var(--folio-tree-font-paper);
+}
+
+body:not(.folio-chatgpt-mode) .nav-files-container {
+  /* 书页的行距比 VSCode 松一档；圆角收小，别像个 App 的胶囊 */
+  --nav-item-padding: 6px 8px;
+  --nav-item-radius: 4px;
+  --nav-item-color-active: var(--folio-heading-strong);
+}
+
+/* 中文在衬线体下略松一点更好读；只动字距，不动颜色 ——
+   .nav-folder-title-content 有显式 color，碰它会盖掉 is-active 的继承色。 */
+body:not(.folio-chatgpt-mode) :is(.nav-folder-title-content, .nav-file-title-content) {
+  letter-spacing: 0.01em;
+}
+
+/* 文件夹图标退到背景里：它是印刷符号，不是 UI 控件 */
+body:not(.folio-chatgpt-mode) .nav-folder-title::before {
+  opacity: 0.6;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+body:not(.folio-chatgpt-mode) .nav-folder-title:hover::before,
+body:not(.folio-chatgpt-mode) .nav-folder-title.is-active::before {
+  opacity: 1;
+}
+
+/* 选中：竖条贴到行首当页边标记，不再缩在色块中间 */
+body:not(.folio-chatgpt-mode) .nav-file-title.is-active::before {
+  inset-inline-start: 0;
+  inset-block: 4px;
+}
+
+/* 「文件树紧凑行高」在纸感模式下也要生效 ——
+   上面那条的优先级比 body.folio-tree-compact 高，得在这里重新收紧一次。 */
+body:not(.folio-chatgpt-mode).folio-tree-compact .nav-files-container {
+  --nav-item-padding: 3px 8px;
+  --nav-item-margin-bottom: 0px;
+}
+
+/* 侧栏面板标题（「文件」/「搜索」）像书页的页眉：
+   只作用于左右侧栏，不动正文视图的 header。 */
+body:not(.folio-chatgpt-mode) .mod-left-split .view-header-title,
+body:not(.folio-chatgpt-mode) .mod-right-split .view-header-title {
+  font-family: var(--folio-text-font);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--folio-heading);
+}
+
 /* ==========================================================================
    8. 专注模式：把非当前段落调暗
    ========================================================================== */
@@ -1208,6 +1333,18 @@ body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-qu
 /* 选中文字更柔和 */
 ::selection {
   background: var(--text-selection);
+}
+
+/* —— 高亮（==文字==）：暗底上补一条下划线 ——
+   深色下的高亮底与选区底亮度只差 1.3:1，只靠底色，「我标的重点」
+   和「我选中的文字」是分不清的。加一条暖黄下划线，让划重点的手感
+   在暗色里也立得住。inline 元素的 border 不参与行高计算，只画不撑。 */
+body.theme-dark .markdown-rendered mark,
+body.theme-dark .markdown-source-view.mod-cm6 .cm-highlight,
+body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
+  border-bottom: 2px solid rgba(224, 184, 94, 0.5);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 /* 侧边栏文件树与面板之间的分隔线收敛 */
