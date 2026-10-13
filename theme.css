@@ -373,8 +373,9 @@ body.theme-light {
   --folio-rule: #e7e3da;
   --folio-active-line-bg: #f2ede6;
   --folio-bold-color: #c0392b;
-  --folio-code-bg: #e8e3d5;
-  --folio-code-bg-active: #dcd6c4;
+  --folio-code-block-bg: #f6f8fa;
+  --folio-code-block-border: #e5e7eb;
+  --folio-code-line-active: #eaeef2;
   --folio-quote-bg: #f5f2e9;
 
   --folio-heading-strong: #14110c;
@@ -420,8 +421,9 @@ body.theme-dark {
   --folio-rule: #35322d;
   --folio-active-line-bg: #322b20;
   --folio-bold-color: #e0736a;
-  --folio-code-bg: #302d27;
-  --folio-code-bg-active: #3b362f;
+  --folio-code-block-bg: #2b2b2b;
+  --folio-code-block-border: #3a3a3a;
+  --folio-code-line-active: #333333;
   --folio-quote-bg: #262420;
 
   --folio-heading-strong: #fbf7ee;
@@ -491,8 +493,6 @@ body.theme-light.folio-chatgpt-mode {
   --folio-heading: #212121;
   --folio-heading-muted: #6b6b6b;
 
-  --folio-code-bg: #f3f3f3;
-  --folio-code-bg-active: #e8e8e8;
   --folio-quote-bg: #f9f9f9;
   --folio-active-line-bg: #f4f4f4;
 
@@ -525,8 +525,6 @@ body.theme-dark.folio-chatgpt-mode {
   --folio-heading: #ececec;
   --folio-heading-muted: #b4b4b4;
 
-  --folio-code-bg: #303030;
-  --folio-code-bg-active: #3a3a3a;
   --folio-quote-bg: #2a2a2a;
   --folio-active-line-bg: #2a2a2a;
 
@@ -722,57 +720,104 @@ body.folio-title-centered .inline-title {
   margin: 2.2em auto;
 }
 
-/* —— 代码 —— */
-body {
-  --code-background: var(--folio-code-bg);
-  --code-normal: var(--folio-ink);
-  --code-comment: var(--folio-ink-faint);
-  --code-size: 0.875em; /* 14px @16 —— GPT 规范 */
+/* —— 代码（参考 ChatGPT 网页端的代码块）—— */
+
+/* 语法高亮色板：阅读模式（Prism .token.*）与编辑器（cm-*）共用同一套 --code-* 变量，
+   所以改这一组变量，两种模式同时生效。 */
+body.theme-light {
+  --code-normal: #24292f;
+  --code-comment: #6e7781;
+  --code-keyword: #cf222e;
+  --code-operator: #cf222e;
+  --code-string: #0a3069;
+  --code-function: #8250df;
+  --code-value: #0550ae;
+  --code-tag: #116329;
+  --code-property: #0550ae;
+  --code-punctuation: #57606a;
+  --folio-code-class: #953800;
+  --code-size: 0.88em;
 }
-.markdown-rendered code,
-.cm-inline-code {
-  background: var(--code-background);
-  border-radius: 4px;
-  padding: 0.12em 0.34em;
-  font-size: var(--code-size);
-  color: var(--folio-ink-soft);
+body.theme-dark {
+  --code-normal: #e5e5e5;
+  --code-comment: #7f848e;
+  --code-keyword: #c792ea;
+  --code-operator: #c792ea;
+  --code-string: #c3e88d;
+  --code-function: #82aaff;
+  --code-value: #f78c6c;
+  --code-tag: #f78c6c;
+  --code-property: #89ddff;
+  --code-punctuation: #89ddff;
+  --folio-code-class: #ffcb6b;
+  --code-size: 0.88em;
 }
-/* 阅读视图：整块就是一个 <pre>，圆角一次到位 */
-.markdown-rendered pre {
-  background: var(--code-background);
-  border-radius: 6px;
-  line-height: 1.55;
+/* app.css 把 class-name / builtin 并进了 function 色，这里单独拎出来 */
+.markdown-rendered pre .token.class-name,
+.markdown-rendered pre .token.builtin,
+.cm-type,
+.cm-builtin {
+  color: var(--folio-code-class);
 }
 
-/* 编辑器：把 --code-radius 归零，杜绝任何来源的逐行圆角 */
+/* —— 代码块容器：底色 / 圆角 / 细边框 —— */
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .cm-preview-code-block {
+  background: var(--folio-code-block-bg) !important;
+  border: 1px solid var(--folio-code-block-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.15em 0;
+  padding: 0;
+  box-shadow: none;
+}
+/* 代码内容 */
+.markdown-rendered pre code {
+  display: block;
+  padding: 16px 18px;
+  background: transparent !important;
+  border: 0;
+  color: var(--code-normal);
+  font-size: 13px;
+  line-height: 1.7;
+  font-weight: 400;
+  tab-size: 2;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* —— 行内代码 —— */
+.markdown-rendered :not(pre) > code,
+.cm-inline-code {
+  background: rgba(127, 127, 127, 0.13);
+  border: 1px solid rgba(127, 127, 127, 0.12);
+  border-radius: 5px;
+  padding: 0.12em 0.35em;
+  font-size: var(--code-size);
+  color: var(--code-normal);
+}
+
+/* —— 编辑器：把 --code-radius 归零，杜绝任何来源的逐行圆角 —— */
 .markdown-source-view.mod-cm6 {
   --code-radius: 0px;
 }
 
-/* 编辑器：一个代码块是一串 .cm-line.HyperMD-codeblock。
-   中间行一律直角（逐行圆角会把整块切成一节一节），只给「一整段」的首行和末行圆角。
-   注意：不要再给「围栏相邻行」额外加圆角 —— 围栏可见时那会在围栏与代码行之间留下缺口。 */
+/* 实时预览里「编辑中」的代码块是一串 .cm-line.HyperMD-codeblock：
+   逐行铺底、中间行直角，只给一整段的首 / 末行圆角。
+   注意：不要给「围栏相邻行」额外加圆角 —— 围栏可见时那会留下缺口。 */
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
-  background: var(--code-background) !important;
+  background: var(--folio-code-block-bg) !important;
   border-radius: 0 !important;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.7;
 }
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.HyperMD-codeblock + .HyperMD-codeblock) {
-  border-start-start-radius: 6px !important;
-  border-start-end-radius: 6px !important;
+  border-start-start-radius: 12px !important;
+  border-start-end-radius: 12px !important;
 }
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(:has(+ .HyperMD-codeblock)) {
-  border-end-start-radius: 6px !important;
-  border-end-end-radius: 6px !important;
-}
-.markdown-rendered pre {
-  padding: 0.9em 1.1em;
-  border: 1px solid var(--folio-rule);
-}
-.markdown-rendered pre code {
-  background: transparent;
-  padding: 0;
-  color: var(--code-normal);
+  border-end-start-radius: 12px !important;
+  border-end-end-radius: 12px !important;
 }
 
 /* ==========================================================================
@@ -1077,7 +1122,7 @@ body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
 /* 代码块里的当前行：不要那条横穿整块的全宽色带，
    改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
 body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
-  background-color: var(--folio-code-bg-active) !important;
+  background-color: var(--folio-code-line-active) !important;
   box-shadow: none !important;
 }
 
