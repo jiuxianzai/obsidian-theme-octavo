@@ -164,6 +164,17 @@ settings:
     default: 5
     format: em
   -
+    id: folio-palette
+    title: 配色 · Palette
+    type: heading
+    level: 1
+  -
+    id: folio-palette-neutral
+    title: ChatGPT 中性灰配色
+    description: 用 ChatGPT 网页端那套中性灰 + 绿色强调色替换纸感暖色；关掉即回到纸感
+    type: class-toggle
+    default: true
+  -
     id: folio-layout
     title: 版面 · Layout
     type: heading
@@ -449,6 +460,46 @@ body {
   --h4-color: var(--folio-heading);
   --h5-color: var(--folio-heading-muted);
   --h6-color: var(--folio-heading-muted);
+}
+
+/* ==========================================================================
+   2b. 配色方案：ChatGPT 中性灰（可选，默认开）
+   --------------------------------------------------------------------------
+   参考 ChatGPT 网页端：白底 + 中性灰 + 低饱和辅助色 + 绿色强调色。
+   关掉 Style Settings 里的「ChatGPT 中性灰配色」即回到纸感暖色。
+   ========================================================================== */
+
+body.theme-light.folio-palette-neutral {
+  --folio-paper: #ffffff;
+  --folio-paper-2: #f9f9f9;
+  --folio-paper-3: #f3f3f3;
+  --folio-rule: #e5e5e5;
+
+  --folio-ink-strong: #212121;
+  --folio-ink: #212121;
+  --folio-ink-soft: #6b6b6b;
+  --folio-ink-muted: #8f8f8f;
+  --folio-ink-faint: #b4b4b4;
+
+  --folio-heading-strong: #212121;
+  --folio-heading: #212121;
+  --folio-heading-muted: #6b6b6b;
+
+  --folio-code-bg: #f3f3f3;
+  --folio-code-bg-active: #e8e8e8;
+  --folio-quote-bg: #f9f9f9;
+  --folio-active-line-bg: #f4f4f4;
+
+  --text-accent: #10a37f;
+  --text-accent-hover: #0d8f70;
+  --interactive-accent: #10a37f;
+  --interactive-accent-hover: #0d8f70;
+
+  --background-modifier-border-hover: #cdcdcd;
+  --background-modifier-hover: rgba(0, 0, 0, 0.045);
+  --background-modifier-active-hover: rgba(0, 0, 0, 0.075);
+  --text-selection: rgba(16, 163, 127, 0.18);
+  --text-highlight-bg: rgba(16, 163, 127, 0.18);
 }
 
 /* ==========================================================================
@@ -819,7 +870,7 @@ select {
   --nav-item-padding: 5px 8px;          /* 上下 5px，左右 8px */
   --nav-item-margin-bottom: 1px;        /* 行与行之间留一点缝 */
   --nav-item-radius: 6px;
-  --nav-item-size: 13.5px;
+  --nav-item-size: 11.5px;
   --nav-item-color: var(--folio-ink-soft);
   --nav-item-color-hover: var(--text-normal);
   --nav-item-color-active: var(--text-normal);
@@ -992,4 +1043,16 @@ body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-qu
 /* 让「阅读/编辑」时的光标颜色跟随墨色 */
 .markdown-source-view.mod-cm6 .cm-cursor {
   border-left-color: var(--text-accent);
+}
+
+/* ==========================================================================
+   10. 日历插件（Calendar）—— 高亮今天
+   ========================================================================== */
+
+.calendar .day.today,
+.calendar .today,
+.calendar-day.today {
+  background-color: var(--interactive-accent) !important;
+  color: var(--text-on-accent) !important;
+  font-weight: 600;
 }
