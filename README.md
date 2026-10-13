@@ -1,8 +1,11 @@
-# Folio · 纸感 Obsidian 主题
+# Folio · Obsidian 主题
 
-一款偏「纸质书」的 Obsidian 主题：浅白纸面、墨色宋体正文、当代书籍排版、克制的界面，以及接近 VSCode 的文件树。
+一款偏「现代文档」的 Obsidian 主题：默认是 ChatGPT 网页端那套**中性灰 + 蓝色强调色**，
+也可以一键切回**纸感书卷**（宋体正文 + 首行缩进 + 标题居中）。
 
 独立仓库，独立版本管理。
+
+![预览](screenshot.png)
 
 ## 仓库结构
 
@@ -11,8 +14,11 @@ obsidian-theme-folio/
 ├── manifest.json     ← 主题元信息（Obsidian 读取）
 ├── theme.css         ← 主题全部样式 + Style Settings 配置
 ├── versions.json     ← 主题版本 → 最低 Obsidian 版本
-├── install.sh        ← 软链到某个 vault
-├── preview.html      ← 本地预览页（浏览器打开即可看排版，开发用）
+├── INSTALL.md        ← 面向使用者的安装说明（分享时带上）
+├── screenshot.png    ← 预览图（上架社区主题也需要）
+├── package.sh        ← 打分享用的 zip 到 ~/Downloads
+├── install.sh        ← 开发用：软链到某个 vault
+├── preview.html      ← 开发用：浏览器里的预览页
 ├── LICENSE
 └── README.md
 ```
@@ -21,16 +27,31 @@ obsidian-theme-folio/
 Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常被 vault 的
 `.gitignore` 忽略；把主题独立成仓库再软链进去，就能脱离 vault 独立做版本管理、备份与发布。
 
-## 安装 / 恢复
+## 安装
+
+**开发时（本机）**：用软链，改完 CSS 直接生效。
 
 ```bash
 ./install.sh                       # 默认链接到同级的 obsidian-library vault
 ./install.sh /path/to/your/vault   # 或指定 vault
 ```
 
-然后在 Obsidian：`Settings → Appearance → Themes → Folio`。
+**分享给别人**：见 [`INSTALL.md`](INSTALL.md)。简要版是把本仓库改名为 `Folio`
+放进对方的 `<库>/.obsidian/themes/`，然后在 `设置 → 外观 → 主题` 里选它。
 
 > 新装了字体后，**需要完全退出并重启 Obsidian** 才会生效（Chromium 只在启动时枚举系统字体）。
+
+## 分享给别人
+
+```bash
+./package.sh                # 生成 ~/Downloads/folio-obsidian-theme-v<版本>.zip
+./package.sh /path/to/dir   # 或指定输出目录
+```
+
+zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `versions.json` /
+`INSTALL.md` / `README.md` / `LICENSE` / `screenshot.png`），不含开发脚本。
+
+想让别人**在 Obsidian 里直接搜到并安装**，需要上架社区主题列表，见文末「发布到社区主题」。
 
 ## 字体方案
 
