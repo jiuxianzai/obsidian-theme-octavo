@@ -169,9 +169,9 @@ settings:
     type: heading
     level: 1
   -
-    id: folio-palette-neutral
-    title: ChatGPT 中性灰配色
-    description: 用 ChatGPT 网页端那套中性灰 + 绿色强调色替换纸感暖色；关掉即回到纸感
+    id: folio-chatgpt-mode
+    title: ChatGPT 模式
+    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色 #3983f7、无衬线、左对齐不缩进不居中。关掉即回到纸感书卷
     type: class-toggle
     default: true
   -
@@ -273,6 +273,8 @@ settings:
 body {
   /* —— 可被 Style Settings 覆盖的变量 —— */
   --folio-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  --folio-sans-font: -apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue",
+    "Noto Sans SC", sans-serif;
   --folio-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
   --folio-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
 
@@ -463,13 +465,17 @@ body {
 }
 
 /* ==========================================================================
-   2b. 配色方案：ChatGPT 中性灰（可选，默认开）
+   2b. 观感方案：ChatGPT 模式（默认开）
    --------------------------------------------------------------------------
-   参考 ChatGPT 网页端：白底 + 中性灰 + 低饱和辅助色 + 绿色强调色。
-   关掉 Style Settings 里的「ChatGPT 中性灰配色」即回到纸感暖色。
+   一键把「配色 + 字体 + 排版」切成 ChatGPT 网页端的观感：
+     配色 · 中性灰 + 蓝色强调色 #3983f7
+     字体 · 无衬线
+     排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
+   关掉 Style Settings 里的「ChatGPT 模式」即回到 Folio 的纸感书卷。
    ========================================================================== */
 
-body.theme-light.folio-palette-neutral {
+/* —— 浅色配色 —— */
+body.theme-light.folio-chatgpt-mode {
   --folio-paper: #ffffff;
   --folio-paper-2: #f9f9f9;
   --folio-paper-3: #f3f3f3;
@@ -490,16 +496,78 @@ body.theme-light.folio-palette-neutral {
   --folio-quote-bg: #f9f9f9;
   --folio-active-line-bg: #f4f4f4;
 
-  --text-accent: #10a37f;
-  --text-accent-hover: #0d8f70;
-  --interactive-accent: #10a37f;
-  --interactive-accent-hover: #0d8f70;
+  --text-accent: #3983f7;
+  --text-accent-hover: #2b6fd8;
+  --interactive-accent: #3983f7;
+  --interactive-accent-hover: #2b6fd8;
 
   --background-modifier-border-hover: #cdcdcd;
   --background-modifier-hover: rgba(0, 0, 0, 0.045);
   --background-modifier-active-hover: rgba(0, 0, 0, 0.075);
-  --text-selection: rgba(16, 163, 127, 0.18);
-  --text-highlight-bg: rgba(16, 163, 127, 0.18);
+  --text-selection: rgba(57, 131, 247, 0.18);
+  --text-highlight-bg: rgba(57, 131, 247, 0.18);
+}
+
+/* —— 深色配色 —— */
+body.theme-dark.folio-chatgpt-mode {
+  --folio-paper: #212121;
+  --folio-paper-2: #171717;
+  --folio-paper-3: #303030;
+  --folio-rule: #424242;
+
+  --folio-ink-strong: #ececec;
+  --folio-ink: #ececec;
+  --folio-ink-soft: #b4b4b4;
+  --folio-ink-muted: #8f8f8f;
+  --folio-ink-faint: #6b6b6b;
+
+  --folio-heading-strong: #ececec;
+  --folio-heading: #ececec;
+  --folio-heading-muted: #b4b4b4;
+
+  --folio-code-bg: #303030;
+  --folio-code-bg-active: #3a3a3a;
+  --folio-quote-bg: #2a2a2a;
+  --folio-active-line-bg: #2a2a2a;
+
+  --text-accent: #3983f7;
+  --text-accent-hover: #5c9bff;
+  --interactive-accent: #3983f7;
+  --interactive-accent-hover: #5c9bff;
+
+  --background-modifier-border-hover: #565656;
+  --background-modifier-hover: rgba(255, 255, 255, 0.06);
+  --background-modifier-active-hover: rgba(255, 255, 255, 0.1);
+  --text-selection: rgba(57, 131, 247, 0.25);
+  --text-highlight-bg: rgba(57, 131, 247, 0.25);
+}
+
+/* —— 字体：无衬线 —— */
+body.folio-chatgpt-mode {
+  --font-text: var(--folio-sans-font);
+  --font-text-theme: var(--folio-sans-font);
+}
+
+/* —— 排版：去掉「书」的做法 —— */
+body.folio-chatgpt-mode .markdown-rendered > p,
+body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+  text-indent: 0 !important;
+}
+body.folio-chatgpt-mode .markdown-rendered > p,
+body.folio-chatgpt-mode .markdown-rendered li,
+body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .cm-line {
+  text-align: left !important;
+}
+body.folio-chatgpt-mode .inline-title {
+  text-align: left !important;
+}
+body.folio-chatgpt-mode .markdown-rendered h1,
+body.folio-chatgpt-mode .markdown-rendered h2,
+body.folio-chatgpt-mode .markdown-rendered h3,
+body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  border-bottom: none !important;
 }
 
 /* ==========================================================================
