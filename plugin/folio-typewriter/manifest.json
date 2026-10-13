@@ -1,0 +1,10 @@
+{
+  "id": "folio-typewriter",
+  "name": "Folio Typewriter",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "打字机滚动：让光标所在行始终停在视口垂直居中（配合 Folio 主题的聚焦模式使用）。",
+  "author": "youyanping",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

@@ -1219,16 +1219,32 @@ body:not(.folio-chatgpt-mode) .mod-right-split .view-header-title {
 }
 
 /* ==========================================================================
-   8. 专注模式：把非当前段落调暗
+   8. 专注模式：把非当前内容调暗，突出「光标所在行」与「鼠标悬停行」
+   --------------------------------------------------------------------------
+   注意：编辑器里除了逐行的 .cm-line，还有一类「块级部件」——表格、嵌入、代码块
+   预览等，它们是 .cm-embed-block，并不是 .cm-line。只调暗 .cm-line 会漏掉表格，
+   表格就会一直保持原样（看起来像被高亮/没被调暗），所以这里两类都要列上。
    ========================================================================== */
 
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line {
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block {
   opacity: 0.32;
   transition: opacity 160ms ease;
 }
+
+/* 亮起：光标所在行（.cm-active / .cm-activeLine）、鼠标悬停行与块、标题，
+   以及「光标所在行里的块部件」和「正在编辑的表格」 */
 body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line:hover,
 body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-header {
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-header,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active .cm-embed-block,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine .cm-embed-block,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:hover,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:focus-within,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.is-selected,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.has-selection,
+body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-selected) {
   opacity: 1;
 }
 
