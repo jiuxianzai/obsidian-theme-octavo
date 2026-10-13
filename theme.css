@@ -338,10 +338,13 @@ body {
   --indentation-guide-color: transparent;
   --indentation-guide-color-active: var(--background-modifier-border-hover);
 
-  /* —— 引用块：只保留一种颜色（灰），避免与 Obsidian 默认的主体色叠加 —— */
+  /* —— 引用块：只保留一种颜色（灰），避免与 Obsidian 默认的主体色叠加 ——
+     注意：实时预览里 Obsidian 自己那条 `.…is-live-preview .HyperMD-quote` 的
+     优先级比主题里同名的 3 类选择器更高，所以背景不能只写在主题规则里，必须
+     写进 --blockquote-background-color，让 Obsidian 的原生规则也用它。 */
   --blockquote-border-color: var(--folio-rule);
   --blockquote-border-thickness: 3px;
-  --blockquote-background-color: transparent;
+  --blockquote-background-color: var(--folio-quote-bg);
   --blockquote-color: var(--folio-ink-soft);
   --blockquote-font-style: italic;
   --blockquote-style: italic;
@@ -540,10 +543,19 @@ body.theme-dark.folio-chatgpt-mode {
   --text-highlight-bg: rgba(57, 131, 247, 0.25);
 }
 
-/* —— 字体：无衬线 —— */
+/* —— 字体：正文无衬线；标题沿用 Folio 纸感的衬线字体 ——
+   Obsidian 的标题字体跟 --font-text 是分开的（--h1-font…--h6-font，默认 inherit），
+   所以把正文切成无衬线后，标题仍可单独指回纸感字体。 */
 body.folio-chatgpt-mode {
   --font-text: var(--folio-sans-font);
   --font-text-theme: var(--folio-sans-font);
+
+  --h1-font: var(--folio-text-font);
+  --h2-font: var(--folio-text-font);
+  --h3-font: var(--folio-text-font);
+  --h4-font: var(--folio-text-font);
+  --h5-font: var(--folio-text-font);
+  --h6-font: var(--folio-text-font);
 }
 
 /* —— 排版：去掉「书」的做法 —— */
@@ -684,9 +696,10 @@ body.folio-title-centered .inline-title {
 
 /* —— 引用：浅色圆角背景 + 单色左边线 ——
    注意：编辑器里的线是 Obsidian 用 .HyperMD-quote:before 画的，
-   所以这里不要再加 border-inline-start，否则会出现两条线（灰 + 主体色）。 */
+   所以这里不要再加 border-inline-start，否则会出现两条线（灰 + 主体色）。
+   编辑器选择器带上 .is-live-preview，跟 Obsidian 原生规则同级，靠「主题后加载」获胜。 */
 .markdown-rendered blockquote,
-.markdown-source-view.mod-cm6 .HyperMD-quote {
+.markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote {
   color: var(--folio-ink-soft);
   font-style: italic;
   background-color: var(--folio-quote-bg);
@@ -1128,18 +1141,61 @@ body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.
 
 /* ==========================================================================
    8b. 隐藏 Markdown 语法（参考 Minimal 的 Hide Markdown syntax）
+   --------------------------------------------------------------------------
+   核心结论：标记只有在「成为该行最后一个元素」时（例如刚打完 ## 的空标题），
+   才不能做成 0 宽——那时光标没有落点，会消失、且后续输入会跑到标记前面（标题
+   写不出来）。标记后面只要还有内容，光标就被后面的文字「托住」，可以安全地
+   做成 0 宽、完全不留占位（和 Minimal 观感一致）。
+   做法：默认全部 display: none；只把「当前行里位于行尾的标记」重新放出来，
+   保留其宽度、把字形变透明，专门给光标当落点。因为它在行尾，这点占位看不出来。
    ========================================================================== */
 
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-code.cm-inline-code,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-em,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-strikethrough,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-strong,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting.cm-formatting-highlight,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-link,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-header,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-hmd-internal-link.cm-link-has-alias,
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-link-alias-pipe {
+body.folio-hide-markdown .markdown-source-view.is-live-preview :is(
+    .cm-formatting.cm-formatting-code.cm-inline-code,
+    .cm-formatting.cm-formatting-em,
+    .cm-formatting.cm-formatting-strikethrough,
+    .cm-formatting.cm-formatting-strong,
+    .cm-formatting.cm-formatting-highlight,
+    .cm-formatting-link,
+    .cm-formatting-header,
+    .cm-hmd-internal-link.cm-link-has-alias,
+    .cm-link-alias-pipe
+  ) {
   display: none;
+}
+
+/* 当前行、标记位于行尾：保留宽度当光标落点（字形透明） */
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
+    .cm-formatting.cm-formatting-code.cm-inline-code,
+    .cm-formatting.cm-formatting-em,
+    .cm-formatting.cm-formatting-strikethrough,
+    .cm-formatting.cm-formatting-strong,
+    .cm-formatting.cm-formatting-highlight,
+    .cm-formatting-link,
+    .cm-formatting-header,
+    .cm-hmd-internal-link.cm-link-has-alias,
+    .cm-link-alias-pipe
+  ):last-child {
+  display: inline;
+  -webkit-text-fill-color: transparent;
+  caret-color: var(--text-normal);
+}
+
+/* 同上，但个别空行结构里行尾是 <br>（单独一条，避免 :has 不被支持时连带整条失效） */
+body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
+    .cm-formatting.cm-formatting-code.cm-inline-code,
+    .cm-formatting.cm-formatting-em,
+    .cm-formatting.cm-formatting-strikethrough,
+    .cm-formatting.cm-formatting-strong,
+    .cm-formatting.cm-formatting-highlight,
+    .cm-formatting-link,
+    .cm-formatting-header,
+    .cm-hmd-internal-link.cm-link-has-alias,
+    .cm-link-alias-pipe
+  ):has(+ br:last-child) {
+  display: inline;
+  -webkit-text-fill-color: transparent;
+  caret-color: var(--text-normal);
 }
 body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-quote {
   opacity: 0;
