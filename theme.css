@@ -113,13 +113,13 @@ settings:
     id: folio-h1-size
     title: H1 字号
     type: variable-number
-    default: 1.9
+    default: 1.75
     format: em
   -
     id: folio-h2-size
     title: H2 字号
     type: variable-number
-    default: 1.55
+    default: 1.375
     format: em
   -
     id: folio-h3-size
@@ -284,8 +284,8 @@ body {
   --folio-heading-spacing: 1.7em;
   --folio-table-min-col: 5em;
 
-  --folio-h1-size: 1.9em;
-  --folio-h2-size: 1.55em;
+  --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
+  --folio-h2-size: 1.375em; /* 22px @16 */
   --folio-h3-size: 1.32em;
   --folio-h4-size: 1.18em;
   --folio-h5-size: 1.08em;
@@ -312,7 +312,7 @@ body {
   --h6-size: var(--folio-h6-size);
 
   --h1-weight: 700;
-  --h2-weight: 650;
+  --h2-weight: 700;
   --h3-weight: 600;
   --h4-weight: 600;
   --h5-weight: 600;
@@ -570,42 +570,8 @@ body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   border-bottom: none !important;
 }
 
-/* —— 字号：按 ChatGPT 的层级 ——
-   正文 16px / 行高 28px（由 Appearance → Font size 控制，当前即 16）；
-   下面把标题、代码、侧边栏对齐到 GPT 的规范值。 */
-body.folio-chatgpt-mode {
-  --h1-size: 1.75em;   /* 28px @16 */
-  --h2-size: 1.375em;  /* 22px @16 */
-  --h1-weight: 700;
-  --h2-weight: 700;
-  --h1-line-height: 1.3;
-  --h2-line-height: 1.35;
-  --code-size: 0.875em;     /* 14px @16 */
-  --line-height-normal: 1.75; /* 16px 正文 / 28px 行高 */
-}
-
-/* 侧边栏会话名称：14px / 400 / 20px */
-body.folio-chatgpt-mode .nav-files-container {
-  --nav-item-size: 14px;
-  --nav-item-weight: 400;
-  --nav-item-weight-active: 500;
-  --nav-item-padding: 3px 8px;
-}
-body.folio-chatgpt-mode .nav-folder-title-content {
-  font-weight: 500;
-}
-
-/* 侧边栏分组标题：12px / 500 */
-body.folio-chatgpt-mode .view-header-title {
-  font-size: 12px;
-  font-weight: 500;
-}
-
-/* 顶部标签标题：14px / 500 */
-body.folio-chatgpt-mode .workspace-tab-header-inner-title {
-  font-size: 14px;
-  font-weight: 500;
-}
+/* 字号层级（GPT 规范：侧边栏 14px / H1 28px / H2 22px / 代码 14px）
+   已提升到主题基础层，全局生效，见「1. 字体与排版刻度」与「7. 文件树」。 */
 
 /* ==========================================================================
    3. 正文排版
@@ -761,7 +727,7 @@ body {
   --code-background: var(--folio-code-bg);
   --code-normal: var(--folio-ink);
   --code-comment: var(--folio-ink-faint);
-  --code-size: 0.86em;
+  --code-size: 0.875em; /* 14px @16 —— GPT 规范 */
 }
 .markdown-rendered code,
 .cm-inline-code {
@@ -907,6 +873,7 @@ body {
   box-shadow: none;
 }
 .workspace-tab-header-inner-title {
+  font-size: 14px; /* GPT：顶部标签标题 14px / 500 */
   font-weight: 500;
 }
 .workspace-tab-header-container-inner {
@@ -926,7 +893,8 @@ body {
   background: transparent;
 }
 .view-header-title {
-  font-weight: 600;
+  font-size: 12px; /* GPT：侧边栏分组标题 12px / 500 */
+  font-weight: 500;
   letter-spacing: 0.01em;
 }
 
@@ -975,7 +943,9 @@ select {
   --nav-item-padding: 5px 8px;          /* 上下 5px，左右 8px */
   --nav-item-margin-bottom: 1px;        /* 行与行之间留一点缝 */
   --nav-item-radius: 6px;
-  --nav-item-size: 11.5px;
+  --nav-item-size: 14px;                /* GPT：侧边栏会话名称 14px */
+  --nav-item-weight: 400;
+  --nav-item-weight-active: 500;
   --nav-item-color: var(--folio-ink-soft);
   --nav-item-color-hover: var(--text-normal);
   --nav-item-color-active: var(--text-normal);
@@ -1043,7 +1013,7 @@ select {
 
 /* 文件夹文字：中等字重 + 更深的墨色 */
 .nav-folder-title-content {
-  font-weight: 550;
+  font-weight: 500;
   color: var(--folio-ink);
 }
 
