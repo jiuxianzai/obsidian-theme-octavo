@@ -1239,6 +1239,30 @@ select {
   background-color: var(--text-accent);
 }
 
+/* —— 文件行的「文件」SVG 图标 ——
+   画法和文件夹图标一模一样（24 视窗、描边 2、圆角接头、mask 上色），只是换成
+   一张「折角纸」。宽高同样是 15px + 7px 间距，于是文件夹名与文件名会落在同一条
+   竖线上、两列图标也对齐 —— 层级一眼能看出来。
+   折角纸路径取自 Lucide / Feather 的 file：外框走到右上角切一刀，再用一条
+   折线（13,2 → 13,9 → 20,9）把折角画出来。 */
+.nav-file-title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-inline-end: 7px;
+  background-color: var(--folio-ink-faint);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: background-color 100ms ease;
+}
+.nav-file-title:hover::before {
+  background-color: var(--folio-ink-soft);
+}
+.nav-file-title.is-active::before {
+  background-color: var(--text-accent);
+}
+
 /* 文件夹文字：中等字重 + 更深的墨色 */
 .nav-folder-title-content {
   font-weight: 500;
@@ -1247,8 +1271,9 @@ select {
 
 /* 选中文件：左侧强调竖条 —— 只有 GPT 模式画。
    纸感模式不要它（竖条是 App 的「选中控件」，不是纸上的记号），
-   那边的选中态只靠底色 + 字重区分，见 7 节末尾的纸感文件树块。 */
-body.folio-chatgpt-mode .nav-file-title.is-active::before {
+   那边的选中态只靠底色 + 字重区分，见 7 节末尾的纸感文件树块。
+   注意挂在 ::after 上：::before 已经给了「文件」图标，不能互相顶掉。 */
+body.folio-chatgpt-mode .nav-file-title.is-active::after {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
@@ -1296,13 +1321,13 @@ body:not(.folio-chatgpt-mode) :is(.nav-folder-title-content, .nav-file-title-con
   letter-spacing: 0.01em;
 }
 
-/* 文件夹图标退到背景里：它是印刷符号，不是 UI 控件 */
-body:not(.folio-chatgpt-mode) .nav-folder-title::before {
+/* 文件夹 / 文件图标退到背景里：它们是印刷符号，不是 UI 控件 */
+body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title)::before {
   opacity: 0.6;
   transition: opacity 120ms ease, background-color 120ms ease;
 }
-body:not(.folio-chatgpt-mode) .nav-folder-title:hover::before,
-body:not(.folio-chatgpt-mode) .nav-folder-title.is-active::before {
+body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title):hover::before,
+body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title).is-active::before {
   opacity: 1;
 }
 
