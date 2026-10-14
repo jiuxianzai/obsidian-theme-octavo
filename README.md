@@ -27,6 +27,7 @@ obsidian-theme-folio/
 ├── preview.html      ← 开发用：浏览器里的排版预览页
 ├── palette.gen.py    ← 开发用：从 theme.css 生成四套配色的色卡
 ├── palette.html      ← 色卡（生成物，不入库；python3 palette.gen.py 生成）
+├── dev/probe/        ← 开发用：真实 Obsidian 探针（CDP 量「有/无光标」「实时预览/阅读视图」，见「开发」）
 ├── LICENSE
 └── README.md
 ```
@@ -344,7 +345,8 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
   89.78px —— 看起来就是「光标一进单元格，文字横向重排、整行还变高」。
 
 四条都已在 `.cm-table-widget` 范围内复位（`theme.css` 第 5 节）。**在真实 Obsidian 里
-实测**（CDP 点进单元格 + 量 Range）：激活格与同文本的未激活格现在逐项相同 ——
+实测**（探针见 `dev/probe/`，`python3 dev/probe/probe.py` 可一键复跑；CDP 点进单元格 +
+量 Range）：激活格与同文本的未激活格现在逐项相同 ——
 左内边距 12.5px、行高 64.98px、视觉行 16+17 字（行右缘 268.5 / 276.5px）全都一样；
 里层行的 `letter-spacing / text-indent / text-align` 分别是 `normal / 0px / start`
 （后面两条即使把 `folio-book-indent`、`folio-justify` 打开也保持不变）。
@@ -444,6 +446,21 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 ```bash
 python3 palette.gen.py && open palette.html
 ```
+
+**表格 / 编辑器相关的改动，用真实 Obsidian 探针再量一遍**（`dev/probe/`）：它会另起一个
+独立 profile 的 Obsidian 实例、开一个只含测试笔记的临时 vault（主题用当前工作区这份），
+用远程调试 + 模拟真实点击去量 DOM：
+
+```bash
+python3 dev/probe/probe.py        # 全部一致 → 退出码 0；有不一致 → 1
+```
+
+它验的是静态页验不了的两件事：① **同一个单元格「有光标 / 没光标」** 的文本起点、行高、
+折行是否一致 —— 也就是里层编辑器那四处复位（内边距、首行缩进、两端对齐、`letter-spacing`）；
+② **实时预览与阅读视图** 的单元格内边距与单行行高是否一致。为什么非要真机：实时预览的表格
+组件是 `.cm-content` 的直接子元素、里层编辑器只在光标进去时才存在，静态复现页一旦把 DOM
+猜错（`letter-spacing` 那条就栽过：静态页量出「两边都是 0.16px，不用改」，真机里其实是
+「没光标没有、光标进去才有」）。细节见 `dev/probe/README.md`。
 
 ## 发布到社区主题
 
