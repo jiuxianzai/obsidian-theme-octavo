@@ -1033,12 +1033,13 @@ body {
   width: 100%;
 }
 
-/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐」复位 ——
+/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐 / 字距」复位 ——
    光标点进某个单元格时，Obsidian 会在那个 <td> 里再挂一个 CodeMirror：
    .table-cell-wrapper > .cm-editor > .cm-scroller > .cm-content > .cm-line
    （见 app.js editTableCell()：新建 wrapper → 原来的 .table-cell-wrapper 隐藏
-   → 把里层编辑器塞进同一个 <td>）。而第 3 节有三处规则是按**后代**写的，
-   于是会一起漏进这个里层编辑器 —— 症状都是「有光标 / 没光标两个样」：
+   → 把里层编辑器塞进同一个 <td>）。而第 3 节有四条规则会一起漏进这个里层编辑器
+   —— 它们要么写成后代选择器、要么直接命中里层的 `.cm-line`，症状清一色是
+   「有光标 / 没光标两个样」：
 
    1) `.markdown-source-view.mod-cm6 .cm-content { padding-inline: 16px }`
       那是给外层编辑器补的（抵消表格组件的「padding 16px + margin -16px」），
@@ -1060,12 +1061,16 @@ body {
       这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
       写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
 
-   另外**别**在这里补 `letter-spacing: normal`：letter-spacing 是继承属性，外层那个
-   .cm-line 的 0.01em 本来就会传进单元格 —— 有光标、没光标都是 0.16px，在这儿
-   归零反倒制造出新的不一致（实测过）。顺带记一笔：阅读视图的单元格不在这条
-   继承链上（没有 .cm-line 祖先），两个视图差 0.01em ≈ 0.16px/字，太小、先不动。
+   4) `.markdown-source-view.mod-cm6 .cm-line { letter-spacing: 0.01em }`（第 3 节
+      「段落：清晰但不松散」）→ 里层这一行自带 0.01em（16px 字号 = 0.16px/字），
+      而**没光标**的单元格没有这条 —— 表格组件是 `.cm-content` 的直接子元素
+      （实测祖先链：.cm-table-widget → .cm-content → .cm-contentContainer →
+      .cm-sizer → .cm-scroller），根本不在任何 `.cm-line` 里，继承不到。
+      一行三四十字就差 5px 上下，正好把折行点顶过去：实测同一格（33 字）没光标时
+      是 16+17 两行、行高 64.98px，光标一进去变 16+16+1 三行、89.78px —— 看起来
+      就是「光标一进单元格，文字横向重排、整行还变高」。复位成 normal 后逐行一致。
 
-   三条复位的权重都不低于被复位的那条（padding 那条更高），不依赖书写顺序；
+   四条复位的权重都不低于被复位的那条（padding 那条更高），不依赖书写顺序；
    作用范围仅限于「表格组件里的里层编辑器」，正文与阅读视图一行都不碰。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content {
   padding-inline: 0;
@@ -1076,6 +1081,9 @@ body.folio-book-indent .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
 body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-align: inherit;
   text-justify: auto;
+}
+.markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+  letter-spacing: normal;
 }
 
 /* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
