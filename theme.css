@@ -664,7 +664,10 @@ body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
    .cm-scroller（overflow-x: auto）就会多出十几像素的横向滚动 —— 与列数
    无关，只有 1 列也照样。
    代价：窗口比「栏宽 + 32px」更窄时，正文会跟着窄最多 32px（总好过整个
-   编辑器能左右滑）。 */
+   编辑器能左右滑）。
+   注意：下面这条补的是**外层**编辑器，而它写成了后代选择器 —— 表格单元格
+   进入编辑态时，里层那个编辑器也会被命中，必须在 §5 复位（否则光标一进
+   单元格，那一行文字就右移一个字）。 */
 .markdown-source-view.mod-cm6 .cm-sizer {
   max-width: calc(var(--folio-content-width) + 2 * var(--size-4-4, 16px)) !important;
   margin-inline: auto !important;
@@ -968,6 +971,19 @@ body {
 .markdown-rendered td {
   padding: 0.45em 0.75em;
 }
+/* 实时预览的同一份内边距要写在 .table-cell-wrapper 上 —— 两个视图的内边距
+   不在同一个元素上，必须分别写，写一处只会「一个视图生效」：
+     · 阅读视图：td / th 自带内边距（Obsidian 默认 var(--size-2-2) var(--size-4-2)
+       = 4px 8px，被上面那条抬到 0.45em 0.75em）。
+     · 实时预览：Obsidian 把单元格的内边距全归到里层的 .table-cell-wrapper
+       （app.css：`.cm-table-widget th, td { padding: 0 }`，权重 0-4-1，盖得住
+       上面那条 .markdown-rendered td），所以真正要调的是 wrapper。
+   不改这条的后果：实时预览的单元格只有 8px / 4px，比阅读视图窄一圈，行高
+   也跟着矮 6.4px（实测 33.8px vs 40.17px）——同一篇笔记切两个视图，表格
+   就像换了一份。行高不用另外调：两个视图都用 --table-line-height。 */
+.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper {
+  padding: 0.45em 0.75em;
+}
 .markdown-rendered table {
   margin-block: var(--p-spacing);
 }
@@ -1015,6 +1031,51 @@ body {
 }
 .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
   width: 100%;
+}
+
+/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐」复位 ——
+   光标点进某个单元格时，Obsidian 会在那个 <td> 里再挂一个 CodeMirror：
+   .table-cell-wrapper > .cm-editor > .cm-scroller > .cm-content > .cm-line
+   （见 app.js editTableCell()：新建 wrapper → 原来的 .table-cell-wrapper 隐藏
+   → 把里层编辑器塞进同一个 <td>）。而第 3 节有三处规则是按**后代**写的，
+   于是会一起漏进这个里层编辑器 —— 症状都是「有光标 / 没光标两个样」：
+
+   1) `.markdown-source-view.mod-cm6 .cm-content { padding-inline: 16px }`
+      那是给外层编辑器补的（抵消表格组件的「padding 16px + margin -16px」），
+      里层并不需要 —— 它的内边距本来就由 .table-cell-wrapper 提供（上面那条
+      0.45em 0.75em）。漏进来的后果：被激活的单元格凭空多出 16px 左内边距，
+      正好是**一个汉字**的宽度（16px 字号下 1em = 16px）；没激活的单元格
+      没有这 16px。两下一比，就是「光标一进单元格，那一行文字整体右移一个字」。
+   2) `body.folio-book-indent … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
+      单元格里层的行没有 HyperMD- 类，会被当成纯段落再缩进两个字 ——
+      开着「书籍段落缩进」时，错位从 1 个字变成 3 个字（16px + 2em）。
+      而单元格里的段落本就不该有首行缩进（第 3 节原话：表格等 HyperMD 行不缩进）。
+   3) `body.folio-justify … .cm-line { text-align: justify; text-justify: inter-ideograph }`
+      这个模式**默认就是开的**（@settings 里 default: true）→ 里层这一行被拉成
+      两端对齐：单元格里折出来的前几行被撑满、汉字之间被拉开，最后一行照旧不撑
+      （实测：第 2 行字距 15.43 → 16.17px、行右缘 198 → 206px；截图里 29 → 33px
+      的也是它）→ 看起来就是「有光标和没光标，字间距不一样」。
+      阅读视图的单元格从不两端对齐（`body.folio-justify .markdown-rendered > p`
+      只认直接子段），没光标的单元格也不是 `.cm-line` —— 所以只有光标进去那一下会变。
+      这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
+      写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
+
+   另外**别**在这里补 `letter-spacing: normal`：letter-spacing 是继承属性，外层那个
+   .cm-line 的 0.01em 本来就会传进单元格 —— 有光标、没光标都是 0.16px，在这儿
+   归零反倒制造出新的不一致（实测过）。顺带记一笔：阅读视图的单元格不在这条
+   继承链上（没有 .cm-line 祖先），两个视图差 0.01em ≈ 0.16px/字，太小、先不动。
+
+   三条复位的权重都不低于被复位的那条（padding 那条更高），不依赖书写顺序；
+   作用范围仅限于「表格组件里的里层编辑器」，正文与阅读视图一行都不碰。 */
+.markdown-source-view.mod-cm6 .cm-table-widget .cm-content {
+  padding-inline: 0;
+}
+body.folio-book-indent .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+  text-indent: 0;
+}
+body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+  text-align: inherit;
+  text-justify: auto;
 }
 
 /* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
