@@ -159,6 +159,18 @@
             </div>
             <div class="callout-content"><p>想做成笔记就像在写书一般。</p></div>
           </div>
+
+          <p>折叠态：Obsidian 只是把正文 <code>display: none</code> 藏起来，元素还在 DOM 里 ——
+             上下留白由容器统一给，所以折叠块也上下对称（回归检查点）。</p>
+
+          <div class="callout" data-callout="tip" data-callout-fold="-">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div>
+              <div class="callout-title-inner">折叠的标注块</div>
+              <div class="callout-fold is-collapsed"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></div>
+            </div>
+            <div class="callout-content" style="display: none"><p>折叠时这段不占位。</p></div>
+          </div>
         </div>
       </div>
     </main>
