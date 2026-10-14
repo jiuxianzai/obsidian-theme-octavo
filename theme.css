@@ -164,12 +164,11 @@ settings:
     type: heading
     level: 1
   -
-    id: folio-table-min-col
-    title: 最小列宽
-    description: 列宽默认平分；当平分后小于此值时，表格改为横向滚动
+    id: folio-table-cols
+    title: 每行最多列数
+    description: 列数不超过它时平分铺满整栏；第 N+1 列起表格整体变宽、横向滚动
     type: variable-number
-    default: 5
-    format: em
+    default: 4
   -
     id: folio-palette
     title: 配色 · Palette
@@ -308,7 +307,7 @@ body {
   --folio-u-color: var(--folio-bold-color);
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
-  --folio-table-min-col: 5em;
+  --folio-table-cols: 4; /* 每行最多列数：列宽下限 = 栏宽 ÷ 这个数 */
 
   --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
   --folio-h2-size: 1.375em; /* 22px @16 */
@@ -933,15 +932,20 @@ body {
   border-collapse: collapse;
 }
 
-/* 单元格：把 width 当作「最小列宽」。
-   平分后仍小于该值 → 表格整体变宽 → 容器横向滚动。
-   content-box 很关键：border-box 会让最小列宽失效。 */
+/* 单元格宽度 = 栏宽 ÷ 每行最多列数（border-box，含内边距与边框）。
+   它同时充当「最小列宽」：列数不超过设定值时表格正好铺满整栏；再多一列，
+   各列不让位 → 表格整体变宽 → 由容器横向滚动。
+   拿 --folio-content-width 换算而不是写死 em，是为了跟着「正文栏宽」走：
+   设 4 列就是 4 列铺满，之后改栏宽不用重算。
+   为什么不用百分比当这个下限：table-layout: fixed 下浏览器会把 `width: 100%/4`
+   当成 auto 直接忽略，实测第 5 列照样挤进同一行（不溢出、也就不滚）。
+   末尾减 2px 是给 border-collapse 的余数 —— 不减的话 4 列会差 1px 就冒滚动条。 */
 .markdown-rendered th,
 .markdown-rendered td,
 .markdown-source-view.mod-cm6 .cm-table-widget th,
 .markdown-source-view.mod-cm6 .cm-table-widget td {
-  box-sizing: content-box;
-  width: var(--folio-table-min-col);
+  box-sizing: border-box;
+  width: calc(var(--folio-content-width) / var(--folio-table-cols) - 2px);
   min-width: 0;
   max-width: none;
   white-space: normal;
@@ -960,9 +964,14 @@ body {
   margin-block: var(--p-spacing);
 }
 
-/* 实时预览：表容器横向滚动 */
+/* 实时预览：表容器横向滚动。
+   overflow-y 必须显式关掉：容器一旦成为滚动盒，写不写都从 auto 派生，
+   macOS「始终显示滚动条」下就会多出一条没用的竖向滚动条（表格本身
+   从来不会比容器高，竖着没东西可滚）。Obsidian 自己的
+   .cm-table-widget 也是这么写的（overflow-x: auto; overflow-y: hidden）。 */
 .markdown-source-view.mod-cm6 .cm-table-widget {
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
   width: 100%;
@@ -976,6 +985,7 @@ body {
    auto）—— 那才是「整块面板横滚」的由来。 */
 .markdown-rendered .table-wrapper {
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 body {
