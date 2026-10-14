@@ -307,7 +307,7 @@ body {
   --folio-u-color: var(--folio-bold-color);
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
-  --folio-table-cols: 4; /* 每行最多列数：列宽下限 = 栏宽 ÷ 这个数 */
+  --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
 
   --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
   --folio-h2-size: 1.375em; /* 22px @16 */
@@ -932,20 +932,14 @@ body {
   border-collapse: collapse;
 }
 
-/* 单元格宽度 = 栏宽 ÷ 每行最多列数（border-box，含内边距与边框）。
-   它同时充当「最小列宽」：列数不超过设定值时表格正好铺满整栏；再多一列，
-   各列不让位 → 表格整体变宽 → 由容器横向滚动。
-   拿 --folio-content-width 换算而不是写死 em，是为了跟着「正文栏宽」走：
-   设 4 列就是 4 列铺满，之后改栏宽不用重算。
-   为什么不用百分比当这个下限：table-layout: fixed 下浏览器会把 `width: 100%/4`
-   当成 auto 直接忽略，实测第 5 列照样挤进同一行（不溢出、也就不滚）。
-   末尾减 2px 是给 border-collapse 的余数 —— 不减的话 4 列会差 1px 就冒滚动条。 */
+/* 单元格不写 width：列宽交给 table-layout: fixed 平分（各列等宽、不看内容长短）。
+   列的「最小宽度」不在这里给，改由下面那组 :has() 规则统一给 —— 而且它是相对
+   **实际容器**算的，不是拿「正文栏宽」设置换算出来的。 */
 .markdown-rendered th,
 .markdown-rendered td,
 .markdown-source-view.mod-cm6 .cm-table-widget th,
 .markdown-source-view.mod-cm6 .cm-table-widget td {
   box-sizing: border-box;
-  width: calc(var(--folio-content-width) / var(--folio-table-cols) - 2px);
   min-width: 0;
   max-width: none;
   white-space: normal;
@@ -963,6 +957,38 @@ body {
 .markdown-rendered table {
   margin-block: var(--p-spacing);
 }
+
+/* —— 「每行最多列数」是怎么生效的 ——
+   列数**不超过** --folio-table-cols：表格就是容器宽的 100%，各列平分 ——
+   一点都不滚（不是「差几像素才滚」，是正好 100%）。
+   一旦**多出**一列：把表格的最小宽度抬到 (列数 ÷ 设定值) × 容器宽，各列因此
+   始终占「容器宽 ÷ 设定值」、不肯让位 → 表格变宽 → 容器横向滚动。
+
+   百分比是相对**实际容器**算的（表格的包含块），这一点是上一版出问题的地方：
+   上一版拿 `--folio-content-width ÷ 列数` 算绝对值，只要面板内宽比「正文栏宽」
+   设置窄几像素（窗口差一点、外边距、滚动条），4 列就会顶出几像素的滚动条。
+   现在 ≤ 设定值的列数一定正好 100%；窗口比栏宽还窄时，也只是各列一起变窄，
+   不会提前开始滚。
+
+   为什么要逐个数写：CSS 数不出「有几列」，只能靠 :has(tr > :nth-child(k))
+   一次命中一个 k。这些规则权重完全相同，靠**层叠顺序**取胜 —— 所以 k 必须
+   升序写：候选里最大的那个（= 真实列数）在最后，盖住前面的。
+   16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。 */
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--folio-table-cols)); }
 
 /* 实时预览：表容器横向滚动。
    overflow-y 必须显式关掉：容器一旦成为滚动盒，写不写都从 auto 派生，
