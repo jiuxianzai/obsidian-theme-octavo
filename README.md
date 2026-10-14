@@ -158,6 +158,48 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
   得另想办法。
 - **实时预览里，光标停在那一行时标签按原文显示**，和「隐藏 Markdown 语法」的取舍一致。
 
+## 标注块（Callout）
+
+七个语义类型。做法借 **GitHub Alerts** 的骨架（NOTE / TIP / IMPORTANT / WARNING /
+CAUTION），换成本主题的纸感语言：
+
+- 左边一条 **3px 语义色竖线**（与引用块同宽），其余三边不封口
+- 底色只铺同色 **7%**（深色 10%），比 GitHub 更淡，纸面仍是主角
+- **只有标题与图标吃语义色**，正文保持墨色 —— 正文对比度完全不受影响
+- 圆角 8px，与引用块一致
+
+写法就是 Obsidian 原生语法（和 GitHub Alerts 同一套）：
+
+```markdown
+> [!note] 顺带一提
+> 正文照常写，可以用 **加粗**、<u>红下划线</u>、==高亮==，互不打架。
+
+> [!caution] 最重的一档
+> 用朱批红 —— 和加粗、红下划线是同一支笔。
+```
+
+| 类型 | 语义 | 别名 | 色相 |
+| --- | --- | --- | --- |
+| `note` | 顺带一提 | —（默认类型） | 靛蓝 |
+| `tip` | 小技巧 | `hint` | 松绿 |
+| `important` | 必须知道 | — | 紫 |
+| `warning` | 当心 | `attention` | 琥珀 |
+| `caution` | 最重的一档 | — | 朱批红 |
+| `example` | 举例 | — | 石墨青 |
+| `quote` | 引文 | `cite` | 暖褐 |
+
+语义强度参考 GitHub 的排序：`note` < `tip` < `important` < `warning` < `caution`。
+GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）、**别嵌套**、**标题别省**。
+
+几条实现上的约定（都在 theme.css §12）：
+
+- 颜色收在 `--folio-co-*` 变量里，浅 / 深各一套；类型 → 颜色的映射一并在 §12，换色只动变量。
+- **没列出的类型不会掉样式**：`info`、`success`、`danger`、`bug` 这类会统一落到 `note`
+  的配色，不会再冒出 Obsidian 默认那套彩色。
+- **图标仍由 Obsidian 提供**（Lucide）。要换，给对应类型写一条 `--callout-icon: lucide-xxx`。
+- **主题不碰 Obsidian 的 `--callout-color`**：它 1.13 起从「R, G, B 三元组」改成要求完整
+  颜色值，主题若依赖它就会被钉死在某个版本上；这里用自己的 `--folio-co`。
+
 ## 聚焦模式
 
 `Style Settings → Folio → 版面 → 聚焦模式`（默认关）。开启后：
@@ -225,6 +267,7 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
 | 当前行 / 加粗 | 光标所在行铺一层浅底，用一叠 `box-shadow`（每段平移量为行宽的 0.7 倍，保证互相咬合）横向铺满编辑区；底色不透明，避免半透明叠加出现色阶。加粗文字为朱批红（纸感 `#b03a2e` / 深色 `#e0736a`）—— 刻意与代码 keyword 的红拉开，避免「加粗」和「行内代码」共用同一支红笔、互相稀释强调 |
 | 引用块 | 浅色圆角背景（`--folio-quote-bg`）+ 一条灰色左边线 + 上下内边距（`--folio-quote-pad`，默认 0.7em，可在 Style Settings 调）。编辑器里多行引用由逐行底拼成整段，**圆角与上下 padding 都只给首 / 末行** —— CM6 的引用是多个 `.cm-line`，padding 写进通用规则会把整段切成一块块；左边线改 `--blockquote-border-color` 且不再自加边框，避免与 Obsidian 默认的主体色竖线叠成两条 |
 | 批注（红色下划线） | 原文 `<u>…</u>`，主题把 `u` / `ins` 渲染成朱红下划线：`text-decoration-color` 走 `--folio-u-color`，线比默认粗一档、往下压一点（`thickness` / `underline-offset`），并关掉 `text-decoration-skip-ink` 让整条线连成一笔。快捷键由配套插件 `folio-mark` 提供（`Cmd/Ctrl+U`）。**刻意不去动 `.cm-underline`** —— 那是内部链接的类，碰它会把所有链接一起染红 |
+| 标注块（Callout） | 七个语义类型（note / tip / important / warning / caution / example / quote）各配一支色：左边 3px 语义色竖线 + 同色 7%（深色 10%）极浅底 + 语义色标题与图标，正文仍是墨色，圆角 8px 与引用块对齐。颜色收在 `--folio-co-*`（浅 / 深两套），语义强度照 GitHub Alerts 的排序；不列出的类型（info / success / danger…）统一落到 note 配色。**不碰 Obsidian 的 `--callout-color`**（1.13 起改了取值格式，依赖它会被钉死版本），改用自有的 `--folio-co` |
 
 ## 注意
 

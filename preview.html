@@ -100,6 +100,65 @@
             </tbody>
           </table>
           <p>标签：<span class="tag">#主题</span> <span class="tag">#排版</span>，链接：<a class="internal-link" href="#">Obsidian 主题开发</a>。</p>
+
+          <h2>标注块（Callout）</h2>
+          <p>七个语义类型：一条 3px 语义色竖线 + 语义色标题 + 极浅同色底，正文保持墨色。</p>
+
+          <div class="callout" data-callout="note">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 6.8a1 1 0 0 0-4-4L3.8 16.2a2 2 0 0 0-.5.8l-1.3 4.4a.5.5 0 0 0 .6.6l4.4-1.3a2 2 0 0 0 .8-.5z"/></svg></div>
+              <div class="callout-title-inner">Note</div>
+            </div>
+            <div class="callout-content"><p>顺带一提，这一句在原文里是 <code>&gt; [!note]</code>。</p></div>
+          </div>
+
+          <div class="callout" data-callout="tip">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+              <div class="callout-title-inner">Tip</div>
+            </div>
+            <div class="callout-content"><p>别名 <code>[!hint]</code> 也认，样式与 tip 一致。</p></div>
+          </div>
+
+          <div class="callout" data-callout="important">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
+              <div class="callout-title-inner">Important</div>
+            </div>
+            <div class="callout-content"><p>正文里可以放 <strong>加粗</strong>、<u>红下划线</u>、<mark>高亮</mark>，互不打架。</p></div>
+          </div>
+
+          <div class="callout" data-callout="warning">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div>
+              <div class="callout-title-inner">Warning</div>
+            </div>
+            <div class="callout-content"><p>别名 <code>[!attention]</code> 同款。</p></div>
+          </div>
+
+          <div class="callout" data-callout="caution">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 2h8.2L22 7.9v8.2L16.1 22H7.9L2 16.1V7.9z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
+              <div class="callout-title-inner">Caution</div>
+            </div>
+            <div class="callout-content"><p>最重的一档，用朱批红 —— 和加粗、红下划线是同一支笔。</p></div>
+          </div>
+
+          <div class="callout" data-callout="example">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></div>
+              <div class="callout-title-inner">Example</div>
+            </div>
+            <div class="callout-content"><p>举例子、放样例输出时用。</p></div>
+          </div>
+
+          <div class="callout" data-callout="quote">
+            <div class="callout-title">
+              <div class="callout-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3"/><path d="M20.5 5H16a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2v1a3 3 0 0 1-3 3"/></svg></div>
+              <div class="callout-title-inner">Quote</div>
+            </div>
+            <div class="callout-content"><p>想做成笔记就像在写书一般。</p></div>
+          </div>
         </div>
       </div>
     </main>

@@ -1418,3 +1418,135 @@ body.folio-u-red :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, i
   /* 字形下伸部分（如「务、字」的钩）不再把线断开，整条连成一笔 */
   text-decoration-skip-ink: none;
 }
+
+/* ==========================================================================
+   12. 标注块（Callout）
+   --------------------------------------------------------------------------
+   覆盖 Obsidian 内置的七个语义类型：
+     note · tip · important · warning · caution · example · quote
+   （各自的长别名 hint / attention / cite 一并认，写法见下）
+
+   做法借 GitHub Alerts（NOTE / TIP / IMPORTANT / WARNING / CAUTION）的骨架 ——
+   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Folio 的纸感语言：
+     · 左边一条 3px 语义色竖线（与引用块同宽），其余三边不封口
+     · 底色只铺 7%（深色 10%），比 GitHub 更淡，纸面仍是主角
+     · 只有标题与图标吃语义色，正文保持墨色 —— 正文对比度完全不受影响
+     · 圆角 8px，与引用块一致
+
+   两个坑，记在这里：
+     1. 不碰 Obsidian 的 --callout-color。它 1.13 起从「R, G, B 三元组」改成
+        「完整颜色值」，主题若依赖它就被钉死在某个版本上。这里用自己的
+        --folio-co（仍是三元组），只喂给自己的 rgba()。
+     2. --folio-co 必须在基础规则里给默认值（note）。否则未列出的类型
+        （info / success / danger / bug …）拿到 undefined，整块会掉样式。
+   ========================================================================== */
+
+/* —— 语义色：浅色一套、深色一套（"R, G, B" 三元组）—— */
+body.theme-light {
+  --folio-co-note: 47, 93, 158; /* 靛蓝 */
+  --folio-co-tip: 43, 122, 75; /* 松绿 */
+  --folio-co-important: 107, 74, 168; /* 紫 */
+  --folio-co-warning: 138, 90, 18; /* 琥珀 */
+  --folio-co-caution: 176, 58, 46; /* 朱批红：和加粗、红下划线共用一支笔 */
+  --folio-co-example: 74, 96, 118; /* 石墨青 */
+  --folio-co-quote: 107, 95, 71; /* 暖褐：引用那一档 */
+  --folio-co-alpha: 0.07;
+}
+body.theme-dark {
+  --folio-co-note: 122, 167, 232;
+  --folio-co-tip: 98, 192, 138;
+  --folio-co-important: 183, 156, 240;
+  --folio-co-warning: 217, 169, 79;
+  --folio-co-caution: 224, 115, 106;
+  --folio-co-example: 147, 179, 201;
+  --folio-co-quote: 176, 164, 140;
+  --folio-co-alpha: 0.1;
+}
+
+/* —— 类型 → 语义色。默认 note，认不出的类型也走 note —— */
+.callout {
+  --folio-co: var(--folio-co-note);
+}
+.callout[data-callout="tip"],
+.callout[data-callout="hint"] {
+  --folio-co: var(--folio-co-tip);
+}
+.callout[data-callout="important"] {
+  --folio-co: var(--folio-co-important);
+}
+.callout[data-callout="warning"],
+.callout[data-callout="attention"] {
+  --folio-co: var(--folio-co-warning);
+}
+.callout[data-callout="caution"] {
+  --folio-co: var(--folio-co-caution);
+}
+.callout[data-callout="example"] {
+  --folio-co: var(--folio-co-example);
+}
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+  --folio-co: var(--folio-co-quote);
+}
+
+/* —— 基础形态 —— */
+.callout {
+  /* 关掉 Obsidian 的整圈描边与混合模式，改画左边一条竖线 */
+  --callout-border-width: 0;
+  --callout-border-opacity: 0;
+  --callout-blend-mode: normal;
+  --callout-radius: 8px;
+
+  background-color: rgba(var(--folio-co), var(--folio-co-alpha));
+  border-left: 3px solid rgb(var(--folio-co));
+  border-radius: 8px;
+  /* 内边距交给标题 / 正文各自处理：只有标题的标注块才不会多出一段空白 */
+  padding: 0;
+  margin: 1.1em 0;
+}
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.7em 1.05em 0;
+  color: rgb(var(--folio-co));
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 只有标题、没有正文时，把标题的下留白补回来 */
+.callout-title:last-child {
+  padding-bottom: 0.7em;
+}
+
+.callout-icon,
+.callout-fold {
+  display: flex;
+  align-items: center;
+  color: rgb(var(--folio-co));
+}
+
+.callout-content {
+  padding: 0.45em 1.05em 0.85em;
+  color: var(--text-normal);
+}
+
+/* 空正文不占位（Obsidian 有时会留一个空的 .callout-content） */
+.callout-content:empty {
+  display: none;
+}
+
+/* 正文里的首 / 末元素不要再叠外边距，否则会顶到圆角边上 */
+.callout-content > :first-child {
+  margin-top: 0;
+}
+.callout-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* 嵌套的标注块收一点上下间距，别把外层撑得太松散 */
+.callout-content .callout {
+  margin: 0.7em 0;
+}
