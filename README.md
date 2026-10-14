@@ -21,7 +21,8 @@ obsidian-theme-folio/
 ├── install-plugin.sh ← 开发用：软链配套插件到某个 vault
 ├── plugin/           ← 配套插件（各自独立，见对应章节）
 │   ├── folio-typewriter/{manifest.json, main.js}   ← 打字机滚动（见「聚焦模式」）
-│   └── folio-mark/{manifest.json, main.js}         ← 红色下划线（见「朱笔」）
+│   ├── folio-mark/{manifest.json, main.js}         ← 红色下划线（见「朱笔」）
+│   └── folio-table/{manifest.json, main.js}        ← 阅读视图表格横滚（见「表格」）
 ├── preview.html      ← 开发用：浏览器里的排版预览页
 ├── palette.gen.py    ← 开发用：从 theme.css 生成四套配色的色卡
 ├── palette.html      ← 色卡（生成物，不入库；python3 palette.gen.py 生成）
@@ -49,6 +50,7 @@ Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常�
 | --- | --- | --- |
 | `plugin/folio-typewriter` | 聚焦模式下让光标所在行**始终停在视口中间**（打字机滚动） | 浏览器只保证光标「不被裁掉」，主动居中必须由 JS 在每次光标/内容变化后重算 `scrollTop` |
 | `plugin/folio-mark` | `Cmd/Ctrl+U` 给选中文字**加 / 去红色下划线**（见「朱笔」） | Obsidian 核心没有「下划线」命令，主题更绑不了快捷键 |
+| `plugin/folio-table` | 让**阅读视图**里的宽表格能横向滚动（见「表格」） | Obsidian 只在实时预览里给表格包 `.table-wrapper` 容器，阅读视图里没有，纯 CSS 补不出来 |
 
 ```bash
 ./install-plugin.sh                  # 一键把 plugin/ 下的插件都链进 vault 并登记
@@ -166,7 +168,7 @@ CAUTION），换成本主题的纸感语言：
 - 左边一条 **3px 语义色竖线**（与引用块同宽），其余三边不封口
 - 底色只铺同色 **7%**（深色 10%），比 GitHub 更淡，纸面仍是主角
 - **只有标题与图标吃语义色**，正文保持墨色 —— 正文对比度完全不受影响
-- 圆角 8px，与引用块一致
+- 圆角只留右侧 8px（与引用块一致），左侧两角为直角 —— 让 3px 竖线贴齐上边
 
 写法就是 Obsidian 原生语法（和 GitHub Alerts 同一套）：
 
@@ -208,6 +210,28 @@ GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）
   代价是凡是 Obsidian 拿 `--callout-color` 上色的地方都要单独接管一次 —— 目前有两处：
   `.callout-icon .svg-icon`（图标，它的选择器权重比 `.callout-icon` 高，必须再压一层）
   与标注块里的 `--table-border-color`。
+
+## 表格
+
+默认行为：**占满栏宽、列宽平分（不随内容变化）、长内容换行**；如果平分下来连
+「最小列宽」（`--folio-table-min-col`，默认 5em）都不到，表格就整体变宽，由**容器**
+横向滚动。这样短内容不会把某一列挤扁，长内容也不会撑得满屏。
+
+> [!warning] 阅读视图需要插件
+> **实时预览**：Obsidian 自己会把表格包进 `<div class="table-wrapper">`，主题给那个
+> 容器 `overflow-x: auto` 就够了，开箱即用。
+> **阅读视图**：Obsidian **不包**这层容器（`app.js` 里的 `createDiv("table-wrapper")`
+> 只出现在表格编辑器那条路径），表格直接挂在笔记栏下 —— 于是宽表格只会**撑破栏宽、
+> 伸到栏外**，没有任何东西可以滚。这不是主题能靠 CSS 解决的（`overflow` 加在
+> `display: table` 的元素上无效，改成 `display: block` 又会丢掉 `table-layout: fixed`
+> 的平分与最小列宽）。
+> 装配套插件 **`folio-table`** 即可补上这层容器，两个视图行为一致：
+>
+> ```bash
+> ./install-plugin.sh
+> ```
+> 不装也不会坏，只是阅读视图退回 Obsidian 的原生行为（表格伸出栏外，表格比窗口还宽时
+> 由整个面板横滚）。
 
 ## 聚焦模式
 
@@ -270,13 +294,13 @@ GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）
 | ChatGPT 模式 | 一键切换「配色 + 字体 + 排版」：中性灰（浅色 `#ffffff` / `#f9f9f9` / `#f3f3f3`，主文字 `#212121`，次级 `#6b6b6b`，边框 `#e5e5e5`；深色 `#212121` 正文 / `#171717` 下沉侧栏 / `#262626` 浮出面板）+ 蓝色强调色 + **正文无衬线、标题沿用纸感衬线** + 左对齐 / 不缩进 / 标题不居中 / 标题无分隔线 |
 | 字号层级 | 全局生效（两种模式都一样）：侧边栏 14px / 400、正文 16px / 行高 28px、H1 28px / 700、H2 22px / 700、代码块 13px、行内代码 0.88em、侧边栏分组标题 12px、标签标题 14px |
 | 日历 | 给 Calendar 插件的 `.today` 加实心强调色底 + 反白文字，高亮当前日期 |
-| 表格 | 默认全宽、列宽平分（`table-layout: fixed`，不随内容变化）、长内容换行；平分后小于「最小列宽」时表格变宽并可横向滚动 |
+| 表格 | 默认全宽、列宽平分（`table-layout: fixed`，不随内容变化）、长内容换行；平分后小于「最小列宽」时表格变宽并可横向滚动。**两个视图给的滚动容器不一样**：实时预览里 Obsidian 自己把表格包进 `.table-wrapper`，主题给那个容器 `overflow-x: auto` 就够了；阅读视图里 Obsidian **不包**这层容器，纯 CSS 又补不出来 —— 置配套插件 `folio-table` 补上，两个视图就一致了（没装插件时，阅读视图会退回 Obsidian 的原生行为：表格撑破栏宽、由整个面板横滚） |
 | 代码块 | 参考 ChatGPT 网页端：12px 圆角容器 + 细边框 + 内容内边距 16/18px + 13px / 行高 1.7 等宽。底色与纸面同温（**不是**中性灰）：纸感浅 `#f5f3ed` / 纸感深 `#232120`，GPT 浅 `#f6f6f6` / GPT 深 `#1a1a1a`。语法色统一走 `--code-*` 变量（阅读模式 Prism `.token.*` 与编辑器 `cm-*` 共用同一套）。编辑器里代码块是一串 `.cm-line`，中间行直角、只给首/末行圆角（不给围栏相邻行加圆角，否则留缺口） |
 | 行内代码 | 半透明灰底 `rgba(127,127,127,0.13)` + 细边框 + 5px 圆角 |
 | 当前行 / 加粗 | 光标所在行铺一层浅底，用一叠 `box-shadow`（每段平移量为行宽的 0.7 倍，保证互相咬合）横向铺满编辑区；底色不透明，避免半透明叠加出现色阶。加粗文字为朱批红（纸感 `#b03a2e` / 深色 `#e0736a`）—— 刻意与代码 keyword 的红拉开，避免「加粗」和「行内代码」共用同一支红笔、互相稀释强调 |
 | 引用块 | 浅色圆角背景（`--folio-quote-bg`）+ 一条灰色左边线 + 上下内边距（`--folio-quote-pad`，默认 0.7em，可在 Style Settings 调）。编辑器里多行引用由逐行底拼成整段，**圆角与上下 padding 都只给首 / 末行** —— CM6 的引用是多个 `.cm-line`，padding 写进通用规则会把整段切成一块块；左边线改 `--blockquote-border-color` 且不再自加边框，避免与 Obsidian 默认的主体色竖线叠成两条 |
 | 批注（红色下划线） | 原文 `<u>…</u>`，主题把 `u` / `ins` 渲染成朱红下划线：`text-decoration-color` 走 `--folio-u-color`，线比默认粗一档、往下压一点（`thickness` / `underline-offset`），并关掉 `text-decoration-skip-ink` 让整条线连成一笔。快捷键由配套插件 `folio-mark` 提供（`Cmd/Ctrl+U`）。**刻意不去动 `.cm-underline`** —— 那是内部链接的类，碰它会把所有链接一起染红 |
-| 标注块（Callout） | 七个语义类型（note / tip / important / warning / caution / example / quote）各配一支色：左边 3px 语义色竖线 + 同色 7%（深色 10%）极浅底 + 语义色标题与图标，正文仍是墨色，圆角 8px 与引用块对齐。颜色收在 `--folio-co-*`（浅 / 深两套），语义强度照 GitHub Alerts 的排序；不列出的类型（info / success / danger…）统一落到 note 配色。**不碰 Obsidian 的 `--callout-color`**（1.13 起改了取值格式，依赖它会被钉死版本），改用自有的 `--folio-co` |
+| 标注块（Callout） | 七个语义类型（note / tip / important / warning / caution / example / quote）各配一支色：左边 3px 语义色竖线 + 同色 7%（深色 10%）极浅底 + 语义色标题与图标，正文仍是墨色，圆角只留右侧 8px（与引用块对齐），左侧两角为直角。颜色收在 `--folio-co-*`（浅 / 深两套），语义强度照 GitHub Alerts 的排序；不列出的类型（info / success / danger…）统一落到 note 配色。**不碰 Obsidian 的 `--callout-color`**（1.13 起改了取值格式，依赖它会被钉死版本），改用自有的 `--folio-co` |
 
 ## 注意
 

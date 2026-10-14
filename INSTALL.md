@@ -67,6 +67,7 @@
 | Style Settings 调参面板 | **Style Settings** |
 | 聚焦模式下让光标行保持在视口中间 | **Folio Typewriter**（本仓库 `plugin/folio-typewriter`，需另装；纯 CSS 无法做到） |
 | `Cmd/Ctrl+U` 给文字加 / 去红色下划线 | **Folio Mark**（本仓库 `plugin/folio-mark`，需另装；快捷键要靠命令，纯主题给不了） |
+| 阅读视图里宽表格能横向滚动 | **Folio Table**（本仓库 `plugin/folio-table`，需另装；Obsidian 只在实时预览里给表格包滚动容器，阅读视图里没有） |
 
 其余样式（排版、代码块、文件树、引用、表格、**标注块**…）**不需要任何插件**。
 

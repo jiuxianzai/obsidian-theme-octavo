@@ -968,6 +968,16 @@ body {
   width: 100%;
 }
 
+/* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
+   配套插件 folio-table 会补上同名的 .table-wrapper，这一条让它真的能滚；
+   没装插件时选择器落空，什么也不影响。
+   另：Obsidian 在 .markdown-preview-sizer 上没给 overflow，所以表格的溢出
+   会一直冒到 .markdown-preview-view（它由 overflow-y: auto 派生出 overflow-x:
+   auto）—— 那才是「整块面板横滚」的由来。 */
+.markdown-rendered .table-wrapper {
+  overflow-x: auto;
+}
+
 body {
   --tag-background: transparent;
   --tag-color: var(--text-accent);
@@ -1431,7 +1441,8 @@ body.folio-u-red :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, i
      · 左边一条 3px 语义色竖线（与引用块同宽），其余三边不封口
      · 底色只铺 7%（深色 10%），比 GitHub 更淡，纸面仍是主角
      · 只有标题与图标吃语义色，正文保持墨色 —— 正文对比度完全不受影响
-     · 圆角 8px，与引用块一致
+     · 圆角只留右侧 8px（与引用块一致）；左侧两角削成直角，让 3px 竖线
+       从上到下贴齐，不被圆角切出一个缺口
 
    两个坑，记在这里：
      1. 不碰 Obsidian 的 --callout-color。它 1.13 起从「R, G, B 三元组」改成
@@ -1504,12 +1515,15 @@ body.theme-dark {
   --callout-border-width: 0;
   --callout-border-opacity: 0;
   --callout-blend-mode: normal;
-  --callout-radius: 8px;
+  --callout-radius: 0 8px 8px 0;
   /* Obsidian 的 .callout / .callout-title / .callout-content 是读这几个变量
-     取内边距的；变量与下面的显式声明一起给，它哪天换了内部结构也不会跑偏。 */
-  --callout-padding: 0;
-  --callout-title-padding: 0.7em 1.05em 0;
-  --callout-content-padding: 0.45em 1.05em 0.85em;
+     取内边距的；变量与下面的显式声明一起给，它哪天换了内部结构也不会跑偏。
+     上下留白统一由**容器**给：折叠时 Obsidian 只是把 .callout-content 用
+     inline display:none 藏起来（app.js 里的 bl() → e.hide()），元素还在 DOM 里，
+     所以「只剩标题」猜不得 —— 用 :last-child 判断会让折叠块的下留白变成 0。 */
+  --callout-padding: 0.75em 0;
+  --callout-title-padding: 0 1.05em;
+  --callout-content-padding: 0.4em 1.05em 0;
   /* 标注块里的表格边框：Obsidian 会在 .callout 上把它改成 callout 色的 25%
      混合，那个色来自 --callout-color（不是我们的 --folio-co），会漏出青色 /
      橙色。这里用同一支语义色重新调一遍。 */
@@ -1517,9 +1531,8 @@ body.theme-dark {
 
   background-color: rgba(var(--folio-co), var(--folio-co-alpha));
   border-left: 3px solid rgb(var(--folio-co));
-  border-radius: 8px;
-  /* 内边距交给标题 / 正文各自处理：只有标题的标注块才不会多出一段空白 */
-  padding: 0;
+  border-radius: 0 8px 8px 0;
+  padding: 0.75em 0;
   margin: 1.1em 0;
 }
 
@@ -1527,7 +1540,7 @@ body.theme-dark {
   display: flex;
   align-items: center;
   gap: 0.5em;
-  padding: 0.7em 1.05em 0;
+  padding: 0 1.05em;
   color: rgb(var(--folio-co));
   font-size: 0.95em;
   font-weight: 600;
@@ -1541,11 +1554,6 @@ body.theme-dark {
   color: rgb(var(--folio-co));
 }
 
-/* 只有标题、没有正文时，把标题的下留白补回来 */
-.callout .callout-title:last-child {
-  padding-bottom: 0.7em;
-}
-
 .callout .callout-icon,
 .callout .callout-fold {
   display: flex;
@@ -1554,7 +1562,7 @@ body.theme-dark {
 }
 
 .callout .callout-content {
-  padding: 0.45em 1.05em 0.85em;
+  padding: 0.4em 1.05em 0;
   color: var(--text-normal);
 }
 
