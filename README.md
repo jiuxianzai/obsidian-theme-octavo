@@ -19,6 +19,7 @@ obsidian-theme-folio/
 ├── package.sh        ← 打分享用的 zip 到 ~/Downloads
 ├── install.sh        ← 开发用：软链主题到某个 vault
 ├── install-plugin.sh ← 开发用：软链配套插件到某个 vault
+├── sync-plugins.sh   ← 把插件源码镜像到各自的私有仓库（见「配套插件」）
 ├── plugin/           ← 配套插件（各自独立，见对应章节）
 │   ├── folio-typewriter/{manifest.json, main.js}   ← 打字机滚动（见「聚焦模式」）
 │   ├── folio-mark/{manifest.json, main.js}         ← 红色下划线（见「朱笔」）
@@ -57,6 +58,19 @@ Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常�
 ```
 
 装完重启 Obsidian（或 `设置 → 第三方插件` 里重载）即可。
+
+**插件的仓库**：三个配套插件各自有独立私有仓库（`obsidian-folio-typewriter` /
+`obsidian-folio-mark` / `obsidian-folio-table`，另有 vault 里就地开发的 `obsidian-dashboard`）。
+开发仍在原地（`plugin/<id>/`），改完用一条命令镜像到各自仓库：
+
+```bash
+./sync-plugins.sh                 # 同步全部（含 vault 里的 dashboard）
+./sync-plugins.sh folio-table     # 只同步一个
+./sync-plugins.sh --dry-run       # 只看会改什么
+```
+
+仓库里的 `README.md` / `LICENSE` / `.gitignore` 属于「仓库自己」，同步时不会被覆盖或删除；
+`node_modules/` 与运行时 `data.json` 不入库。
 
 **分享给别人**：见 [`INSTALL.md`](INSTALL.md)。简要版是把本仓库改名为 `Folio`
 放进对方的 `<库>/.obsidian/themes/`，然后在 `设置 → 外观 → 主题` 里选它。
