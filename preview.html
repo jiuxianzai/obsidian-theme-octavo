@@ -11,6 +11,7 @@
     --color-base-20:#e3e3e3; --color-base-30:#d0d0d0; --color-base-40:#b5b5b5;
     --color-base-50:#a0a0a0; --color-base-60:#8a8a8a; --color-base-70:#6f6f6f;
     --color-base-100:#262626;
+    --line-height-tight: 1.3;   /* 树行的行高，App 给的值 */
   }
   * { box-sizing: border-box; }
   html, body { margin:0; height:100%; }
@@ -22,8 +23,24 @@
   .markdown-preview-view { padding: 42px 24px 80px; }
   /* 预览里用嵌套 padding 模拟真实树缩进 */
   .nav-folder-children { padding-inline-start: 14px; }
-  .tree-item-icon.collapse-icon { width:16px; display:inline-block; text-align:center; font-size:10px; margin-right:4px; }
-  .nav-folder-title, .nav-file-title { display:flex; align-items:center; padding:6px 8px 6px 10px; border-radius:6px; margin-bottom:2px; }
+  /* 旧折叠箭头（▾）的样式不要再补：主题用 .nav-folder-title .collapse-icon
+     { display: none } 把它换成文件夹 SVG 了。这里若再给它 display，两个图标会
+     同时出现 —— 预览就和 App 长得不一样了。 */
+
+  /* 树行 = Obsidian 的 .tree-item-self：注意 align-items 是 baseline，不是 center。
+     这里必须照抄 App 的真实值 —— 曾经 stub 成 center，正好把「15px 图标没有
+     align-self:center 时坐在文字基线上、比文字高约 3px」这个错位盖住了。
+     行距 / 圆角 / 缩进交给主题自己的 --nav-item-* 变量。 */
+  .nav-folder-title, .nav-file-title {
+    display: flex;
+    align-items: baseline;
+    line-height: var(--line-height-tight);
+    font-size: var(--nav-item-size);
+    color: var(--nav-item-color);
+    padding: var(--nav-item-padding);
+    border-radius: var(--nav-item-radius);
+    margin-bottom: var(--nav-item-margin-bottom);
+  }
 </style>
 </head>
 <body class="theme-light folio-u-red">

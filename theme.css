@@ -1208,13 +1208,20 @@ select {
 }
 
 /* —— 折叠箭头 → 文件夹「开 / 关」SVG 图标 ——
-   用 mask 而不是 background-image，这样图标颜色能跟随 currentColor / 主题墨色。 */
+   用 mask 而不是 background-image，这样图标颜色能跟随 currentColor / 主题墨色。
+
+   align-self: center 不能省：Obsidian 给 .tree-item-self 写的是
+   align-items: baseline（不是 center）。::before 里只有空字符串、没有文字，
+   它的基线就落在自己底边上 —— 15px 的图标于是「坐」在文字基线上，比文字的中线
+   高约 3px。写成 center，图标才跟文字对齐（preview.html 早先把这一行 stub 成
+   align-items: center，正好把这个错位盖住了，别改回去）。 */
 .nav-folder-title .collapse-icon {
   display: none;
 }
 .nav-folder-title::before {
   content: "";
   flex: 0 0 auto;
+  align-self: center;
   width: 15px;
   height: 15px;
   margin-inline-end: 7px;
@@ -1248,6 +1255,7 @@ select {
 .nav-file-title::before {
   content: "";
   flex: 0 0 auto;
+  align-self: center;   /* 居中原因见上面文件夹图标那条 */
   width: 15px;
   height: 15px;
   margin-inline-end: 7px;
