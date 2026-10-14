@@ -8,11 +8,18 @@ set -euo pipefail
 
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT="${1:-$HOME/Downloads}"
-VERSION="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$SRC/manifest.json" | head -1)"
+VERSION="$(python3 - "$SRC/manifest.json" <<'PY'
+import json, sys
+m = json.load(open(sys.argv[1], encoding="utf-8"))
+# 优先 forkVersion：manifest.json 的 version 被抬成 9.9.9，用来屏蔽
+# Obsidian 主题市场的覆盖更新（见 README「别点主题市场里的『更新』」）
+print(m.get("forkVersion") or m.get("version", ""))
+PY
+)"
 NAME="folio-obsidian-theme-v$VERSION"
 
 if [ -z "$VERSION" ]; then
-  echo "✗ 读不到 manifest.json 里的 version" >&2
+  echo "✗ 读不到 manifest.json 里的 forkVersion / version" >&2
   exit 1
 fi
 

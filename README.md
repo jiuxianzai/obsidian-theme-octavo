@@ -11,7 +11,7 @@
 
 ```
 obsidian-theme-folio/
-├── manifest.json     ← 主题元信息（Obsidian 读取）
+├── manifest.json     ← 主题元信息（Obsidian 读取；version 是防覆盖哨兵，见文末 ⚠️ 一节）
 ├── theme.css         ← 主题全部样式 + Style Settings 配置
 ├── versions.json     ← 主题版本 → 最低 Obsidian 版本
 ├── INSTALL.md        ← 面向使用者的安装说明（分享时带上）
@@ -63,6 +63,26 @@ Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常�
 （分享的主题只有 CSS，不含插件；对方若要打字机滚动或红色下划线，需另装上面的插件。）
 
 > 新装了字体后，**需要完全退出并重启 Obsidian** 才会生效（Chromium 只在启动时枚举系统字体）。
+
+## ⚠️ 别点主题市场里的「更新」（防覆盖机制）
+
+本仓库是从**官方 Folio 分叉**出来的自定义版本，和官方**同名同 ID**；又因为它是软链进
+vault 的（`.obsidian/themes/Folio -> 本仓库`），所以在 `设置 → 外观 → 主题` 里点一下
+`Folio` 的「更新」，Obsidian 会按社区市场的记录下载**官方 Folio**，直接覆盖本仓库的
+`theme.css` 与 `manifest.json`——自定义样式全部消失（`git status` 会看到这两个文件被改动）。
+
+防护：`manifest.json` 的 `version` 被抬到 `9.9.9`（远高于官方版本）。Obsidian 只在
+「已装版本 < 市场版本」时才提示更新，因此那个「更新」不会再出现。
+
+- **真实版本**记在 `manifest.json` 的 `forkVersion`（与 `versions.json` 的键保持一致）。
+  `package.sh` 打包时读 `forkVersion`，所以 zip 名字仍是 `folio-obsidian-theme-v0.3.0.zip`。
+- 改主题时照旧只改 `theme.css`；发新版时更新 `forkVersion` 与 `versions.json`，
+  **`version` 保持 `9.9.9` 不动**。
+- 万一还是被覆盖了，回滚一条命令：
+
+  ```bash
+  git fetch && git checkout -- theme.css manifest.json
+  ```
 
 ## 分享给别人
 
