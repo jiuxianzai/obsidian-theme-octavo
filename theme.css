@@ -656,8 +656,22 @@ body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
    3. 正文排版
    ========================================================================== */
 
-/* —— 默认约束到舒适栏宽并居中（可用「取消居中栏宽」关闭）—— */
-.markdown-source-view.mod-cm6 .cm-sizer,
+/* —— 默认约束到舒适栏宽并居中（可用「取消居中栏宽」关闭）——
+   实时预览的栏容器多留 32px：Obsidian 的表格组件是「padding 16px +
+   margin 0 -16px」，边框盒天生比文字行宽出 16px（那 16px 是给它行/列
+   「+」把手留的槽）。把 32px 让给编辑器、再给 .cm-content 补 16px 内边距，
+   表格就正好落进槽里；否则面板只要比栏宽宽不到 32px，CodeMirror 的
+   .cm-scroller（overflow-x: auto）就会多出十几像素的横向滚动 —— 与列数
+   无关，只有 1 列也照样。
+   代价：窗口比「栏宽 + 32px」更窄时，正文会跟着窄最多 32px（总好过整个
+   编辑器能左右滑）。 */
+.markdown-source-view.mod-cm6 .cm-sizer {
+  max-width: calc(var(--folio-content-width) + 2 * var(--size-4-4, 16px)) !important;
+  margin-inline: auto !important;
+}
+.markdown-source-view.mod-cm6 .cm-content {
+  padding-inline: var(--size-4-4, 16px);
+}
 .markdown-preview-view .markdown-preview-sizer {
   max-width: var(--folio-content-width) !important;
   margin-inline: auto !important;
@@ -1014,6 +1028,19 @@ body {
   overflow-y: hidden;
 }
 
+/* 阅读视图：正文本身不再横向滚动。
+   Obsidian 给 .markdown-preview-view 只写了 overflow-y: auto，overflow-x
+   因此从 visible 派生为 auto —— 正文里只要有什么东西宽出一丁点（或者你
+   横向拖一下笔记），整块面板就能左右滑几像素，看起来就像表格在滚。
+   表格该横滚的地方由 .table-wrapper 自己负责（它是独立的滚动容器，不受
+   这里影响），所以正文这一层直接夹住。
+   用 clip 而不是 hidden：夹在**栏容器**上时它的竖轴还是 visible，不会被
+   降级；而 hidden 会让它变成「还能用触控板滑、只是没滚动条」的滚动盒，
+   等于没夹。（实测：夹在面板上会被降级成 hidden，夹在栏容器上才是真 clip。） */
+.markdown-preview-view .markdown-preview-sizer {
+  overflow-x: clip;
+}
+
 body {
   --tag-background: transparent;
   --tag-color: var(--text-accent);
@@ -1137,11 +1164,28 @@ select {
   --nav-item-background-hover: var(--background-modifier-hover);
   --nav-item-background-active: var(--background-modifier-active-hover);
   --nav-item-background-selected: var(--background-modifier-active-hover);
-  /* 缩进 = 图标 15px + 间距 7px = 22px，子项文件名才能与父文件夹名对齐 */
-  --nav-item-children-margin-start: 16px;
-  --nav-item-children-padding-start: 6px;
+  /* 缩进：一级 = 图标 15px + 间距 7px = 22px，子项文件名才能与父文件夹名对齐。
+     整份缩进都放进 padding-inline-start（而不是 margin），原因见下面那条规则。 */
+  --nav-item-children-margin-start: 0px;
+  --nav-item-children-padding-start: 22px;
   --nav-indentation-guide-width: 0px;
   --nav-indentation-guide-color: transparent;
+}
+
+/* —— 子级缩进：写成 padding，不靠 margin ——
+   文件树开启「无限滚动 / 虚拟化」后，Obsidian 会按测量到的行位置，给每行套上
+   inline 的 margin / padding（都带 !important）来复用同一批 DOM。这条路径会把
+   子级容器的 margin 折算掉，只剩 padding 还算数 —— 表现就是文件与上级目录
+   几乎平齐、没有层级（实测一级只剩 ~6px）。
+   所以这里把整份缩进（22px = 文件夹图标 15px + 间距 7px）都放进
+   padding-inline-start：无论 Obsidian 走不走那条折算，子项文件名都稳定落在
+   父文件夹名下方。margin 归零，避免两条路径叠加成 44px。
+   顺带：padding 也正好是缩进引导线的落点，打开「显示缩进引导线」时竖线会落在
+   子项左侧的留白里，不会压在文字上。 */
+.nav-files-container .tree-item-children,
+.nav-files-container .nav-folder-children {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 22px !important;
 }
 
 /* 去掉缩进引导线 / 折叠边框（兼容旧版选择器） */
