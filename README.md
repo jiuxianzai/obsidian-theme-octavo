@@ -19,8 +19,9 @@ obsidian-theme-folio/
 ├── package.sh        ← 打分享用的 zip 到 ~/Downloads
 ├── install.sh        ← 开发用：软链主题到某个 vault
 ├── install-plugin.sh ← 开发用：软链配套插件到某个 vault
-├── plugin/           ← 配套插件（打字机滚动，见「聚焦模式」）
-│   └── folio-typewriter/{manifest.json, main.js}
+├── plugin/           ← 配套插件（各自独立，见对应章节）
+│   ├── folio-typewriter/{manifest.json, main.js}   ← 打字机滚动（见「聚焦模式」）
+│   └── folio-mark/{manifest.json, main.js}         ← 红色下划线（见「朱笔」）
 ├── preview.html      ← 开发用：浏览器里的排版预览页
 ├── palette.gen.py    ← 开发用：从 theme.css 生成四套配色的色卡
 ├── palette.html      ← 色卡（生成物，不入库；python3 palette.gen.py 生成）
@@ -41,20 +42,23 @@ Obsidian 只认 `.obsidian/themes/<名字>/theme.css`，而 `.obsidian/` 通常�
 ./install.sh /path/to/your/vault   # 或指定 vault
 ```
 
-**配套插件（可选）**：主题的「聚焦模式」还带一个打字机滚动效果——光标所在行
-始终停在视口中间。这在纯 CSS 里做不到（浏览器只会把光标滚到「刚好可见」，不会
-主动居中），所以单独做成了插件 `plugin/folio-typewriter`：
+**配套插件（可选）**：主题有两处「纯 CSS 做不到」的能力，各做成一个轻量插件；
+两个都是纯 DOM / 无构建，`main.js` 就是最终产物：
+
+| 插件 | 干什么 | 为什么必须用插件 |
+| --- | --- | --- |
+| `plugin/folio-typewriter` | 聚焦模式下让光标所在行**始终停在视口中间**（打字机滚动） | 浏览器只保证光标「不被裁掉」，主动居中必须由 JS 在每次光标/内容变化后重算 `scrollTop` |
+| `plugin/folio-mark` | `Cmd/Ctrl+U` 给选中文字**加 / 去红色下划线**（见「朱笔」） | Obsidian 核心没有「下划线」命令，主题更绑不了快捷键 |
 
 ```bash
-./install-plugin.sh                  # 链接插件并登记到 community-plugins.json
+./install-plugin.sh                  # 一键把 plugin/ 下的插件都链进 vault 并登记
 ```
 
-装完重启 Obsidian（或 `设置 → 第三方插件` 里重载）即可。它是纯 DOM 实现、无构建
-步骤，`main.js` 就是最终产物。
+装完重启 Obsidian（或 `设置 → 第三方插件` 里重载）即可。
 
 **分享给别人**：见 [`INSTALL.md`](INSTALL.md)。简要版是把本仓库改名为 `Folio`
 放进对方的 `<库>/.obsidian/themes/`，然后在 `设置 → 外观 → 主题` 里选它。
-（分享的主题只有 CSS，不含插件；对方若要打字机滚动，需另装上面的插件。）
+（分享的主题只有 CSS，不含插件；对方若要打字机滚动或红色下划线，需另装上面的插件。）
 
 > 新装了字体后，**需要完全退出并重启 Obsidian** 才会生效（Chromium 只在启动时枚举系统字体）。
 
@@ -101,6 +105,7 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
 - **版面**：取消居中栏宽、**标题居中**、**标题分隔线**、**两端对齐**、**首行缩进**
 - **专注**：**聚焦模式**（调暗非当前内容、悬停行/光标行亮起，详见下节）、隐藏滚动条、隐藏状态栏
 - **编辑器**：**当前行高亮**、**隐藏 Markdown 语法**（见下）
+- **批注**：**红色下划线**（朱笔，见下）
 - **文件树**：紧凑行高、显示缩进引导线
 
 > 正文字号不在此处，请用 `Appearance → Font size`（推荐 17）。原因是 Obsidian 把字号写在
@@ -130,6 +135,28 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
   且默认**不留占位**。唯一例外：当标记正好是该行最后一个元素时（例如刚打完 `##`
   的空标题），会保留标记宽度、只把字形变透明——否则光标没有落点会消失，后续输入
   也会跑到标记前面（标题打不出来）。因为它已在行尾，这点占位看不出来。
+
+## 朱笔 · 红色下划线
+
+给「要盯着的句子」画一条红色下划线，和暖黄的 `==高亮==` 分工：一个是荧光笔，
+一个是批注笔。
+
+| 项 | 说明 |
+| --- | --- |
+| 原文写法 | `<u>要标红的文字</u>`（Obsidian 原生支持，阅读视图与实时预览都会渲染） |
+| 快捷键 | **`Cmd/Ctrl+U`** 加 / 去（配套插件 `folio-mark`；忘了也能在编辑器右键菜单里找到） |
+| 开关 | `Style Settings → Folio → 批注 → 红色下划线（朱笔）`，默认开 |
+| 颜色 | 沿用加粗那支**朱批红**（浅 `#b03a2e` / 深 `#e0736a`）；想换色改 `--folio-u-color` |
+
+插件的行为：选中一段文字按一次包上 `<u>`，再按一次去掉；没选中就插一对空标签、
+光标落在中间；选区里如果有空行，会退化成**逐行包裹**（空行会截断 HTML 块）。
+
+两条边界，先说清楚：
+
+- **标签里不解析 Markdown。** `<u>**粗体**</u>`、`<u>[[链接]]</u>` 里的加粗和链接
+  都不会生效——这是 Obsidian 的既定行为，不是主题的问题。要「红下划线 + 粗体」
+  得另想办法。
+- **实时预览里，光标停在那一行时标签按原文显示**，和「隐藏 Markdown 语法」的取舍一致。
 
 ## 聚焦模式
 
@@ -197,6 +224,7 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
 | 行内代码 | 半透明灰底 `rgba(127,127,127,0.13)` + 细边框 + 5px 圆角 |
 | 当前行 / 加粗 | 光标所在行铺一层浅底，用一叠 `box-shadow`（每段平移量为行宽的 0.7 倍，保证互相咬合）横向铺满编辑区；底色不透明，避免半透明叠加出现色阶。加粗文字为朱批红（纸感 `#b03a2e` / 深色 `#e0736a`）—— 刻意与代码 keyword 的红拉开，避免「加粗」和「行内代码」共用同一支红笔、互相稀释强调 |
 | 引用块 | 浅色圆角背景（`--folio-quote-bg`）+ 一条灰色左边线 + 上下内边距（`--folio-quote-pad`，默认 0.7em，可在 Style Settings 调）。编辑器里多行引用由逐行底拼成整段，**圆角与上下 padding 都只给首 / 末行** —— CM6 的引用是多个 `.cm-line`，padding 写进通用规则会把整段切成一块块；左边线改 `--blockquote-border-color` 且不再自加边框，避免与 Obsidian 默认的主体色竖线叠成两条 |
+| 批注（红色下划线） | 原文 `<u>…</u>`，主题把 `u` / `ins` 渲染成朱红下划线：`text-decoration-color` 走 `--folio-u-color`，线比默认粗一档、往下压一点（`thickness` / `underline-offset`），并关掉 `text-decoration-skip-ink` 让整条线连成一笔。快捷键由配套插件 `folio-mark` 提供（`Cmd/Ctrl+U`）。**刻意不去动 `.cm-underline`** —— 那是内部链接的类，碰它会把所有链接一起染红 |
 
 ## 注意
 

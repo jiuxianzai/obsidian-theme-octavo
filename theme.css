@@ -255,6 +255,17 @@ settings:
     type: class-toggle
     default: false
   -
+    id: folio-markup
+    title: 批注 · Markup
+    type: heading
+    level: 1
+  -
+    id: folio-u-red
+    title: 红色下划线（朱笔）
+    description: 用 <u> 标签包住的文字渲染成红色下划线。配合 folio-mark 插件，Cmd/Ctrl+U 一键加 / 去
+    type: class-toggle
+    default: true
+  -
     id: folio-tree
     title: 文件树 · File explorer
     type: heading
@@ -291,6 +302,10 @@ body {
   --folio-line-height: 1.75;
   --folio-para-spacing: 1.05em;
   --folio-quote-pad: 0.7em; /* 引用块上下内边距：阅读视图与实时预览共用 */
+  /* 朱笔下划线（<u>）的颜色：默认沿用加粗那支朱批红，浅色 / 深色两套自动跟随。
+     想单独换色，在这里改即可 —— 别在 Style Settings 里做成单一色值，
+     那会把深色套的 #e0736a 一起吃掉。 */
+  --folio-u-color: var(--folio-bold-color);
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
   --folio-table-min-col: 5em;
@@ -1379,4 +1394,27 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
   background-color: var(--interactive-accent) !important;
   color: var(--text-on-accent) !important;
   font-weight: 600;
+}
+
+/* ==========================================================================
+   11. 朱笔 · 红色下划线（<u>文字</u>）
+   --------------------------------------------------------------------------
+   原文写成 <u>…</u>（Obsidian 原生支持的 HTML 下划线，阅读视图与实时预览都
+   会渲染成 u 元素），样式交给主题，快捷键交给配套插件 folio-mark
+   （Cmd/Ctrl+U 一键加 / 去）。
+
+   两条边界：
+     1. HTML 标签内不解析 Markdown —— <u>**粗体**</u>、「<u>[[链接]]</u>」里的
+        加粗与链接不会生效，这是 Obsidian 的既定行为，不是主题的锅。
+     2. 别去动 .cm-underline —— 那是内部链接的类，碰它会把所有链接一起染红。
+   ========================================================================== */
+
+body.folio-u-red :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
+  text-decoration-line: underline;
+  text-decoration-color: var(--folio-u-color);
+  /* 线比默认粗一档、往下压一点，读起来像「批注笔」而不是排版下划线 */
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.18em;
+  /* 字形下伸部分（如「务、字」的钩）不再把线断开，整条连成一笔 */
+  text-decoration-skip-ink: none;
 }
