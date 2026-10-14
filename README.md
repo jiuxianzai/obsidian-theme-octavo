@@ -178,15 +178,21 @@ CAUTION），换成本主题的纸感语言：
 > 用朱批红 —— 和加粗、红下划线是同一支笔。
 ```
 
-| 类型 | 语义 | 别名 | 色相 |
-| --- | --- | --- | --- |
-| `note` | 顺带一提 | —（默认类型） | 靛蓝 |
-| `tip` | 小技巧 | `hint` | 松绿 |
-| `important` | 必须知道 | — | 紫 |
-| `warning` | 当心 | `attention` | 琥珀 |
-| `caution` | 最重的一档 | — | 朱批红 |
-| `example` | 举例 | — | 石墨青 |
-| `quote` | 引文 | `cite` | 暖褐 |
+| 类型 | 语义 | 图标 | 别名 | 色相 |
+| --- | --- | --- | --- | --- |
+| `note` | 顺带一提 | 铅笔 | —（默认类型） | 靛蓝 |
+| `tip` | 小技巧 | 灯泡 | `hint` | 松绿 |
+| `important` | 必须知道 | 圆圈警示 | — | 紫 |
+| `warning` | 当心 | 三角警示 | `attention` | 琥珀 |
+| `caution` | 最重的一档 | 八边形警示 | — | 朱批红 |
+| `example` | 举例 | 列表 | — | 石墨青 |
+| `quote` | 引文 | 引号 | `cite` | 暖褐 |
+
+> [!warning] 图标是特意换过的
+> Obsidian 默认里 **tip 与 important 都是 `lucide-flame`、颜色还同为青色**，
+> **warning 与 caution 都是 `lucide-alert-triangle`** —— 只靠颜色根本分不开。
+> 主题只覆盖这三个撞车的：tip 换灯泡、important 换圆圈警示、caution 换八边形警示，
+> 其余保留 Obsidian 自己的图标（note 铅笔、example 列表、quote 引号）。
 
 语义强度参考 GitHub 的排序：`note` < `tip` < `important` < `warning` < `caution`。
 GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）、**别嵌套**、**标题别省**。
@@ -199,6 +205,9 @@ GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）
 - **图标仍由 Obsidian 提供**（Lucide）。要换，给对应类型写一条 `--callout-icon: lucide-xxx`。
 - **主题不碰 Obsidian 的 `--callout-color`**：它 1.13 起从「R, G, B 三元组」改成要求完整
   颜色值，主题若依赖它就会被钉死在某个版本上；这里用自己的 `--folio-co`。
+  代价是凡是 Obsidian 拿 `--callout-color` 上色的地方都要单独接管一次 —— 目前有两处：
+  `.callout-icon .svg-icon`（图标，它的选择器权重比 `.callout-icon` 高，必须再压一层）
+  与标注块里的 `--table-border-color`。
 
 ## 聚焦模式
 

@@ -1463,16 +1463,24 @@ body.theme-dark {
   --folio-co-alpha: 0.1;
 }
 
-/* —— 类型 → 语义色。默认 note，认不出的类型也走 note —— */
+/* —— 类型 → 语义色与图标 ——
+   图标只覆盖会「撞车」的三处：Obsidian 默认里 tip 与 important 用的是同一个
+   lucide-flame、颜色还同为 --color-cyan-rgb；warning 与 caution 同为
+   lucide-alert-triangle。只靠颜色分不开，所以这里各换一支：
+       tip → 灯泡（也跟 GitHub 的 TIP 一致）
+       important → 圆圈警示（三角给 warning、八边形给 caution，正好三档递进）
+   其余类型保留 Obsidian 自己的图标：note=pencil、example=list、quote=quote-glyph。 */
 .callout {
   --folio-co: var(--folio-co-note);
 }
 .callout[data-callout="tip"],
 .callout[data-callout="hint"] {
   --folio-co: var(--folio-co-tip);
+  --callout-icon: lucide-lightbulb;
 }
 .callout[data-callout="important"] {
   --folio-co: var(--folio-co-important);
+  --callout-icon: lucide-alert-circle;
 }
 .callout[data-callout="warning"],
 .callout[data-callout="attention"] {
@@ -1480,6 +1488,7 @@ body.theme-dark {
 }
 .callout[data-callout="caution"] {
   --folio-co: var(--folio-co-caution);
+  --callout-icon: lucide-alert-octagon;
 }
 .callout[data-callout="example"] {
   --folio-co: var(--folio-co-example);
@@ -1496,6 +1505,15 @@ body.theme-dark {
   --callout-border-opacity: 0;
   --callout-blend-mode: normal;
   --callout-radius: 8px;
+  /* Obsidian 的 .callout / .callout-title / .callout-content 是读这几个变量
+     取内边距的；变量与下面的显式声明一起给，它哪天换了内部结构也不会跑偏。 */
+  --callout-padding: 0;
+  --callout-title-padding: 0.7em 1.05em 0;
+  --callout-content-padding: 0.45em 1.05em 0.85em;
+  /* 标注块里的表格边框：Obsidian 会在 .callout 上把它改成 callout 色的 25%
+     混合，那个色来自 --callout-color（不是我们的 --folio-co），会漏出青色 /
+     橙色。这里用同一支语义色重新调一遍。 */
+  --table-border-color: rgba(var(--folio-co), 0.3);
 
   background-color: rgba(var(--folio-co), var(--folio-co-alpha));
   border-left: 3px solid rgb(var(--folio-co));
@@ -1505,7 +1523,7 @@ body.theme-dark {
   margin: 1.1em 0;
 }
 
-.callout-title {
+.callout .callout-title {
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -1516,33 +1534,40 @@ body.theme-dark {
   letter-spacing: 0.01em;
 }
 
+/* 图标颜色必须单独再压一层：Obsidian 是写给 `.callout-icon .svg-icon` 的
+   （0,2,0），只写 `.callout-icon` 会被它盖掉 —— 那样图标仍旧走
+   --callout-color，tip 与 important 会双双变成同一个青色，正是当初撞车的地方。 */
+.callout .callout-icon .svg-icon {
+  color: rgb(var(--folio-co));
+}
+
 /* 只有标题、没有正文时，把标题的下留白补回来 */
-.callout-title:last-child {
+.callout .callout-title:last-child {
   padding-bottom: 0.7em;
 }
 
-.callout-icon,
-.callout-fold {
+.callout .callout-icon,
+.callout .callout-fold {
   display: flex;
   align-items: center;
   color: rgb(var(--folio-co));
 }
 
-.callout-content {
+.callout .callout-content {
   padding: 0.45em 1.05em 0.85em;
   color: var(--text-normal);
 }
 
 /* 空正文不占位（Obsidian 有时会留一个空的 .callout-content） */
-.callout-content:empty {
+.callout .callout-content:empty {
   display: none;
 }
 
 /* 正文里的首 / 末元素不要再叠外边距，否则会顶到圆角边上 */
-.callout-content > :first-child {
+.callout .callout-content > :first-child {
   margin-top: 0;
 }
-.callout-content > :last-child {
+.callout .callout-content > :last-child {
   margin-bottom: 0;
 }
 
