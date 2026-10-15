@@ -7,3 +7,4 @@ palette.html
 .idea/
 .vscode/
 node_modules/
+__pycache__/

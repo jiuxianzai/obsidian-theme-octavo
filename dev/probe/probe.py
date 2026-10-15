@@ -314,10 +314,10 @@ def kill_stale(profile: Path):
     time.sleep(0.5)
 
 
-def wait_ready(cdp: 'CDP', timeout: float = 60) -> bool:
-    """等 Obsidian 把 vault 和布局都load完 —— CDP 页面比 app 就绪早得多。"""
+def wait_ready(cdp: 'CDP', note: str = NOTE, timeout: float = 60) -> bool:
+    """等 Obsidian 把 vault 和布局都 load 完 —— CDP 页面比 app 就绪早得多。"""
     expr = ("!!(window.app && app.workspace && app.workspace.layoutReady && app.vault && "
-            "app.vault.getAbstractFileByPath(%s))" % json.dumps(NOTE))
+            "app.vault.getAbstractFileByPath(%s))" % json.dumps(note))
     deadline = time.time() + timeout
     while time.time() < deadline:
         try:
