@@ -230,6 +230,24 @@ GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）
 
 也就是说，**设 4 就是「4 列铺满，出现第 5 列才开始左右滑」**。
 
+滚的是哪一层，两个视图不一样 —— 而实时预览那一层**必须是四周留了 16px 槽的容器**：
+
+- **实时预览**：滚动盒是 Obsidian 的 **`.cm-table-widget`**（`padding: 16px` +
+  `margin: 0 -16px`，四周正好留出 16px 的槽，给它行/列那两个绝对定位的「+」把手用）。
+  所以主题显式把 `.table-wrapper` 交回给外层（`overflow: visible`）：wrapper 自己的
+  `padding` 是 0，兜不住 `inset-inline-start: 100%`、宽 16px 的「+」列把手 —— 它一旦成了
+  滚动盒，这 16px 就成了**实打实可滚的余量**：表格只有 1 列、正好 100% 宽，容器照样能
+  左右滑 16px，滑到底右边多一条空白，看起来就像表格没铺满。附带两个症状：每张表下面
+  多一条 15px 的横向滚动条，`overflow-y: hidden` 还把下面的「+」行把手裁掉（点不到）。
+- **阅读视图**：滚动盒就是配套插件补的那层 `.table-wrapper`（阅读视图没有把手，不需要留槽）。
+
+> [!warning] `.markdown-rendered .table-wrapper` 那条不只作用于阅读视图
+> 实时预览的表格组件**自己也带 `markdown-rendered` 类**（实测 `class="cm-embed-block
+> cm-table-widget markdown-rendered"`），所以那条会连实时预览的 wrapper 一起命中。
+> 主题靠 `.cm-table-widget .table-wrapper { overflow: visible }`（权重 0-4-0 > 0-2-0）
+> 把它压回去。删掉那一条会立刻复发上面那 16px —— `dev/probe/probe.py` 的**检查 3**
+> 就是守这个的（1/2/4/6 列，逐层强行滚一遍）。
+
 宽度是相对**表格的实际容器**算的（百分比），不是拿「正文栏宽」设置换算的绝对值 ——
 所以面板比栏宽窄几像素时（窗口差一点、外边距、滚动条），≤ 设定值的列数也仍然是
 正好 100%、不滚；窗口整体变窄时，各列只是跟着一起变窄，不会提前开始滚。
@@ -416,7 +434,7 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 | --- | --- |
 | `preview.html` | 浏览器里直接看排版，或让无头 Chrome 截图 |
 | `palette.gen.py` | 从 `theme.css` 生成四套配色的色卡（含 WCAG 对比度与改动对照） |
-| `dev/probe/` | **真实 Obsidian 探针**：量表格「有 / 无光标」「实时预览 / 阅读视图」是否一致 |
+| `dev/probe/` | **真实 Obsidian 探针**：量表格「有 / 无光标」「实时预览 / 阅读视图」是否一致、横向可滚量对不对 |
 | `dev/screenshot/` | 生成 README 头图 `screenshot.png`（真实 Obsidian、纸感模式） |
 
 ```bash

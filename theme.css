@@ -1029,8 +1029,27 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
 }
+/* 实时预览里「滚的是 .cm-table-widget，不是 .table-wrapper」—— wrapper 要交回给外层。
+   wrapper 里挂着 Obsidian 的两个绝对定位「+」把手：
+     · .table-col-btn  inset-inline-start: 100%; width: 16px → 右边探出 16px
+     · .table-row-btn  top: 100%;               height: 16px → 下边探出 16px
+   wrapper 自己没有 padding，兜不住这 16px。一旦它成了滚动盒（就是下面给阅读视图
+   写的那条 `.markdown-rendered .table-wrapper` —— 实时预览的表格组件**也带
+   .markdown-rendered 类**，会被一起命中），这 16px 就成了实打实可滚的余量：
+   表格哪怕只有 1 列、正好 100% 宽，容器也能左右滑 16px，滑到底右边多一条空白，
+   看起来就像表格没铺满。滚动盒还有两个副作用：多出一条 15px 的横向滚动条
+   （每张表下面白白多 15px 空白），以及 `overflow-y: hidden` 把下面的「+」行把手
+   裁掉（实测悬停 opacity 永远是 0，点不到）。
+   .cm-table-widget 天生就是干这个的：padding: 16px + margin: 0 -16px，四周正好
+   留出 16px 的槽，把手落在槽里 —— ≤ 设定列数时 scrollWidth 正好等于 clientWidth
+   （一个像素都不多），> 设定列数时按表格的超出量滚。
+   实测（真实 app.css，1100×1000，1/2/4/6 列）：
+     原样：1/2/4 列 wrapper 可滚 16px（＝把手宽），且每张表下多 15px 滚动条；6 列 wrapper 滚 320px
+     修复：1/2/4 列 0px；6 列改由 .cm-table-widget 滚 304px；两个把手都能悬停到（opacity 1）
+     阅读视图两版完全一致（1/2/4 列 0px；6 列 336px），插件那条路不受影响。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
   width: 100%;
+  overflow: visible;
 }
 
 /* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐 / 字距」复位 ——
@@ -1089,6 +1108,10 @@ body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
 /* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
    配套插件 folio-table 会补上同名的 .table-wrapper，这一条让它真的能滚；
    没装插件时选择器落空，什么也不影响。
+   ⚠️ `.markdown-rendered` 实时预览的表格组件也带（见上一节），所以这条会连实时
+   预览那层 wrapper 一起命中 —— 那一层靠上面 `.cm-table-widget .table-wrapper
+   { overflow: visible }` 按权重压回去（0-4-0 > 0-2-0）。删那条会立刻复发
+   「≤ 设定列数也能左右滑 16px + 每张表下多 15px 空白」。
    另：Obsidian 在 .markdown-preview-sizer 上没给 overflow，所以表格的溢出
    会一直冒到 .markdown-preview-view（它由 overflow-y: auto 派生出 overflow-x:
    auto）—— 那才是「整块面板横滚」的由来。 */

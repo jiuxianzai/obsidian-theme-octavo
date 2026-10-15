@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""真实 Obsidian 探针 —— 表格单元格「有光标 / 没光标」「实时预览 / 阅读视图」一致性检查。
+"""真实 Obsidian 探针 —— 表格的「有光标 / 没光标」「实时预览 / 阅读视图」「横向可滚量」检查。
 
 为什么要这个：theme.css 里表格那几条规则，很多坑只在真实 DOM 里才显形 ——
   · 表格组件是 `.cm-content` 的**直接子元素**，不在任何 `.cm-line` 里（继承关系跟猜的不一样）；
   · 单元格里层那个 CodeMirror 只在光标进去时才存在，且会被 Obsidian 的 app.css 抢权重；
-  · Obsidian 自己的 `.cm-table-widget th, td { padding: 0 }` 会盖掉主题的 `th/td` 规则。
+  · Obsidian 自己的 `.cm-table-widget th, td { padding: 0 }` 会盖掉主题的 `th/td` 规则；
+  · 「能不能左右滑」取决于**哪一层是滚动盒**，而那一层会随主题改动漂移 ——
+    要逐层强行滚一下才知道（检查 3）。
 静态复现页（preview.html 那种）把 DOM 猜错一次，结论就会反 —— letter-spacing 那条
 就曾被判成「不用改」，实际必须改。所以这类改动一律在这里量一遍。
 
@@ -260,6 +262,91 @@ LINE_WITH_MODES = r"""
 })()
 """
 
+# 检查 3：横向可滚量。把每张表**每一层祖先**都强行滚一下（scrollLeft = 99999，
+# 再读回来），谁真的动了、动了多少 —— 「能不能左右滑」只有这么量才是真的。
+#
+# 为什么要逐层：横向滚动盒不止一个候选。实时预览里真正的滚动盒是 .cm-table-widget，
+# 但主题给阅读视图写的那条 `.markdown-rendered .table-wrapper { overflow-x: auto }`
+# **连实时预览那层 wrapper 也会命中**（表格组件自己带 markdown-rendered 类），
+# 于是「滚的是哪一层」会随主题改动漂移 —— 只量某一层必然漏。踩过一次：
+# 只量 .cm-table-widget（0px）就下结论「不滚」，其实 .table-wrapper 能滑 16px
+# （＝里面的「+」列把手宽度，wrapper 自己 padding 为 0，兜不住它）。
+#
+# 为什么要整篇扫一遍：CodeMirror 只渲染视口附近的块，fixture 里靠后的表
+# 根本不在 DOM 里。所以先一步步滚下去，滚到哪张就量哪张（每种列数只量一次）。
+SCROLL = r"""
+(async () => {
+  const r2 = n => +n.toFixed(2);
+  const tryScroll = el => { const b = el.scrollLeft; el.scrollLeft = 99999;
+                            const a = el.scrollLeft; el.scrollLeft = b; return r2(a - b); };
+  const measure = tbl => {
+    const tb = tbl.getBoundingClientRect();
+    const tr = tbl.querySelector('tr');
+    const layers = [];
+    let el = tbl.parentElement;
+    while (el && el !== document.body) {
+      const cs = getComputedStyle(el);
+      layers.push({ n: el.className.toString().split(' ')[0] || el.tagName,
+                    can: tryScroll(el), cw: el.clientWidth,
+                    pl: parseFloat(cs.paddingLeft) || 0, ovx: cs.overflowX,
+                    over: el.scrollWidth - el.clientWidth });
+      el = el.parentElement;
+    }
+    return { cols: tr ? tr.children.length : 0, tblW: r2(tb.width), layers };
+  };
+  const sc = document.querySelector('.markdown-source-view .cm-scroller')
+          || document.querySelector('.cm-scroller');
+  const out = [], done = new Set();
+  const collect = () => {
+    document.querySelectorAll('.cm-table-widget table').forEach(tbl => {
+      if (tbl.getBoundingClientRect().width === 0) return;
+      const tr = tbl.querySelector('tr');
+      const cols = tr ? tr.children.length : 0;
+      if (done.has(cols)) return;                 // fixture 里每种列数只有一张
+      done.add(cols);
+      out.push(measure(tbl));
+    });
+  };
+  if (sc) {
+    const step = Math.max(200, sc.clientHeight * 0.7);
+    for (let top = 0; top <= sc.scrollHeight; top += step) {
+      sc.scrollTop = top;
+      await new Promise(r => requestAnimationFrame(() => setTimeout(r, 80)));
+      collect();
+    }
+    sc.scrollTop = 0;
+    await new Promise(r => requestAnimationFrame(() => setTimeout(r, 80)));
+  }
+  collect();
+  out.sort((a, b) => a.cols - b.cols);
+  return { setting: getComputedStyle(document.body).getPropertyValue('--folio-table-cols').trim(),
+           tables: out };
+})()
+"""
+
+# CodeMirror 同样只渲染视口附近的块：检查 1 要点进「最长文本的格」，得先把它滚进
+# 视口，否则真实鼠标事件会落到窗口外面（点了个空，症状是「点进去没有里层编辑器」）。
+CELL_SCROLL = r"""
+(() => {
+  const tbl = document.querySelector('.cm-table-widget table');
+  if (!tbl) return false;
+  const cells = [...tbl.querySelectorAll('td')];
+  const textOf = td => {
+    const w = document.createTreeWalker(td, NodeFilter.SHOW_TEXT, { acceptNode(n) {
+      const p = n.parentElement; if (!p) return NodeFilter.FILTER_REJECT;
+      const cs = getComputedStyle(p);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return NodeFilter.FILTER_REJECT;
+      return n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }});
+    return w.nextNode();
+  };
+  const long = [...cells].sort((a, b) => (textOf(b)?.length ?? 0) - (textOf(a)?.length ?? 0))[0];
+  if (!long) return false;
+  long.scrollIntoView({ block: 'center' });
+  return true;
+})()
+"""
+
 OPEN_NOTE = r"""
 (async () => {
   document.body.classList.add('folio-justify');           // 主题里这个模式默认开
@@ -347,6 +434,47 @@ def same_lines(a, b) -> bool:
     return all(x['n'] == y['n'] and abs(x['right'] - y['right']) <= 0.1 for x, y in zip(a, b))
 
 
+def check_scroll(cdp: 'CDP') -> bool:
+    """【3】横向可滚量：≤ 设定列数必须一层都不滚，> 设定列数必须整张表都够得着。"""
+    d = cdp.eval(SCROLL, await_promise=True)
+    setting = int(d['setting'] or 4)
+    print(f'\n【3】表格横向可滚量（--folio-table-cols = {setting}，实时预览）')
+    if setting != 4:
+        print(f'  注：fixture 的 2/4/6 列是按「设定值 4」摆的，当前设定值 {setting}，判定按当前值走')
+    ok = True
+    seen_under = seen_over = False
+    for t in d['tables']:
+        scrolled = [l for l in t['layers'] if l['can'] > 0]
+        if t['cols'] <= setting:
+            seen_under = True
+            if scrolled:
+                good = False
+                detail = '✗ 还能左右滑：' + '、'.join(
+                    f'{l["n"]} {l["can"]}px（overflow-x: {l["ovx"]}，scrollWidth 多出 {l["over"]}px）'
+                    for l in scrolled)
+            else:
+                good, detail = True, '✓ 每一层都 0px（正好铺满，一个像素都不多）'
+        else:
+            seen_over = True
+            # 「够得着」＝真滚到底时，表格右缘必须落在可视区里：
+            #   can + clientWidth - paddingLeft ≥ 表格宽
+            reach = max((l['can'] + l['cw'] - l['pl'] for l in scrolled), default=0)
+            if not scrolled:
+                good, detail = False, '✗ 一层都滚不动（表格右半边会被裁掉，够不着）'
+            elif reach < t['tblW'] - 0.5:
+                good = False
+                detail = f'✗ 滚到底还差 {t["tblW"] - reach:.1f}px 才看得到表格右缘'
+            else:
+                di = max(scrolled, key=lambda l: l['can'])
+                good, detail = True, f'✓ 由 {di["n"]} 滚 {di["can"]}px，滚到底能看到表格右缘'
+        print(f'  {t["cols"]} 列  表格宽 {t["tblW"]}px  {detail}')
+        ok &= good
+    if not (seen_under and seen_over):
+        print('  ⚠️ fixture 里没同时覆盖「≤ 设定值」与「> 设定值」两种表，判定不完整')
+        ok = False
+    return ok
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description='真实 Obsidian 探针：表格单元格一致性检查')
     ap.add_argument('--dir', default='/tmp/folio-probe', help='临时 vault / profile 放哪（默认 /tmp/folio-probe）')
@@ -377,6 +505,10 @@ def main() -> int:
 
         # ---- 检查 1：同一个格，没光标 vs 有光标 -------------------------------
         base = cdp.eval(MEASURE)
+        if not cdp.eval(CELL_SCROLL):          # 先把目标格滚进视口，再取坐标
+            print('✗ 找不到可点的单元格')
+            return 1
+        time.sleep(0.8)
         center = cdp.eval(CELL_CENTER)
         if not center:
             print('✗ 拿不到单元格坐标')
@@ -433,6 +565,11 @@ def main() -> int:
                 ok &= good
             print(f'  内边距落在谁身上      实时预览 td={base["short"]["tdPadLeft"]} / '
                   f'wrapper={base["short"]["wrapperPadLeft"]}；阅读视图 td={rv["short"]["tdPadLeft"]}')
+
+        # ---- 检查 3：横向可滚量（回到实时预览，只在实时预览里判）--------------
+        cdp.eval(SET_MODE % json.dumps('source'), await_promise=True)
+        time.sleep(0.6)
+        ok &= check_scroll(cdp)
 
         print('\n结果：' + ('全部一致 ✓' if ok else '有不一致 ✗'))
         return 0 if ok else 1
