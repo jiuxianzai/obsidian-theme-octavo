@@ -177,9 +177,9 @@ settings:
   -
     id: folio-chatgpt-mode
     title: ChatGPT 模式
-    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。关掉即回到纸感书卷
+    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。默认关（= 纸感书卷），打开即切到这套
     type: class-toggle
-    default: true
+    default: false
   -
     id: folio-layout
     title: 版面 · Layout
