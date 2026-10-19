@@ -1,0 +1,10 @@
+{
+  "id": "folio-toolbar",
+  "name": "Folio Toolbar",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "选中文工具条：在编辑器里选中文字后浮出加粗 / 斜体 / 行内代码 / 链接 / 格式转换等按钮，兼容 Folio 主题。",
+  "author": "youyanping",
+  "authorUrl": "",
+  "isDesktopOnly": true
+}
