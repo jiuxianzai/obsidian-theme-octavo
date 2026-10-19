@@ -426,6 +426,11 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
   「无限滚动 / 虚拟化」会给每行套 inline 的 `margin` / `padding`（带 `!important`），
   走 `--nav-item-children-margin-start`（那是 margin）的那半会被折算掉，一级缩进只剩
   ~6px、文件和上级目录就贴一起了。
+- **改 `--nav-item-padding` 时必须同时改 `--nav-item-parent-padding`**（v0.5.3 修）：
+  Obsidian 的默认 `--nav-item-parent-padding: var(--nav-item-padding)` 写在 `body` 上，
+  var() 在声明它的元素上就算好了（左侧 24px）再往下继承；只在 `.nav-files-container`
+  里改 `--nav-item-padding`（8px）时，文件行跟着变、文件夹行（`.mod-collapsible`）没变 ——
+  同级的文件夹会比文件**多缩 16px**，图标和名字都错开一列。两处一起改即可。
 - 行距 / 圆角由 `--nav-item-*` 变量控制，字号 `--nav-item-size: 14px`；去掉缩进引导线。
 - 选中态 = 底色 + 字重。GPT 模式另有左侧强调竖条，挂在 `::after` 上（避免顶掉 `::before`
   的文件图标）；纸感模式去掉竖条 —— 它是 App 的选中控件，不是纸上的记号。
@@ -479,7 +484,7 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 主题里带一个版本戳 `--folio-version`（`theme.css` 顶部与变量区各一处，与 `manifest.json`
 的 `forkVersion` 同步），手机补丁片段 `snippets/folio-mobile.css` 会把它画成一枚徽标：
 
-- **绿色**「Folio 主题 v0.5.2 · 2026-10-19」= 手机上加载的就是最新主题；
+- **绿色**「Folio 主题 v0.5.3 · 2026-10-19」= 手机上加载的就是最新主题；
 - **红色**「Folio 主题 未知版本（theme.css 没同步到最新）」= theme.css 没同步过去，
   去 iCloud 里看 `…/.obsidian/themes/Folio/theme.css` 的修改时间，或重跑 `./sync-mobile.sh`。
 

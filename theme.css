@@ -1,9 +1,12 @@
 /* ==========================================================================
    FOLIO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   ★ v0.5.2 · 2026-10-19 ★  （forkVersion，见 manifest.json；改完记得跑
+   ★ v0.5.3 · 2026-10-19 ★  （forkVersion，见 manifest.json；改完记得跑
    ./sync-mobile.sh 同步到手机）
-   这一版：移动端（iPhone / iPad）适配 —— §14 两条窄屏规则、§5 里层编辑器
+   这一版：修文件树「同级文件夹比文件多缩 16px」—— 补上 --nav-item-parent-padding，
+   否则文件夹行仍在用 Obsidian 默认的左内边距 24px（在 body 上就算好了，只改
+   --nav-item-padding 管不到它）。
+   上一版 v0.5.2：移动端（iPhone / iPad）适配 —— §14 两条窄屏规则、§5 里层编辑器
    复位加固（!important）、阅读视图裁剪框外扩 24px、表格「+」把手改撑 wrapper、
    手机顶栏改不透明 + 日期框图标不再压字。
    --------------------------------------------------------------------------
@@ -324,7 +327,7 @@ body {
 
   /* —— 版本戳：手机上的 folio-mobile 片段会把它显示成徽标，
      用来验收「手机上加载的是哪一版」。改版本时这里和 manifest.json 一起改。 */
-  --folio-version: "v0.5.2 · 2026-10-19";
+  --folio-version: "v0.5.3 · 2026-10-19";
   --folio-version-bg: rgba(46, 125, 50, 0.92); /* 有版本号＝绿；旧主题没有这个变量，徽标落红 */
 
   --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
@@ -1366,6 +1369,13 @@ select {
   --nav-item-background-hover: var(--background-modifier-hover);
   --nav-item-background-active: var(--background-modifier-active-hover);
   --nav-item-background-selected: var(--background-modifier-active-hover);
+  /* ⚠️ 父行内边距必须跟 --nav-item-padding 一起改，别漏了。
+     Obsidian 的默认是 `--nav-item-parent-padding: var(--nav-item-padding)`，但那条声明写在
+     body 上 —— var() 在「声明它的元素」上就算好了（24px 左内边距），再随继承往下传。
+     我们只在 .nav-files-container 里改 --nav-item-padding 时，文件行（用 nav-item-padding）
+     拿到 8px，文件夹行（.tree-item-self.mod-collapsible，用 parent-padding）还是 24px ——
+     同级的文件夹会比文件往右多缩 16px，图标和文字都对不齐。 */
+  --nav-item-parent-padding: var(--nav-item-padding);
   /* 缩进：一级 = 图标 15px + 间距 7px = 22px，子项文件名才能与父文件夹名对齐。
      整份缩进都放进 padding-inline-start（而不是 margin），原因见下面那条规则。 */
   --nav-item-children-margin-start: 0px;
