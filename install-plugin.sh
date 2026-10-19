@@ -66,3 +66,4 @@ PY
 echo "   重启 Obsidian（或 设置 → 第三方插件 → 重载）后即可生效。"
 echo "   · folio-typewriter：聚焦模式打开时，光标所在行停在视口中间"
 echo "   · folio-mark：Cmd/Ctrl+U 给选中文字加 / 去红色下划线"
+echo "   · folio-toolbar：选中文字浮出格式工具条（加粗 / 链接 / 格式转换…）"

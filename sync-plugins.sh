@@ -4,6 +4,7 @@
 # 开发仍然在原地，本脚本只负责「同步过去」：
 #   plugin/folio-mark       → github.com/jiuxianzai/obsidian-folio-mark
 #   plugin/folio-table      → github.com/jiuxianzai/obsidian-folio-table
+#   plugin/folio-toolbar    → github.com/jiuxianzai/obsidian-folio-toolbar
 #   plugin/folio-typewriter → github.com/jiuxianzai/obsidian-folio-typewriter
 #   <vault>/.obsidian/plugins/dashboard → github.com/jiuxianzai/obsidian-dashboard
 #
@@ -46,6 +47,7 @@ done
 PLUGINS=(
   "folio-mark|$THEME_DIR/plugin/folio-mark|obsidian-folio-mark|"
   "folio-table|$THEME_DIR/plugin/folio-table|obsidian-folio-table|"
+  "folio-toolbar|$THEME_DIR/plugin/folio-toolbar|obsidian-folio-toolbar|"
   "folio-typewriter|$THEME_DIR/plugin/folio-typewriter|obsidian-folio-typewriter|"
   "dashboard|$VAULT_DIR/.obsidian/plugins/dashboard|obsidian-dashboard|node_modules,data.json"
 )
@@ -87,8 +89,9 @@ for entry in "${PLUGINS[@]}"; do
     git -C "$work" checkout -q -B main
   fi
 
-  # 仓库自己的文件不动；源里的这些也不带过去
-  excludes=(--exclude=.git --exclude=.DS_Store --exclude=README.md --exclude=LICENSE --exclude=.gitignore)
+  # 仓库自己的文件不动；源里的这些也不带过去。
+  # data.json 是 Obsidian 写的运行时设置（软链进 vault 会写回源目录），永不同步。
+  excludes=(--exclude=.git --exclude=.DS_Store --exclude=README.md --exclude=LICENSE --exclude=.gitignore --exclude=data.json)
   if [ -n "$extra" ]; then
     IFS=',' read -ra xs <<<"$extra"
     for x in "${xs[@]}"; do excludes+=(--exclude="$x"); done

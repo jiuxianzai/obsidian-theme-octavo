@@ -21,10 +21,10 @@
 | 标题层级 | H1 1.75em 递减到 H6 1.02em，始终大于正文 1em；独立墨色 + 字重，上下留白充足 |
 | 标注块 | 七类语义 Callout（note / tip / important / warning / caution / example / quote）：3px 语义色竖线 + 极浅同色底，正文保持墨色 |
 | 表格 | 占满栏宽、列宽平分（不随内容变化）、长内容换行；「每行最多列数」超出才横滚；两个视图的内边距与行高一致 |
-| 编辑器 | 朱批红下划线（`Cmd/Ctrl+U`）、暖黄高亮、当前行浅底、可隐藏 Markdown 语法、光标行居中（插件） |
+| 编辑器 | 朱批红下划线（`Cmd/Ctrl+U`）、暖黄高亮、当前行浅底、可隐藏 Markdown 语法、光标行居中（插件）、选中浮出格式工具条（插件） |
 | 聚焦模式 | 调暗非当前内容，鼠标悬停行与光标行亮起；配套插件让光标行始终停在视口中间 |
 | 文件树 | 文件夹与文件各有 SVG 图标、缩进 22px、去掉缩进引导线；纸感模式下整棵树按「书的目录」重做 |
-| 纯 CSS 做不到的 | 三个轻量插件：打字机滚动、红下划线命令、阅读视图表格横滚（见「安装」） |
+| 纯 CSS 做不到的 | 四个轻量插件：打字机滚动、红下划线命令、阅读视图表格横滚、选中文工具条（见「安装」） |
 | 可调 | 接入 Style Settings：字体、行高、段距、栏宽、标题字号、表格列数、上面每一项开关 |
 
 ## 安装
@@ -46,13 +46,14 @@
 
 ### 配套插件（可选）
 
-主题有三处「纯 CSS 做不到」的能力，各做成一个轻量插件；都是纯 DOM、无构建，`main.js` 就是最终产物：
+主题有四处「纯 CSS 做不到」的能力，各做成一个轻量插件；都是纯 DOM、无构建，`main.js` 就是最终产物：
 
 | 插件 | 干什么 | 为什么必须用插件 |
 | --- | --- | --- |
 | `plugin/folio-typewriter` | 聚焦模式下让光标所在行**始终停在视口中间**（打字机滚动） | 浏览器只保证光标「不被裁掉」，主动居中必须由 JS 在每次光标/内容变化后重算 `scrollTop` |
 | `plugin/folio-mark` | `Cmd/Ctrl+U` 给选中文字**加 / 去红色下划线**（见「朱笔」） | Obsidian 核心没有「下划线」命令，主题更绑不了快捷键 |
 | `plugin/folio-table` | 让**阅读视图**里的宽表格能横向滚动（见「表格」） | Obsidian 只在实时预览里给表格包 `.table-wrapper` 容器，阅读视图里没有，纯 CSS 补不出来 |
+| `plugin/folio-toolbar` | 选中文字后**浮出格式工具条**（加粗 / 链接 / 格式转换…，见「选中文工具条」） | 桌面端没有「选中即浮出格式条」这回事，要监听选区、算坐标、动态插 DOM |
 
 ```bash
 ./install-plugin.sh      # 一键把 plugin/ 下的插件都链进 vault 并登记
@@ -60,8 +61,8 @@
 
 装完重启 Obsidian（或在 `设置 → 第三方插件` 里重载）即可。
 
-三个插件各自有独立私有仓库（`obsidian-folio-typewriter` / `obsidian-folio-mark` /
-`obsidian-folio-table`，另有在 vault 里就地开发的 `obsidian-dashboard`）。开发仍在
+四个插件各自有独立私有仓库（`obsidian-folio-typewriter` / `obsidian-folio-mark` /
+`obsidian-folio-table` / `obsidian-folio-toolbar`，另有在 vault 里就地开发的 `obsidian-dashboard`）。开发仍在
 `plugin/<id>/` 原地进行，改完镜像过去：
 
 ```bash
@@ -91,6 +92,12 @@
 
 三套字体都可在 `Style Settings → Folio` 里一键切换（各有一组预设）。
 
+> **手机上（iOS）没有中文衬线**：`Noto Serif CJK SC` / `Songti SC` 在 iOS 的 WKWebView 里
+> 都命中不了，正文中文会回落到系统无衬线（苹方），西文仍是 Iowan 衬线 —— 看起来就是
+> 「汉字黑体 + 数字衬线」这种混搭。想两端一致，要么在手机上装一款中文衬线
+> （思源宋体 / Noto Serif SC / 宋体 SC，装了主题会自动命中），要么把「正文字体」
+> 切成「系统无衬线」。
+
 ## 调参（Style Settings）
 
 已接入 [`obsidian-style-settings`](https://github.com/mgmeyers/obsidian-style-settings)。
@@ -105,7 +112,7 @@
 | 排版 | 正文栏宽 `--folio-content-width` | 42rem |
 | 标题 | H1–H6 字号 | 1.75 / 1.375 / 1.32 / 1.18 / 1.08 / 1.02（em） |
 | 标题 | 标题上方留白 | 1.7 |
-| 表格 | 每行最多列数 | 4（超出才横向滚动） |
+| 表格 | 每行最多列数 | 4（超出才横向滚动）；手机上默认 3，见「移动端」一节 |
 | 配色 | **ChatGPT 模式** | **关**（= 纸感书卷；打开即切到中性灰那套） |
 | 版面 | 取消居中栏宽 / **标题居中** / **标题分隔线** / **两端对齐** / **首行缩进** / **聚焦模式** | 关 / 开 / 开 / 开 / 开 / 关 |
 | 专注 | 隐藏滚动条 / 隐藏底部状态栏 | 关 / 关 |
@@ -228,7 +235,15 @@ GitHub 自己的建议也照搬了：**别滥用**（一节里最多一两个）
 | ≤ 设定值 | 各列平分可用宽度、正好铺满，**一点都不滚**（是正好 100%，不是「差几像素才滚」） |
 | > 设定值 | 各列都守住「可用宽度 ÷ 设定值」这个下限，不肯再让 → 表格整体变宽 → **容器横向滚动** |
 
-也就是说，**设 4 就是「4 列铺满，出现第 5 列才开始左右滑」**。
+也就是说，**设 4 就是「4 列铺满，出现第 5 列才开始左右滑」**（手机上默认按 3 算，见「移动端」）。
+
+「撑开」这件事写在**谁**身上有讲究：实时预览里先把 `.table-wrapper` 撑开（表格是
+`width: 100%`，跟着走），阅读视图里撑表格自己。原因是实时预览的两个「+」把手
+（列/行）是 **wrapper 的绝对定位子元素**（`app.css`：`.table-col-btn { inset-inline-start: 100% }`）——
+wrapper 要是不等于表格宽，那把「+」就贴不到表格右缘，会**叠在表格内容上**。
+手机上（设定 3 列 + 4 列表）实测：表格 438.66px、wrapper 329px，把手落在表格里侧
+109.66px 处，正好压在「备注」那一列的字上；把 min-width 挪到 wrapper 上之后是 0px。
+两个探针都把这条当验收项（`probe.py` 的检查 3、`mobile_probe.py` 的检查 A）。
 
 滚的是哪一层，两个视图不一样 —— 而实时预览那一层**必须是四周留了 16px 槽的容器**：
 
@@ -354,6 +369,30 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
   得另想办法。
 - **实时预览里，光标停在那一行时标签按原文显示**，和「隐藏 Markdown 语法」的取舍一致。
 
+## 选中文工具条（folio-toolbar）
+
+在编辑器里选中一段文字、松手稍停（默认 200 ms），选区上方浮出一条格式工具条；点一下就作用，
+`Esc` 或点别处收起。
+
+| 组 | 按钮 | 走什么 |
+| --- | --- | --- |
+| 行内格式（默认开） | 加粗、斜体、删除线、行内代码、高亮、链接、清除格式 | Obsidian 核心命令（`editor:toggle-bold` / `editor:insert-link` / `editor:clear-formatting` …） |
+| 行内格式（默认关） | 朱笔下划线 | `<u>…</u>`；装了 `folio-mark` 就复用它的命令，否则插件自带简版（见「朱笔」） |
+| 格式转换（默认关） | 标题 1–3、无序 / 有序列表、引用、代码块、待办 | 核心命令（`editor:set-heading-1` / `editor:toggle-bullet-list` / `editor:toggle-blockquote` / `editor:insert-codeblock` / `editor:cycle-list-checklist`） |
+| 标注（默认关） | 标注：**一个按钮，点开选类型**（note / tip / important / warning / caution / example / quote） | 核心只能插固定类型的空标注、且不认选区，所以按类型自己改写 `> [!type]`；同类型再点一次拆掉，换类型直接改 |
+
+- **按钮尽量走核心命令**（标注、朱笔下划线除外）：切换语义、链接弹窗、多行行为都跟编辑器自带的一致。
+- **标注**：点「标注」弹出类型菜单，图标与主题 §12 的语义映射一致（tip 灯泡、important 圆圈警示、caution 八边形警示）；把选中的段落包成标注，同类型再点一次拆掉。
+- **可配置**：`设置 → Folio Toolbar` 里逐个开关按钮、改弹出延迟（0–800 ms）、选择是否在图标下显示名称。
+- **只在实时预览 / 源码模式出现**：选区必须落在当前文档的主编辑器上。阅读视图不弹；
+  表格单元格里那层里层编辑器也不弹（否则会把格式施加到外层文档）。
+- **桌面端专用**：移动端 Obsidian 自带格式工具条，这里不重复造。外观写在 `theme.css` §13，
+  跟随纸感 / ChatGPT 两套配色。
+
+> [!note] 为什么必须用插件
+> Obsidian 桌面端没有「选中即浮出格式条」这回事（移动端的原生工具条由 App 提供，桌面端没有）。
+> 要监听选区、算坐标、动态插 DOM，纯 CSS 做不到。
+
 ## 聚焦模式
 
 `Style Settings → Folio → 版面 → 聚焦模式`（默认关）。开启后：
@@ -418,6 +457,61 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 | 标签 | 透明底 + 强调色文字 + 一条细分隔边框（`--tag-*`），不做成彩色药丸 |
 | 日历 | 给 Calendar 插件的 `.today` 加实心强调色底 + 反白文字，高亮当前日期 |
 
+## 移动端（手机 / 平板）
+
+主题原本是照桌面端调的。手机上 Obsidian 有一整套挂在 `is-mobile` / `is-phone` 下的规则
+（页边距、表格把手的槽、属性面板外扩……），所以窄屏下有几处得单独交代 —— 全部写在
+`theme.css` §14，且只对 `body.is-mobile` 生效，桌面一个像素都不动。
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| 手机上正文比阅读视图窄 32px，同一篇笔记切个视图就重排 | 桌面那 16px 的 `.cm-content` 内边距是给表格组件的「padding 16 + margin −16」让把手槽的；手机上 Obsidian 自己就给了页边距（`--file-margins-x`），再补 16px 纯属白窄（393px 视口：实时预览 313px vs 阅读视图 345px，表格也从 329px 被压到 297px） | ≤ 50rem 的窄屏撤掉这 16px：正文回到 345px、表格 329px，行/列把手仍在页边距的槽里 |
+| 手机上 4 列表每列只有 ~82px，一行三四个字 | 列宽 = 容器宽 ÷ 「每行最多列数」（默认 4） | 手机上默认降到 **3 列**（列宽 ~110px，第 4 列起横向滚动）。想改回去：Style Settings 新增的「手机上每行最多列数」，或干脆把 `--folio-table-cols-mobile` 设成 4 |
+| 阅读视图里标题旁边的小三角不见了、点也点不到 | 主题给栏容器夹了 `overflow-x: clip` 防正文横滚，而折叠箭头（`margin-inline-start: -22px`／手机 −20px）与手机版属性面板的外扩（`translateX(-12px)`）天生在文字左缘之外 —— 被一起裁掉了 | 裁剪框向外放 24px（`overflow-clip-margin: 24px`）：只放宽裁剪范围，不产生滚动盒，正文照样横滚不动 |
+| 光标点进单元格，那一格突然不折行了（文字溢出格子、格子里自己横滚） | 里层编辑器的 `.cm-content` 是 flex 子项，`min-width` 默认 `auto` ＝「最长不可断词」的宽度；窄列里它比整个格子还宽（实测 74px 的格子被顶到 80px） | §5 第五条复位 `min-width: 0`；另外把 app.css 改掉的 `overflow-wrap` 改回 `anywhere`，让「有光标 / 没光标」折行完全一致 |
+| 光标点进单元格，整格文字右移一小截、每行只剩一个字 | 手机上的 `folio-mobile` 片段写过一条 `body.is-mobile … .cm-content { padding-inline: 14px }`，权重 **0-4-1** 正好压过主题那条复位（0-4-0）—— 于是那 14px 连**单元格里层编辑器**一起改到（80px 的格子：wrapper 12.75 + 漏进来 14 = 26.75px，只剩一格字宽）。桌面上没有这个片段，所以怎么量都量不出来 | 两边都改：片段不再给 `.cm-content` 写内边距；主题的复位加 `!important`（不看权重，谁也别想再漏）。复现与验收用 `mobile_probe.py --snippet`（片段在主题之后加载，层叠跟手机一致） |
+| 顶部（状态栏那一条 + 标题条 + 按钮药丸）是半透明的，正文往上滚会从底下透出来、和标题叠在一起 | Obsidian 手机悬浮导航条的设计：药丸底 `--raised-background` 是 65% 纸色 + 模糊，`.view-header` 自己写死 `transparent`（0-4-0） | §14 把药丸底、标题条、状态栏那一条都换成不透明纸底（顶栏那条用同权重选择器压回 app.css 的写法）。**不是系统限制，纯 CSS 可改**；想回到半透明就把 §14 末段删掉 |
+| 属性面板里的日期输入框，左边有个小日历图标压在「2026/10/19」上 | iOS 把 `<input type="date">` 的原生日历图标画在框**左端**，而框只有 95px，塞不下「图标 + 数值」 | §14 藏掉该图标并给到 `min-width: 15ch`（实测 95 → 132px，数值不再被压）。桌面上图标在右端、不挡字，所以只改手机 |
+| 手机上「宋体纸感」变成黑体 | iOS 没预装中文衬线：`Noto Serif CJK SC` 不存在，`Songti SC` 在 WKWebView 里命中不了，中文回落到系统无衬线（PingFang），只有西文是 Iowan 衬线（截图里「1027」还是 old-style 数字） | 装一款中文衬线（思源宋体 / Noto Serif SC / 宋体 SC）即可命中；不装就把「正文字体」切成「系统无衬线」，两端至少一致 |
+
+### 怎么确认手机上加载的是哪一版
+
+主题里带一个版本戳 `--folio-version`（`theme.css` 顶部与变量区各一处，与 `manifest.json`
+的 `forkVersion` 同步），手机补丁片段 `snippets/folio-mobile.css` 会把它画成一枚徽标：
+
+- **绿色**「Folio 主题 v0.5.2 · 2026-10-19」= 手机上加载的就是最新主题；
+- **红色**「Folio 主题 未知版本（theme.css 没同步到最新）」= theme.css 没同步过去，
+  去 iCloud 里看 `…/.obsidian/themes/Folio/theme.css` 的修改时间，或重跑 `./sync-mobile.sh`。
+
+徽标 6 秒后自己淡出（`pointer-events: none`，不挡操作）；不想要就把片段里
+「版本徽标」那一段删掉。片段文件名**不要改** —— Obsidian 是按文件名记「哪些片段开着」的，
+改名等于自动关掉。
+
+### 同步到手机
+
+手机 / iPad 那个库**不是**软链接（iCloud、Obsidian Sync 都不跟随软链接），主题得单独拷过去：
+
+```bash
+./sync-mobile.sh                  # 主题 + manifest + snippets/ 一起拷到 iCloud 里的 iphone_note 库
+./sync-mobile.sh /path/to/vault   # 或指定别的库
+```
+
+拷完在手机上**完全退出** Obsidian 再打开（主题 CSS 是启动时读的），然后看那枚徽标。
+
+手机视口下的回归检查走 `dev/probe/mobile_probe.py`（393×852 + `is-mobile`，
+四组检查：横向几何 / 单元格逐格比 / 各类格式体检 / 阅读视图夹取；
+`--snippet snippets/folio-mobile.css` 会把片段按真路数一起加载，层叠与手机一致）。
+
+### `snippets/folio-mobile.css`（手机补丁片段）
+
+手机上那些「桌面主题管不到」的部分：17px 正文字号、文件树 36px 触控目标、
+Dashboard 双栏改单栏、iOS 惯性滚动、Home 指示条留白，外加版本徽标。
+它有两处**别改**的硬约束：
+
+- 别给 `.cm-content` 写内边距（权重 0-4-1 会连单元格里层编辑器一起改到，就是上面那条 bug）；
+- 别把 `--file-margins` 调到 22px 以下（表格组件的把手槽要 ≥16px；阅读视图的折叠箭头
+  是 `-20px`，实测 18px 时箭头会探出屏幕左边 2~4px）。
+
 ## 注意
 
 - 旧 snippet `hide-tree-lines.css` / `edit-css.css` 与主题的文件树样式重叠，建议在
@@ -434,7 +528,7 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 | --- | --- |
 | `preview.html` | 浏览器里直接看排版，或让无头 Chrome 截图 |
 | `palette.gen.py` | 从 `theme.css` 生成四套配色的色卡（含 WCAG 对比度与改动对照） |
-| `dev/probe/` | **真实 Obsidian 探针**：量表格「有 / 无光标」「实时预览 / 阅读视图」是否一致、横向可滚量对不对 |
+| `dev/probe/` | **真实 Obsidian 探针**：`probe.py` 量桌面下表格「有 / 无光标」「实时预览 / 阅读视图」是否一致、横向可滚量对不对；`mobile_probe.py` 把视口压成 393×852 并补上 `is-mobile`（`--snippet` 可把 CSS 片段按真路数一起加载），量手机下同一批东西外加各类格式体检；`toolbar_probe.py` 量选中文工具条的浮出 / 定位 / 按钮落笔 |
 | `dev/screenshot/` | 生成 README 头图 `screenshot.png`（真实 Obsidian、纸感模式） |
 
 ```bash
@@ -448,6 +542,9 @@ python3 palette.gen.py && open palette.html
 
 # 表格 / 编辑器改动：真机量一遍（全部一致 → 退出码 0）
 python3 dev/probe/probe.py
+
+# 选中文工具条改动：真机量一遍（浮出 / 定位 / 落笔都对 → 退出码 0）
+python3 dev/probe/toolbar_probe.py
 
 # 重新生成头图
 python3 dev/screenshot/shot.py
@@ -480,7 +577,7 @@ zip 里只含使用者需要的文件（`theme.css` / `manifest.json` / `version
 > 「已装版本 < 市场版本」时才提示更新，因此那个「更新」不会再出现。
 >
 > - **真实版本**记在 `manifest.json` 的 `forkVersion`（与 `versions.json` 的键保持一致）。
->   `package.sh` 打包时读 `forkVersion`，所以 zip 名字仍是 `folio-obsidian-theme-v0.3.0.zip`。
+>   `package.sh` 打包时读 `forkVersion`，所以 zip 名字仍是 `folio-obsidian-theme-v0.4.0.zip`。
 > - 改主题时照旧只改 `theme.css`；发新版时更新 `forkVersion` 与 `versions.json`，
 >   **`version` 保持 `9.9.9` 不动**。
 > - 万一还是被覆盖了，回滚一条命令：`git fetch && git checkout -- theme.css manifest.json`。
@@ -508,7 +605,8 @@ obsidian-theme-folio/
 ├── plugin/           ← 配套插件（各自独立，见对应章节）
 │   ├── folio-typewriter/{manifest.json, main.js}   ← 打字机滚动（见「聚焦模式」）
 │   ├── folio-mark/{manifest.json, main.js}         ← 红色下划线（见「朱笔」）
-│   └── folio-table/{manifest.json, main.js}        ← 阅读视图表格横滚（见「表格」）
+│   ├── folio-table/{manifest.json, main.js}        ← 阅读视图表格横滚（见「表格」）
+│   └── folio-toolbar/{manifest.json, main.js}      ← 选中文工具条（见「选中文工具条」）
 ├── preview.html      ← 开发用：浏览器里的排版预览页
 ├── palette.gen.py    ← 开发用：从 theme.css 生成四套配色的色卡
 ├── palette.html      ← 色卡（生成物，不入库；python3 palette.gen.py 生成）

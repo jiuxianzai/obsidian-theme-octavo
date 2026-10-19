@@ -8,3 +8,7 @@ palette.html
 .vscode/
 node_modules/
 __pycache__/
+
+# Obsidian 写到插件目录里的运行时设置（软链进 vault 后写回源目录），不入库；
+# sync-plugins.sh 同步到各插件仓库时也排除它
+plugin/*/data.json
