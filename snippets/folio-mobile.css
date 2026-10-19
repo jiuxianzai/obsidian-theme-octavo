@@ -1,0 +1,106 @@
+/* ==========================================================================
+   folio-mobile —— Folio 主题的 iPhone / iPad 适配补丁
+   --------------------------------------------------------------------------
+   ★ 随主题 v0.5.2 一起发布 · 2026-10-19 ★
+   （本文件由主题仓库 obsidian-theme-folio 维护，用 ./sync-mobile.sh 同步到手机；
+     文件名**不要**改 —— Obsidian 是按文件名记「哪些片段开着」的，改名＝自动关闭。）
+
+   界面上会浮出一枚版本徽标（6 秒后淡出），显示的是**主题自报的版本**
+   （theme.css 里的 --folio-version）：
+     · 绿色「Folio 主题 v0.5.2 · 2026-10-19」= 手机上加载的就是最新主题；
+     · 红色「Folio 主题 未知版本」        = theme.css 没同步到（去 iCloud 里看
+       …/.obsidian/themes/Folio/theme.css 的修改时间，或重跑 ./sync-mobile.sh）。
+   只想验版本、不想要徽标：把下面「版本徽标」那一段删掉即可。
+
+   为什么要单独一层：Folio 的 theme.css 是按桌面端写的。手机上的差异
+   （页边距、字号、触控目标、Dashboard 双栏、表格把手的槽）在这里补，
+   theme.css 那边只留 §14 的两条通用规则（窄屏正文栏宽、手机表格列数）。
+
+   ⚠️ 写这个片段的坑（v0.4.0 踩过，别再踩）：
+   `body.is-mobile .markdown-source-view.mod-cm6 .cm-content` 的权重是 0-4-1，
+   比主题里那条「表格单元格里层编辑器复位」（0-4-0）**高**。所以只要是给
+   `.cm-content` 写内边距，就会连**单元格里层那个编辑器**一起改到 —— 症状是
+   「光标点进格子，那一格变成一个字一行」（17px 字号下：wrapper 12.75px +
+   漏进来的 14px = 26.75px，80px 的格子只剩 26.5px 放字）。
+   两边的修法：主题那条复位加了 !important（谁也别想再漏），
+   而这里**不再给 .cm-content 写内边距** —— 手机上这件事归 theme.css §14 管。
+
+   想关掉：设置 → 外观 → CSS 片段 → 取消勾选 folio-mobile。
+   ========================================================================== */
+
+/* —— 0. 版本徽标：显示主题自报的版本（手机同步验收用）—— */
+body.is-mobile::after {
+  content: "Folio 主题 " var(--folio-version, "未知版本（theme.css 没同步到最新）");
+  position: fixed;
+  z-index: 9999;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 999px;
+  /* 有版本号 → 绿；没有（＝旧主题）→ 红 */
+  background-color: var(--folio-version-bg, rgba(198, 40, 40, 0.92));
+  color: #fff;
+  font-family: var(--font-interface);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: folio-version-fade 6s ease forwards;
+}
+
+@keyframes folio-version-fade {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* —— 1. 正文：字号抬到 17px（16px 在 iPhone 上是「能看」，17px 才是「看得舒服」）——
+   ⚠️ 页边距（--file-margins）**不要**在这里覆盖，两条硬约束：
+     · 别小于 16px —— 表格组件的「padding 24px + margin -16px」要靠它兜住，
+       否则行/列把手会被屏幕边缘切掉；
+     · 别小于 22px —— 阅读视图的标题折叠箭头是 `margin-inline-start: -20px`，
+       页边距一紧，箭头就探出屏幕左边（实测 18px 时探出 2~4px）。
+   theme.css §14 已经把桌面那 16px 的「白窄」撤掉了，正文宽度由 Obsidian
+   自己的页边距（手机上 24px）承担 —— 这里什么都不用补。 */
+body.is-mobile {
+  --font-text-size: 17px;
+}
+
+/* —— 2. 文件树：触控目标抬高 ——
+   桌面 14px 字号 + 5px 上下内边距 ≈ 24px 行高，手指点起来太密；
+   36px 接近 iOS 的最小可点区域，同时不会让一屏装不下几行。 */
+body.is-mobile .nav-file-title,
+body.is-mobile .nav-folder-title {
+  min-height: 36px;
+  --nav-item-size: 15px;
+}
+
+/* —— 3. Dashboard：双栏改单栏 ——
+   插件本身写死 grid-template-columns: 1fr 1fr，390px 宽塞两栏，
+   热力图 / 图表会缩成没法看的小方块。 */
+body.is-mobile .dashboard-container {
+  grid-template-columns: 1fr;
+  padding: 12px;
+  gap: 10px;
+}
+
+body.is-mobile .dashboard-row {
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* —— 4. 表格：窄屏横滑时给 iOS 惯性滚动 —— */
+body.is-mobile .markdown-rendered .table-wrapper,
+body.is-mobile .markdown-rendered .cm-table-widget {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* —— 5. 侧栏抽屉：文件树底部留出 iPhone Home 指示条的高度 —— */
+body.is-mobile .nav-files-container {
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
