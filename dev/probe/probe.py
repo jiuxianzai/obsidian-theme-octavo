@@ -292,7 +292,17 @@ SCROLL = r"""
                     over: el.scrollWidth - el.clientWidth });
       el = el.parentElement;
     }
-    return { cols: tr ? tr.children.length : 0, tblW: r2(tb.width), layers };
+    // 列「+」把手挂在 .table-wrapper 的 inset-inline-start: 100% 上 —— wrapper 要是
+    // 不等于表格宽（列数 > 设定值时表格被撑宽就是这样），它就会叠在表格内容上。
+    const wrap = tbl.closest('.cm-table-widget')?.querySelector('.table-wrapper');
+    const btn = tbl.closest('.cm-table-widget')?.querySelector('.table-col-btn');
+    let btnGap = null;
+    if (wrap && btn) {
+      const bb = btn.getBoundingClientRect();
+      btnGap = r2(bb.left - (tb.left + tb.width));           // 0 = 正好贴着表格右缘
+    }
+    return { cols: tr ? tr.children.length : 0, tblW: r2(tb.width), wrapW: wrap ? r2(wrap.getBoundingClientRect().width) : null,
+             btnGap, layers };
   };
   const sc = document.querySelector('.markdown-source-view .cm-scroller')
           || document.querySelector('.cm-scroller');
@@ -383,6 +393,9 @@ def setup(workdir: Path) -> Path:
         'legacyEditor': False, 'livePreview': True, 'defaultViewMode': 'source',
         'readableLineLength': True, 'showLineNumber': False, 'spellcheck': False,
         'attachmentFolderPath': './', 'promptDelete': False,
+        # 跟用户两个库保持一致：关掉「行内标题」，这样手机上量到的是
+        # 「标题条里显示路径」那套（手机截图里就是它），而不是行内大标题
+        'showInlineTitle': False,
     }, ensure_ascii=False))
     (vault / '.obsidian' / 'appearance.json').write_text(json.dumps({
         'baseFontSize': 16, 'theme': 'moonstone', 'cssTheme': 'Folio',
@@ -469,6 +482,14 @@ def check_scroll(cdp: 'CDP') -> bool:
                 good, detail = True, f'✓ 由 {di["n"]} 滚 {di["can"]}px，滚到底能看到表格右缘'
         print(f'  {t["cols"]} 列  表格宽 {t["tblW"]}px  {detail}')
         ok &= good
+        # 列「+」把手必须贴着表格右缘（差 ≤1px）：wrapper 宽 == 表格宽才成立。
+        # 这条是「把手叠在表格内容上」那个 bug 的守门人 —— 手机上（3 列设定 + 4 列表）
+        # 实测量到差 -109.66px，挪到 wrapper 上撑开之后是 0。
+        if t.get('btnGap') is not None:
+            gap_ok = abs(t['btnGap']) <= 1
+            print(f'      列「+」把手：距表格右缘 {t["btnGap"]}px（wrapper {t.get("wrapW")}px vs '
+                  f'表格 {t["tblW"]}px）{"✓" if gap_ok else "✗ 会叠在表格内容上"}')
+            ok &= gap_ok
     if not (seen_under and seen_over):
         print('  ⚠️ fixture 里没同时覆盖「≤ 设定值」与「> 设定值」两种表，判定不完整')
         ok = False
