@@ -1,6 +1,12 @@
 /* ==========================================================================
    FOLIO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
+   ★ v0.5.2 · 2026-10-19 ★  （forkVersion，见 manifest.json；改完记得跑
+   ./sync-mobile.sh 同步到手机）
+   这一版：移动端（iPhone / iPad）适配 —— §14 两条窄屏规则、§5 里层编辑器
+   复位加固（!important）、阅读视图裁剪框外扩 24px、表格「+」把手改撑 wrapper、
+   手机顶栏改不透明 + 日期框图标不再压字。
+   --------------------------------------------------------------------------
    设计目标
      1. 标题字号层层递减，且始终大于正文；颜色与正文区分；上下留白充足
      2. 复杂文档不费力：行高、段距、栏宽都按「阅读舒适区」调过
@@ -170,6 +176,12 @@ settings:
     type: variable-number
     default: 4
   -
+    id: folio-table-cols-mobile
+    title: 手机上每行最多列数
+    description: 手机屏窄，4 列表平分下来每列只有 ~82px（一行三四个字）。默认降到 3：列宽 ~110px，多出来的列改为横向滚动；桌面不受影响。
+    type: variable-number
+    default: 3
+  -
     id: folio-palette
     title: 配色 · Palette
     type: heading
@@ -308,6 +320,12 @@ body {
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
   --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
+  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §14 */
+
+  /* —— 版本戳：手机上的 folio-mobile 片段会把它显示成徽标，
+     用来验收「手机上加载的是哪一版」。改版本时这里和 manifest.json 一起改。 */
+  --folio-version: "v0.5.2 · 2026-10-19";
+  --folio-version-bg: rgba(46, 125, 50, 0.92); /* 有版本号＝绿；旧主题没有这个变量，徽标落红 */
 
   --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
   --folio-h2-size: 1.375em; /* 22px @16 */
@@ -1020,6 +1038,38 @@ body {
 :where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--folio-table-cols)); }
 :where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--folio-table-cols)); }
 
+/* —— 实时预览：同一份「撑开」要写在 .table-wrapper 上，不能只写在表格上 ——
+   表格的两个「+」把手是 wrapper 的绝对定位子元素（app.css：
+   `.table-col-btn { inset-inline-start: 100% }`、`.table-row-btn { top: 100% }`），
+   也就是说它们贴着 **wrapper 的右缘 / 下缘**。只要 wrapper 还是 100%（＝容器宽）
+   而表格比它宽，那把「+」就会叠在表格内容上 —— 手机上（设定 3 列 + 4 列表）
+   实测：表格 438.66px、wrapper 329px，把手落在表格里侧 109.66px 处，
+   正好压在「备注」那一列的字上。桌面上列数一超过设定值同样会中（只是平时少见）。
+   修法：把同一份 min-width 挪到 wrapper 上 —— wrapper 与表格同宽
+   （表格是 `width: 100%`，跟着 wrapper 走），把手自然贴住表格右缘，
+   而且跟着内容一起横向滚走（它落在组件 16/24px 的把手槽里）。
+   表格宽度、可滚量、「≤ 设定列数一点都不滚」三条验收全部不变。
+   ⚠️ 表格那层必须同时把 min-width 归零：两代都撑会变成 (k ÷ 设定值)²。
+   阅读视图里没有这两个把手（也没有这个组件），那儿照旧撑表格 —— 上面 15 条一条不动。 */
+.markdown-source-view.mod-cm6 .cm-table-widget table {
+  min-width: 0;
+}
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--folio-table-cols)); }
+
 /* 实时预览：表容器横向滚动。
    overflow-y 必须显式关掉：容器一旦成为滚动盒，写不写都从 auto 派生，
    macOS「始终显示滚动条」下就会多出一条没用的竖向滚动条（表格本身
@@ -1052,13 +1102,14 @@ body {
   overflow: visible;
 }
 
-/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐 / 字距」复位 ——
+/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐 / 字距 / 最小宽」复位 ——
    光标点进某个单元格时，Obsidian 会在那个 <td> 里再挂一个 CodeMirror：
    .table-cell-wrapper > .cm-editor > .cm-scroller > .cm-content > .cm-line
    （见 app.js editTableCell()：新建 wrapper → 原来的 .table-cell-wrapper 隐藏
-   → 把里层编辑器塞进同一个 <td>）。而第 3 节有四条规则会一起漏进这个里层编辑器
-   —— 它们要么写成后代选择器、要么直接命中里层的 `.cm-line`，症状清一色是
-   「有光标 / 没光标两个样」：
+   → 把里层编辑器塞进同一个 <td>）。第 3 节有四条规则会一起漏进这个里层编辑器
+   （它们要么写成后代选择器、要么直接命中里层的 `.cm-line`），再搭上 app.css
+   给里层编辑器定的两条规矩（flex 子项的 `min-width: auto`、被改掉的
+   `overflow-wrap`）—— 六条的症状清一色是「有光标 / 没光标两个样」：
 
    1) `.markdown-source-view.mod-cm6 .cm-content { padding-inline: 16px }`
       那是给外层编辑器补的（抵消表格组件的「padding 16px + margin -16px」），
@@ -1089,10 +1140,47 @@ body {
       是 16+17 两行、行高 64.98px，光标一进去变 16+16+1 三行、89.78px —— 看起来
       就是「光标一进单元格，文字横向重排、整行还变高」。复位成 normal 后逐行一致。
 
-   四条复位的权重都不低于被复位的那条（padding 那条更高），不依赖书写顺序；
-   作用范围仅限于「表格组件里的里层编辑器」，正文与阅读视图一行都不碰。 */
+   5) `min-width: 0` —— 第五条复位，**窄列（手机上）**才现形的那种。
+      里层 `.cm-content` 是 `.cm-scroller`（overflow-x: auto）的 flex 子项，而
+      flex 子项的 `min-width` 默认是 `auto` ＝「最长不可断词」的宽度。列一窄，
+      这一下就顶穿单元格：实测手机（393px 视口）一张 4 列表，列宽 74px、单元格
+      内容宽 49px，点进「2024.11.14」那格后 `.cm-content` 变成 80.08px ——
+      比整格还宽，于是这格不再折行（没光标 [6,4] 两行 → 有光标 [10] 一行），
+      文字溢出格子、格子里自己横滚。`min-width: 0` 把它按回单元格宽度，
+      两个状态重新逐行一致。只写在内层，正文那个外层编辑器不受影响。
+
+   六条复位的权重都不低于被复位的那条（padding 那条更高、且加了 `!important`），
+   不依赖书写顺序；作用范围仅限于「表格组件里的里层编辑器」，正文与阅读视图
+   一行都不碰。
+
+   ⚠️ 为什么 padding 那条还要 `!important` + 物理属性（真事，不是预防性地写）：
+   手机上的 `folio-mobile.css` 片段（snippets/folio-mobile.css）里有一条
+     `body.is-mobile .markdown-source-view.mod-cm6 .cm-content { padding-inline: 14px }`
+   —— 权重 **0-4-1**，正好比这条复位的 0-4-0 高一位。于是桌面上怎么都量不出的
+   那 16px 级的漏，在手机上稳稳复现：iPhone 15/16 Pro（393pt、17px 字号）上
+   实测「没光标 12.75px（＝ wrapper 的 0.75em）→ 光标一进去 26.75px
+   （12.75 + 漏进来的 14px）」，80px 的格子只剩 26.5px 放字，于是**一个字一行**。
+   两边的修法：片段那边不再给 `.cm-content` 写内边距（见它的文件头），
+   这边把复位写成「逻辑 + 物理 + WebKit 旧写法 + !important」四保险 ——
+   `!important` 不看权重，谁也别想再漏进来；范围仍限于表格组件内部，
+   正文一行都不碰。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content {
-  padding-inline: 0;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  -webkit-padding-start: 0 !important;
+  -webkit-padding-end: 0 !important;
+  min-width: 0;
+}
+/* 6) 折行方式也要跟「没光标」那一版对齐。
+   单元格里的静态文本由 th/td 上的 `overflow-wrap: anywhere` 负责（本文件 §5 开头），
+   长的数字串、网址照样在中间断开；可里层编辑器被 app.css 单独改成了
+   `.cm-table-widget .cm-content.cm-lineWrapping { overflow-wrap: normal }`
+   （权重 0-5-0）—— 于是同一个格，没光标时「2024.11.14」折成 6+4 两行，
+   点进去就成了一条 80px 长、顶出格子的整行。这里用**同权重、排在后**
+   的选择器把它改回 anywhere，两个状态才真正逐行一致。 */
+.markdown-source-view.mod-cm6 .cm-table-widget .cm-content.cm-lineWrapping {
+  overflow-wrap: anywhere;
 }
 body.folio-book-indent .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-indent: 0;
@@ -1103,6 +1191,12 @@ body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
 }
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   letter-spacing: normal;
+  /* 同一处 iOS 保险：手机版 app.css 若把内边距挂在行上，这一条也堵住 */
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  -webkit-padding-start: 0 !important;
+  -webkit-padding-end: 0 !important;
 }
 
 /* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
@@ -1126,11 +1220,27 @@ body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
    横向拖一下笔记），整块面板就能左右滑几像素，看起来就像表格在滚。
    表格该横滚的地方由 .table-wrapper 自己负责（它是独立的滚动容器，不受
    这里影响），所以正文这一层直接夹住。
-   用 clip 而不是 hidden：夹在**栏容器**上时它的竖轴还是 visible，不会被
-   降级；而 hidden 会让它变成「还能用触控板滑、只是没滚动条」的滚动盒，
-   等于没夹。（实测：夹在面板上会被降级成 hidden，夹在栏容器上才是真 clip。） */
+
+   夹在**栏容器**（.markdown-preview-sizer）上，而不是面板上：
+     · 栏容器竖轴是 visible → `overflow-x: clip` 原样保留，是真正的 clip：
+       既没有横向滚动盒，也吃不到 macOS 的橡皮筋横拖。
+     · 夹在面板上会被降级成 hidden（app.css 给面板写了 overflow-y: auto，
+       Chromium 里 `clip` + 滚动轴 = hidden），而 hidden 仍是滚动盒 ——
+       触控板照样能横拖，等于没夹（实测过，加 !important 也一样）。
+
+   但不能让 clip 贴着文字边缘：栏容器的边框盒就是「文字左缘」，而有两类东西
+   天生在它外面 —— 直接夹会把它俩一起裁掉：
+     · 标题/列表的折叠箭头：`margin-inline-start: -22px`（手机 -20px）；
+       裁掉之后不只是看不见，连点都点不到，阅读视图里就没法折叠标题了
+       （实测夹在栏容器上时，桌面六条标题的箭头全部整根落在裁剪区外）。
+     · 属性面板：手机版 app.css 给 `.metadata-content` 写了
+       `transform: translateX(-12px); width: calc(100% + 24px)`，有意左右各
+       外扩 12px 到页边距里（桌面 ±4px）。
+   所以给裁剪框向外放 24px（`overflow-clip-margin`）—— 这个「外扩」只放宽
+   裁剪范围，不产生滚动盒，原来的目的（正文横滚不动）一点没丢。 */
 .markdown-preview-view .markdown-preview-sizer {
   overflow-x: clip;
+  overflow-clip-margin: 24px;
 }
 
 body {
@@ -1787,4 +1897,171 @@ body.theme-dark {
 /* 嵌套的标注块收一点上下间距，别把外层撑得太松散 */
 .callout-content .callout {
   margin: 0.7em 0;
+}
+
+/* ==========================================================================
+   13. 配套插件：选中文工具条（folio-toolbar）
+   --------------------------------------------------------------------------
+   编辑器里选中文字、稍停片刻浮出的一排格式按钮（加粗 / 斜体 / 行内代码 /
+   链接 / 格式转换……）。DOM、交互、定位全在插件里（plugin/folio-toolbar），
+   这里只负责外观：
+
+     · 纸感配色：三级纸底 + 规则色描边 + 柔和投影。背景 / 边 / 前景都用
+       主题变量，纸感与 ChatGPT 两套配色（含深浅）自动跟随，无需另写分支。
+     · 按钮：图标为主，悬浮转墨色、按下压深；`.is-labeled` 打开时才显示文字。
+     · 层级：z-index 走 --layer-popover —— 压得住正文，又不出编辑器外壳。
+
+   位置与显隐由插件写内联样式（position: fixed + top/left + .is-visible），
+   这里不碰 top/left，也不写 display 的例外。
+   ========================================================================== */
+
+.folio-toolbar {
+  position: fixed;
+  z-index: var(--layer-popover, 30);
+  display: none;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  background-color: var(--background-secondary-alt);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-s);
+  color: var(--folio-ink-soft);
+  font-family: var(--font-interface);
+  /* 工具条本身不参与选中，免得点按钮时把工具条文字卷进选区 */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.folio-toolbar.is-visible {
+  display: flex;
+}
+
+.folio-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 26px;
+  min-width: 26px;
+  padding: 0 4px;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 5px;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.folio-toolbar-btn:hover {
+  background-color: var(--background-modifier-hover);
+  color: var(--folio-ink);
+}
+
+.folio-toolbar-btn:active {
+  background-color: var(--background-modifier-active-hover);
+}
+
+.folio-toolbar-btn .svg-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.folio-toolbar.is-labeled .folio-toolbar-btn {
+  padding: 0 7px;
+}
+
+.folio-toolbar-label {
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 行内格式与「格式转换」之间的分隔 */
+.folio-toolbar-sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 3px;
+  background-color: var(--background-modifier-border);
+}
+
+/* ==========================================================================
+   14. 移动端（手机 / 平板）
+   --------------------------------------------------------------------------
+   主题的几何模型是照桌面端推的，窄屏上有两处不能照搬：
+
+   一 · 正文栏宽：桌面那 16px 的 `.cm-content` 内边距（§3）是给表格组件的
+        「padding 16px + margin -16px」让把手槽用的。手机上 Obsidian 自己就给了
+        页边距（--file-margins-x），组件的 -16px 外扩正好落在里面 —— 槽已经有了，
+        再补 16px 只是把正文白窄一圈。实测 393px 视口（iPhone 15/16 Pro）：
+          实时预览正文 313px  vs  阅读视图 345px
+        同一篇笔记切个视图就重排一次，段落折行位置还会变；表格也从 329px 被压到
+        297px（每列 82px → 74px）。窄屏下把这 16px 撤掉，正文与阅读视图对齐、
+        表格回到 329px，行/列把手仍在页边距的槽里（组件自身的 padding 24px 没动）。
+
+   二 · 表格列数：手机上 4 列平分下来每列只有 ~82px，一行三四个字（截图里
+        「满月酒合购金」那样）。默认降到 3 列：列宽 ~110px，第 4 列起表格整体
+        变宽、横向滚动 —— 宁可滑一下，也不要一格一行。桌面不受影响。
+
+   阈值 50rem（= 800px）是「窄屏」的近似：比它宽的多半是平板，栏宽上限已经
+   起作用，照桌面模型走更合适。两条都只对 `body.is-mobile` 生效，桌面一个
+   像素都不动。
+
+   ⚠️ 撤掉这 16px 之后，手机上的正文左右留白就只剩页边距（Obsidian 默认
+   --file-margins-x: 24px）。别把它调到 16px 以下：表格组件的「padding 24px +
+   margin -16px」要靠这 16px 兜住，否则行/列把手会被屏幕边缘切掉。
+   （snippets/folio-mobile.css 把页边距收成 18px，就是按这条来的。）
+
+   ⚠️ 手机上「宋体纸感」会退化：iOS 没预装中文衬线（Songti SC 在 WKWebView 里
+   命中不了），正文中文会回落到系统无衬线（PingFang），只有西文还是 Iowan 衬线
+   （实测截图里「1027」是 old-style 数字、汉字是黑体）。装任意一款中文衬线
+   （思源宋体 / Noto Serif SC / 宋体 SC）后本主题会自动命中；不想装字体的话，
+   把「正文字体」切成「系统无衬线」，至少两端一致。
+   ========================================================================== */
+@media (max-width: 50rem) {
+  body.is-mobile .markdown-source-view.mod-cm6 .cm-content {
+    padding-inline: 0;
+  }
+  body.is-mobile {
+    --folio-table-cols: var(--folio-table-cols-mobile, 3);
+  }
+}
+
+/* —— 手机外壳两处：都是「悬浮层（floating nav）」带来的，桌面没有 ——
+
+   一 · 顶部透明：Obsidian 的手机导航条默认是**半透明 + 模糊**的（药丸底的
+        `--raised-background` = 65% 纸色，`.view-header` 自己 `background: transparent`），
+       正文往上滚就从底下透出来 —— 状态栏那一条、标题条、按钮药丸里都能看见字，
+       和标题叠在一起。这不是系统限制，CSS 就能改：把药丸底、标题条、以及状态栏
+       那一条（`--view-header-top-offset` = max(安全区, 12px)）都换成不透明纸底。
+
+   二 · 属性面板的日期输入框：iOS 把原生的小日历图标画在框**左端、压在数值上**
+       （实测框只有 95px，塞不下「图标 + 2026/10/19」）。把图标藏掉（iOS 上点整个框
+       就会弹滚轮，不靠它）并给足宽度。桌面上这个图标在右端、不挡字，所以只改手机。 */
+body.is-mobile {
+  --raised-background: var(--background-primary);
+}
+body.is-mobile .view-header,
+/* 悬浮导航那条（app.css 用 0-4-0 写死 transparent，得同权重压回去） */
+body.is-mobile.is-floating-nav.is-phone .view-header {
+  background-color: var(--background-primary);
+  border-bottom-color: transparent; /* 浮起来的条不该有那条分隔线 */
+}
+body.is-mobile::before {
+  content: '';
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: var(--view-header-top-offset, env(safe-area-inset-top, 0px));
+  background-color: var(--background-primary);
+  pointer-events: none;
+  z-index: 40;
+}
+body.is-mobile input.metadata-input[type='date'] {
+  min-width: 15ch;
+}
+body.is-mobile input.metadata-input[type='date']::-webkit-calendar-picker-indicator {
+  display: none;
 }
