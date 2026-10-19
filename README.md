@@ -263,6 +263,25 @@ wrapper 要是不等于表格宽，那把「+」就贴不到表格右缘，会**
 > 把它压回去。删掉那一条会立刻复发上面那 16px —— `dev/probe/probe.py` 的**检查 3**
 > 就是守这个的（1/2/4/6 列，逐层强行滚一遍）。
 
+### 单元格里的 markdown（v0.5.4）
+
+同一个单元格，Obsidian 可能按**内联文本**渲染（`1. xxx<br>2. yyy` → 紧凑、无缩进），
+也可能把它解析成**块级列表**（`<ol>` / `<ul>`）。后者的样式全来自 app.css：
+
+```css
+.markdown-rendered ul > li, .markdown-rendered ol > li { padding-block: var(--list-spacing); }
+.markdown-rendered ul > li { margin-inline-start: 3ch; }
+.markdown-rendered ol > li { margin-inline-start: 3ch; }
+```
+
+于是同一份数据切个视图/状态就变成「每项之间空 6.4px、整体再右移 26.7px」，
+和旁边内联渲染的单元格对不上（截图对比过：同样 3 项，内联 139.4px 高，列表 183.3px）。
+
+处理：**表格单元格里的列表统一按内联文本显示** —— `ol/ul` 的上下 margin、左缩进归零，
+`li` 的 `padding-block` / `margin-inline-start` 归零，序号用 `list-style-position: inside`
+贴着文字（换行不悬挂）；松散列表（`li > p`）的段落间距也一并压平。改完两个变体
+实测都是 139.4px，行断点、行距、缩进完全一致。
+
 宽度是相对**表格的实际容器**算的（百分比），不是拿「正文栏宽」设置换算的绝对值 ——
 所以面板比栏宽窄几像素时（窗口差一点、外边距、滚动条），≤ 设定值的列数也仍然是
 正好 100%、不滚；窗口整体变窄时，各列只是跟着一起变窄，不会提前开始滚。
@@ -484,7 +503,7 @@ Obsidian 会在那个 `<td>` 里**再挂一个 CodeMirror**（`app.js` 的 `edit
 主题里带一个版本戳 `--folio-version`（`theme.css` 顶部与变量区各一处，与 `manifest.json`
 的 `forkVersion` 同步），手机补丁片段 `snippets/folio-mobile.css` 会把它画成一枚徽标：
 
-- **绿色**「Folio 主题 v0.5.3 · 2026-10-19」= 手机上加载的就是最新主题；
+- **绿色**「Folio 主题 v0.5.4 · 2026-10-19」= 手机上加载的就是最新主题；
 - **红色**「Folio 主题 未知版本（theme.css 没同步到最新）」= theme.css 没同步过去，
   去 iCloud 里看 `…/.obsidian/themes/Folio/theme.css` 的修改时间，或重跑 `./sync-mobile.sh`。
 

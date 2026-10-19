@@ -4,6 +4,6 @@
   "minAppVersion": "1.5.0",
   "author": "youyanping",
   "authorUrl": "",
-  "forkVersion": "0.5.3",
+  "forkVersion": "0.5.4",
   "note": "version 是「防覆盖哨兵」：本 fork 以软链接入 vault、与官方 Folio 同名同 ID，版本号若低于社区市场版本，Obsidian 的「更新」会下载官方版覆盖 theme.css。真实版本看 forkVersion（package.sh 也读它）。"
 }
