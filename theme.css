@@ -678,11 +678,11 @@ body.folio-modern-mode {
 }
 
 /* —— 排版：去掉「书」的做法 —— */
-body.folio-modern-mode .markdown-rendered > p,
+body.folio-modern-mode .markdown-rendered p,
 body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 0 !important;
 }
-body.folio-modern-mode .markdown-rendered > p,
+body.folio-modern-mode .markdown-rendered p,
 body.folio-modern-mode .markdown-rendered li,
 body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line {
   text-align: left !important;
@@ -745,19 +745,26 @@ body.folio-free-width .markdown-preview-view .markdown-preview-sizer {
 }
 
 /* —— 书籍段落：两端对齐 + 首行缩进两字（默认开启，可关）—— */
-body:not(.folio-no-justify) .markdown-rendered > p,
+body:not(.folio-no-justify) .markdown-rendered p,
 body:not(.folio-no-justify) .markdown-rendered li,
 body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-line {
   text-align: justify;
   text-justify: inter-ideograph;
 }
 
-body:not(.folio-no-book-indent) .markdown-rendered > p {
+body:not(.folio-no-book-indent) .markdown-preview-view .el-p > p {
   text-indent: 2em;
 }
 /* 实时预览：只给纯段落行缩进；标题/列表/引用/代码/表格等 HyperMD 行不缩进 */
 body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 2em;
+}
+
+/* 阅读视图的表格单元格与标注块正文：不缩进；表格内不两端对齐 */
+.markdown-rendered th p,
+.markdown-rendered td p {
+  text-indent: 0;
+  text-align: start;
 }
 
 /* —— 标题：上下留白 + 层级观感 —— */
