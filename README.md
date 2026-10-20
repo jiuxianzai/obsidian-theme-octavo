@@ -25,7 +25,14 @@
 <p align="left">
   <img src="screenshots/mobile-paper.png" width="300" alt="手机纸感模式">
   <img src="screenshots/mobile-modern.png" width="300" alt="手机现代模式">
+  <img src="screenshots/mobile-table.png" width="300" alt="手机表格">
 </p>
+
+### 更多截图
+
+| 标注块 | 表格 |
+| --- | --- |
+| ![标注块](screenshots/desktop-callouts.png) | ![表格](screenshots/desktop-table.png) |
 
 ## 特性
 

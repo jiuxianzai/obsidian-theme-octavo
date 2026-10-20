@@ -359,9 +359,6 @@ body {
   --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
   --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §13 */
 
-  /* —— 版本号（仅用于排查，不影响样式）—— */
-  --folio-version: "v1.0.0 · 2026-10-20";
-
   --folio-h1-size: 1.75em; /* 28px @16 */
   --folio-h2-size: 1.375em; /* 22px @16 */
   --folio-h3-size: 1.32em;
@@ -575,7 +572,7 @@ body {
      配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
      字体 · 无衬线
      排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
-   关掉 Style Settings 里的「现代模式」即回到 Folio 的纸感书卷。
+   关掉 Style Settings 里的「现代模式」即回到 Folio Paper 的纸感书卷。
    ========================================================================== */
 
 /* —— 浅色配色 —— */
@@ -665,7 +662,7 @@ body.theme-dark.folio-modern-mode {
   --text-highlight-bg: rgba(224, 184, 94, 0.26); /* 合成 #534831，与选区靠色相区分 */
 }
 
-/* —— 字体：正文无衬线；标题沿用 Folio 纸感的衬线字体 ——
+/* —— 字体：正文无衬线；标题沿用 Folio Paper 纸感的衬线字体 ——
    Obsidian 的标题字体跟 --font-text 是分开的（--h1-font…--h6-font，默认 inherit），
    所以把正文切成无衬线后，标题仍可单独指回纸感字体。 */
 body.folio-modern-mode {
@@ -1825,7 +1822,7 @@ body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6)
    （各自的长别名 hint / attention / cite 一并认，写法见下）
 
    做法借 GitHub Alerts（NOTE / TIP / IMPORTANT / WARNING / CAUTION）的骨架 ——
-   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Folio 的纸感语言：
+   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Folio Paper 的纸感语言：
      · 左边一条 3px 语义色竖线（与引用块同宽），其余三边不封口
      · 底色只铺 7%（深色 10%），比 GitHub 更淡，纸面仍是主角
      · 只有标题与图标吃语义色，正文保持墨色 —— 正文对比度完全不受影响
