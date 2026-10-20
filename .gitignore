@@ -1,14 +1,10 @@
 .DS_Store
 *.log
 
-# 由 palette.gen.py 从 theme.css 生成的色卡（每次改配色都会全量变化，不入库）
-palette.html
-
 .idea/
 .vscode/
 node_modules/
 __pycache__/
 
-# Obsidian 写到插件目录里的运行时设置（软链进 vault 后写回源目录），不入库；
-# sync-plugins.sh 同步到各插件仓库时也排除它
-plugin/*/data.json
+# 本地生成物
+screenshots/.shoot/

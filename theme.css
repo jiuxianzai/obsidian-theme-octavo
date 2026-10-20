@@ -1,31 +1,28 @@
 /* ==========================================================================
-   FOLIO  ·  一款纸感 / 书卷气的 Obsidian 主题
+   FOLIO PAPER  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   ★ v0.5.4 · 2026-10-19 ★  （forkVersion，见 manifest.json；改完记得跑
-   ./sync-mobile.sh 同步到手机）
-   这一版：表格单元格里的 markdown 统一 —— 同一格内容被 Obsidian 解析成块级列表时
-   （<ol>/<ul>）会拿到 app.css 的 li 上下 padding（--list-spacing）和 3ch 左缩进，
-   跟内联 <br> 渲染的格子对不上；现在单元格内列表一律按内联文本显示。
-   上一版 v0.5.3：修文件树「同级文件夹比文件多缩 16px」—— 补上 --nav-item-parent-padding。
-   v0.5.2：移动端（iPhone / iPad）适配 —— §14 两条窄屏规则、§5 里层编辑器
-   复位加固（!important）、阅读视图裁剪框外扩 24px、表格「+」把手改撑 wrapper、
-   手机顶栏改不透明 + 日期框图标不再压字。
-   --------------------------------------------------------------------------
+   ★ v1.0.0 · 2026-10-20 ★
+   默认：宋体正文 + 两端对齐 + 首行缩进 + 标题居中 + 标题分隔线 + 朱批红
+         + 暖白纸面 / 墨色文字。
+   可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线、左对齐。
+   零插件依赖：不装任何社区插件也能得到完整默认外观。
+
    设计目标
      1. 标题字号层层递减，且始终大于正文；颜色与正文区分；上下留白充足
      2. 复杂文档不费力：行高、段距、栏宽都按「阅读舒适区」调过
      3. 纸质书感：暖色纸面 / 墨色文字，衬线正文，克制的装饰
      4. 专注：压低界面噪音，可选「聚焦模式」把非当前行调暗
-     5. 文件树：去掉缩进引导线，紧凑行高，悬浮/选中高亮，接近 VSCode
+     5. 文件树：去掉缩进引导线，紧凑行高，悬浮/选中高亮，接近代码编辑器
 
-   用法：Settings → Appearance → Themes 选择「Folio」
-   调参：需要 obsidian-style-settings 插件（已安装），在 Style Settings 里调
+   安装：把本目录放进 <vault>/.obsidian/themes/Folio Paper/
+   启用：Settings → Appearance → Themes 选择「Folio Paper」
+   调参：不装插件即可用；装 Style Settings 后可在面板里改字体 / 字号 / 开关
    ========================================================================== */
 
 /* @settings
 
-name: Folio
-id: folio
+name: Folio Paper
+id: folio-paper
 settings:
   -
     id: folio-typography
@@ -191,8 +188,8 @@ settings:
     type: heading
     level: 1
   -
-    id: folio-chatgpt-mode
-    title: ChatGPT 模式
+    id: folio-modern-mode
+    title: 现代模式
     description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。默认关（= 纸感书卷），打开即切到这套
     type: class-toggle
     default: false
@@ -210,27 +207,51 @@ settings:
   -
     id: folio-title-centered
     title: 标题居中（书名式）
-    description: 把笔记标题（文件名）居中，像书页的章名
-    type: class-toggle
-    default: true
+    description: 默认开启，像书页的章名。选「关」后标题左对齐
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-title-centered
   -
     id: folio-heading-rule
     title: 标题分隔线
-    description: 在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
-    type: class-toggle
-    default: true
+    description: 默认开启，在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-heading-rule
   -
     id: folio-justify
     title: 正文两端对齐
-    description: 中文书籍排版的常见做法
-    type: class-toggle
-    default: true
+    description: 默认开启，中文书籍排版的常见做法
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-justify
   -
     id: folio-book-indent
     title: 段落首行缩进两字
-    description: 中文书籍排版；关闭后改为纯段间距分隔
-    type: class-toggle
-    default: true
+    description: 默认开启；选「关」后改为纯段间距分隔
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-book-indent
   -
     id: folio-focus-dim
     title: 聚焦模式
@@ -260,9 +281,15 @@ settings:
   -
     id: folio-active-line
     title: 当前行高亮
-    description: 给光标所在行加底色，标明当前位置
-    type: class-toggle
-    default: true
+    description: 默认开启，给光标所在行加底色，标明当前位置
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-active-line
   -
     id: folio-hide-markdown
     title: 隐藏 Markdown 语法
@@ -277,9 +304,15 @@ settings:
   -
     id: folio-u-red
     title: 红色下划线（朱笔）
-    description: 用 <u> 标签包住的文字渲染成红色下划线。配合 folio-mark 插件，Cmd/Ctrl+U 一键加 / 去
-    type: class-toggle
-    default: true
+    description: 默认开启。在笔记里写 <u>文字</u> 即显示为红色下划线；Obsidian 核心没有下划线命令，快捷键需自行绑定或直接用 HTML 标签
+    type: class-select
+    allowEmpty: true
+    default: none
+    options:
+      - label: 开（默认）
+        value: none
+      - label: 关
+        value: folio-no-u-red
   -
     id: folio-tree
     title: 文件树 · File explorer
@@ -324,14 +357,12 @@ body {
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
   --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
-  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §14 */
+  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §13 */
 
-  /* —— 版本戳：手机上的 folio-mobile 片段会把它显示成徽标，
-     用来验收「手机上加载的是哪一版」。改版本时这里和 manifest.json 一起改。 */
-  --folio-version: "v0.5.4 · 2026-10-19";
-  --folio-version-bg: rgba(46, 125, 50, 0.92); /* 有版本号＝绿；旧主题没有这个变量，徽标落红 */
+  /* —— 版本号（仅用于排查，不影响样式）—— */
+  --folio-version: "v1.0.0 · 2026-10-20";
 
-  --folio-h1-size: 1.75em; /* 28px @16 —— GPT 规范 */
+  --folio-h1-size: 1.75em; /* 28px @16 */
   --folio-h2-size: 1.375em; /* 22px @16 */
   --folio-h3-size: 1.32em;
   --folio-h4-size: 1.18em;
@@ -538,17 +569,17 @@ body {
 }
 
 /* ==========================================================================
-   2b. 观感方案：ChatGPT 模式（默认开）
+   2b. 观感方案：现代模式（可选，默认关）
    --------------------------------------------------------------------------
-   一键把「配色 + 字体 + 排版」切成 ChatGPT 网页端的观感：
+   一键把「配色 + 字体 + 排版」切成 现代文档产品的观感：
      配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
      字体 · 无衬线
      排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
-   关掉 Style Settings 里的「ChatGPT 模式」即回到 Folio 的纸感书卷。
+   关掉 Style Settings 里的「现代模式」即回到 Folio 的纸感书卷。
    ========================================================================== */
 
 /* —— 浅色配色 —— */
-body.theme-light.folio-chatgpt-mode {
+body.theme-light.folio-modern-mode {
   --folio-paper: #ffffff;
   --folio-paper-2: #f9f9f9;
   --folio-paper-3: #f3f3f3;
@@ -567,7 +598,7 @@ body.theme-light.folio-chatgpt-mode {
   --folio-quote-bg: #f9f9f9;
   --folio-active-line-bg: #f4f4f4;
 
-  /* 代码块：GPT 模式是中性灰底，不要继承纸感的暖底 */
+  /* 代码块：现代模式是中性灰底，不要继承纸感的暖底 */
   --folio-code-block-bg: #f6f6f6;
   --folio-code-block-border: #e9e9e9;
   --folio-code-line-active: #ededed;
@@ -595,7 +626,7 @@ body.theme-light.folio-chatgpt-mode {
    三级底的语义要读清楚：#212121 正文纸面（基准）；#171717 更沉的侧边栏；
    #262626 浮出的面板。原来 paper-3 是 #303030，比正文还亮，
    于是 212121 → 171717 → 303030 不是一条坡道，侧边栏里嵌面板会「凸」出来。 */
-body.theme-dark.folio-chatgpt-mode {
+body.theme-dark.folio-modern-mode {
   --folio-paper: #212121;
   --folio-paper-2: #171717;
   --folio-paper-3: #262626;
@@ -637,7 +668,7 @@ body.theme-dark.folio-chatgpt-mode {
 /* —— 字体：正文无衬线；标题沿用 Folio 纸感的衬线字体 ——
    Obsidian 的标题字体跟 --font-text 是分开的（--h1-font…--h6-font，默认 inherit），
    所以把正文切成无衬线后，标题仍可单独指回纸感字体。 */
-body.folio-chatgpt-mode {
+body.folio-modern-mode {
   --font-text: var(--folio-sans-font);
   --font-text-theme: var(--folio-sans-font);
 
@@ -650,28 +681,28 @@ body.folio-chatgpt-mode {
 }
 
 /* —— 排版：去掉「书」的做法 —— */
-body.folio-chatgpt-mode .markdown-rendered > p,
-body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+body.folio-modern-mode .markdown-rendered > p,
+body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 0 !important;
 }
-body.folio-chatgpt-mode .markdown-rendered > p,
-body.folio-chatgpt-mode .markdown-rendered li,
-body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .cm-line {
+body.folio-modern-mode .markdown-rendered > p,
+body.folio-modern-mode .markdown-rendered li,
+body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line {
   text-align: left !important;
 }
-body.folio-chatgpt-mode .inline-title {
+body.folio-modern-mode .inline-title {
   text-align: left !important;
 }
-body.folio-chatgpt-mode .markdown-rendered h1,
-body.folio-chatgpt-mode .markdown-rendered h2,
-body.folio-chatgpt-mode .markdown-rendered h3,
-body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body.folio-chatgpt-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+body.folio-modern-mode .markdown-rendered h1,
+body.folio-modern-mode .markdown-rendered h2,
+body.folio-modern-mode .markdown-rendered h3,
+body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   border-bottom: none !important;
 }
 
-/* 字号层级（GPT 规范：侧边栏 14px / H1 28px / H2 22px / 代码 14px）
+/* 字号层级（现代模式规范：侧边栏 14px / H1 28px / H2 22px / 代码 14px）
    已提升到主题基础层，全局生效，见「1. 字体与排版刻度」与「7. 文件树」。 */
 
 /* ==========================================================================
@@ -717,18 +748,18 @@ body.folio-free-width .markdown-preview-view .markdown-preview-sizer {
 }
 
 /* —— 书籍段落：两端对齐 + 首行缩进两字（默认开启，可关）—— */
-body.folio-justify .markdown-rendered > p,
-body.folio-justify .markdown-rendered li,
-body.folio-justify .markdown-source-view.mod-cm6 .cm-line {
+body:not(.folio-no-justify) .markdown-rendered > p,
+body:not(.folio-no-justify) .markdown-rendered li,
+body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-line {
   text-align: justify;
   text-justify: inter-ideograph;
 }
 
-body.folio-book-indent .markdown-rendered > p {
+body:not(.folio-no-book-indent) .markdown-rendered > p {
   text-indent: 2em;
 }
 /* 实时预览：只给纯段落行缩进；标题/列表/引用/代码/表格等 HyperMD 行不缩进 */
-body.folio-book-indent .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 2em;
 }
 
@@ -758,15 +789,15 @@ body.folio-book-indent .markdown-source-view.mod-cm6 .cm-line:not([class*="Hyper
 }
 
 /* —— 标题分隔线：H1–H3，阅读视图与实时预览都生效 —— */
-body.folio-heading-rule .markdown-rendered h1,
-body.folio-heading-rule .markdown-rendered h2,
-body.folio-heading-rule .markdown-rendered h3 {
+body:not(.folio-no-heading-rule) .markdown-rendered h1,
+body:not(.folio-no-heading-rule) .markdown-rendered h2,
+body:not(.folio-no-heading-rule) .markdown-rendered h3 {
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--folio-rule);
 }
-body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   padding-bottom: 0.25em;
   border-bottom: 1px solid var(--folio-rule);
 }
@@ -781,7 +812,7 @@ body.folio-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   letter-spacing: 0.01em;
   margin-block-end: 0.9em;
 }
-body.folio-title-centered .inline-title {
+body:not(.folio-no-title-centered) .inline-title {
   text-align: center;
   margin-block-start: 0.6em;
 }
@@ -850,7 +881,7 @@ body.folio-title-centered .inline-title {
   margin: 2.2em auto;
 }
 
-/* —— 代码（参考 ChatGPT 网页端的代码块）—— */
+/* —— 代码（参考现代文档产品的代码块）—— */
 
 /* 语法高亮色板：阅读模式（Prism .token.*）与编辑器（cm-*）共用同一套 --code-* 变量，
    所以改这一组变量，两种模式同时生效。 */
@@ -1143,7 +1174,7 @@ body {
    实测（真实 app.css，1100×1000，1/2/4/6 列）：
      原样：1/2/4 列 wrapper 可滚 16px（＝把手宽），且每张表下多 15px 滚动条；6 列 wrapper 滚 320px
      修复：1/2/4 列 0px；6 列改由 .cm-table-widget 滚 304px；两个把手都能悬停到（opacity 1）
-     阅读视图两版完全一致（1/2/4 列 0px；6 列 336px），插件那条路不受影响。 */
+     阅读视图两版完全一致（1/2/4 列 0px；6 列 336px），补容器那条路不受影响。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
   width: 100%;
   overflow: visible;
@@ -1164,16 +1195,16 @@ body {
       0.45em 0.75em）。漏进来的后果：被激活的单元格凭空多出 16px 左内边距，
       正好是**一个汉字**的宽度（16px 字号下 1em = 16px）；没激活的单元格
       没有这 16px。两下一比，就是「光标一进单元格，那一行文字整体右移一个字」。
-   2) `body.folio-book-indent … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
+   2) `body:not(.folio-no-book-indent) … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
       单元格里层的行没有 HyperMD- 类，会被当成纯段落再缩进两个字 ——
       开着「书籍段落缩进」时，错位从 1 个字变成 3 个字（16px + 2em）。
       而单元格里的段落本就不该有首行缩进（第 3 节原话：表格等 HyperMD 行不缩进）。
-   3) `body.folio-justify … .cm-line { text-align: justify; text-justify: inter-ideograph }`
+   3) `body:not(.folio-no-justify) … .cm-line { text-align: justify; text-justify: inter-ideograph }`
       这个模式**默认就是开的**（@settings 里 default: true）→ 里层这一行被拉成
       两端对齐：单元格里折出来的前几行被撑满、汉字之间被拉开，最后一行照旧不撑
       （实测：第 2 行字距 15.43 → 16.17px、行右缘 198 → 206px；截图里 29 → 33px
       的也是它）→ 看起来就是「有光标和没光标，字间距不一样」。
-      阅读视图的单元格从不两端对齐（`body.folio-justify .markdown-rendered > p`
+      阅读视图的单元格从不两端对齐（`body:not(.folio-no-justify) .markdown-rendered > p`
       只认直接子段），没光标的单元格也不是 `.cm-line` —— 所以只有光标进去那一下会变。
       这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
       写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
@@ -1229,10 +1260,10 @@ body {
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content.cm-lineWrapping {
   overflow-wrap: anywhere;
 }
-body.folio-book-indent .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-indent: 0;
 }
-body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-align: inherit;
   text-justify: auto;
 }
@@ -1246,9 +1277,9 @@ body.folio-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   -webkit-padding-end: 0 !important;
 }
 
-/* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格只会撑破栏宽。
-   配套插件 folio-table 会补上同名的 .table-wrapper，这一条让它真的能滚；
-   没装插件时选择器落空，什么也不影响。
+/* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格会按栏宽换行。
+   这里保留 .table-wrapper 的滚动样式：若用户自己用插件补了同名容器，就能直接滚；
+   没有容器时选择器落空，什么也不影响。
    ⚠️ `.markdown-rendered` 实时预览的表格组件也带（见上一节），所以这条会连实时
    预览那层 wrapper 一起命中 —— 那一层靠上面 `.cm-table-widget .table-wrapper
    { overflow: visible }` 按权重压回去（0-4-0 > 0-2-0）。删那条会立刻复发
@@ -1333,7 +1364,7 @@ body {
   box-shadow: none;
 }
 .workspace-tab-header-inner-title {
-  font-size: 14px; /* GPT：顶部标签标题 14px / 500 */
+  font-size: 14px; /* 现代模式：顶部标签标题 14px / 500 */
   font-weight: 500;
 }
 .workspace-tab-header-container-inner {
@@ -1353,7 +1384,7 @@ body {
   background: transparent;
 }
 .view-header-title {
-  font-size: 12px; /* GPT：侧边栏分组标题 12px / 500 */
+  font-size: 12px; /* 现代模式：侧边栏分组标题 12px / 500 */
   font-weight: 500;
   letter-spacing: 0.01em;
 }
@@ -1404,7 +1435,7 @@ select {
   --nav-item-padding: 5px 8px;          /* 上下 5px，左右 8px */
   --nav-item-margin-bottom: 1px;        /* 行与行之间留一点缝 */
   --nav-item-radius: 6px;
-  --nav-item-size: 14px;                /* GPT：侧边栏会话名称 14px */
+  --nav-item-size: 14px;                /* 现代模式：侧边栏会话名称 14px */
   --nav-item-weight: 400;
   --nav-item-weight-active: 600;        /* 选中：字重 + 底色，不画左侧竖条 */
   --nav-item-color: var(--folio-ink-soft);
@@ -1533,11 +1564,11 @@ select {
   color: var(--folio-ink);
 }
 
-/* 选中文件：左侧强调竖条 —— 只有 GPT 模式画。
+/* 选中文件：左侧强调竖条 —— 只有 现代模式画。
    纸感模式不要它（竖条是 App 的「选中控件」，不是纸上的记号），
    那边的选中态只靠底色 + 字重区分，见 7 节末尾的纸感文件树块。
    注意挂在 ::after 上：::before 已经给了「文件」图标，不能互相顶掉。 */
-body.folio-chatgpt-mode .nav-file-title.is-active::after {
+body.folio-modern-mode .nav-file-title.is-active::after {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
@@ -1560,19 +1591,19 @@ body.folio-tree-lines .nav-files-container {
 }
 
 /* —— 纸感模式：把文件树做成一本书的目录 ——
-   GPT 模式（默认开）保留上面那套 VSCode 式无衬线；关掉 GPT 模式后，
+   现代模式保留上面那套代码编辑器式无衬线；默认的纸感模式则
    侧栏换成正文衬线 + 更轻的印刷符号 + 页边标记式的选中态。
-   只在 :not(.folio-chatgpt-mode) 下生效，GPT 模式一个像素都不动。 */
+   只在 :not(.folio-modern-mode) 下生效，现代模式一个像素都不动。 */
 
 /* 目录用正文字体（书里的目录和正文同一副字），默认 Iowan + 思源宋体。
    想改回无衬线：把 --folio-tree-font-paper 换成 var(--folio-sans-font)。 */
-body:not(.folio-chatgpt-mode) .mod-left-split .workspace-leaf-content,
-body:not(.folio-chatgpt-mode) .mod-right-split .workspace-leaf-content,
-body:not(.folio-chatgpt-mode) .nav-files-container {
+body:not(.folio-modern-mode) .mod-left-split .workspace-leaf-content,
+body:not(.folio-modern-mode) .mod-right-split .workspace-leaf-content,
+body:not(.folio-modern-mode) .nav-files-container {
   font-family: var(--folio-tree-font-paper);
 }
 
-body:not(.folio-chatgpt-mode) .nav-files-container {
+body:not(.folio-modern-mode) .nav-files-container {
   /* 书页的行距比 VSCode 松一档；圆角收小，别像个 App 的胶囊 */
   --nav-item-padding: 6px 8px;
   --nav-item-radius: 4px;
@@ -1581,31 +1612,31 @@ body:not(.folio-chatgpt-mode) .nav-files-container {
 
 /* 中文在衬线体下略松一点更好读；只动字距，不动颜色 ——
    .nav-folder-title-content 有显式 color，碰它会盖掉 is-active 的继承色。 */
-body:not(.folio-chatgpt-mode) :is(.nav-folder-title-content, .nav-file-title-content) {
+body:not(.folio-modern-mode) :is(.nav-folder-title-content, .nav-file-title-content) {
   letter-spacing: 0.01em;
 }
 
 /* 文件夹 / 文件图标退到背景里：它们是印刷符号，不是 UI 控件 */
-body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title)::before {
+body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title)::before {
   opacity: 0.6;
   transition: opacity 120ms ease, background-color 120ms ease;
 }
-body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title):hover::before,
-body:not(.folio-chatgpt-mode) :is(.nav-folder-title, .nav-file-title).is-active::before {
+body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title):hover::before,
+body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title).is-active::before {
   opacity: 1;
 }
 
 /* 「文件树紧凑行高」在纸感模式下也要生效 ——
    上面那条的优先级比 body.folio-tree-compact 高，得在这里重新收紧一次。 */
-body:not(.folio-chatgpt-mode).folio-tree-compact .nav-files-container {
+body:not(.folio-modern-mode).folio-tree-compact .nav-files-container {
   --nav-item-padding: 3px 8px;
   --nav-item-margin-bottom: 0px;
 }
 
 /* 侧栏面板标题（「文件」/「搜索」）像书页的页眉：
    只作用于左右侧栏，不动正文视图的 header。 */
-body:not(.folio-chatgpt-mode) .mod-left-split .view-header-title,
-body:not(.folio-chatgpt-mode) .mod-right-split .view-header-title {
+body:not(.folio-modern-mode) .mod-left-split .view-header-title,
+body:not(.folio-modern-mode) .mod-right-split .view-header-title {
   font-family: var(--folio-text-font);
   font-size: 13px;
   letter-spacing: 0.08em;
@@ -1646,7 +1677,7 @@ body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-selec
    原理：一叠 box-shadow 沿水平方向平铺（每段是行宽的副本）。
    关键：每段的平移量必须 < 行宽，否则段与段之间会空出缝隙。
    原来用 50vw，屏幕一宽 50vw 就超过行宽 → 底色被断成三段。 */
-body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
+body:not(.folio-no-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active {
   background-color: var(--folio-active-line-bg);
   --folio-al-step: calc(var(--folio-content-width) * 0.7);
   box-shadow:
@@ -1664,7 +1695,7 @@ body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
 
 /* 代码块里的当前行：不要那条横穿整块的全宽色带，
    改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
-body.folio-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+body:not(.folio-no-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
   background-color: var(--folio-code-line-active) !important;
   box-shadow: none !important;
 }
@@ -1764,23 +1795,11 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
 }
 
 /* ==========================================================================
-   10. 日历插件（Calendar）—— 高亮今天
-   ========================================================================== */
-
-.calendar .day.today,
-.calendar .today,
-.calendar-day.today {
-  background-color: var(--interactive-accent) !important;
-  color: var(--text-on-accent) !important;
-  font-weight: 600;
-}
-
-/* ==========================================================================
-   11. 朱笔 · 红色下划线（<u>文字</u>）
+   10. 朱笔 · 红色下划线（<u>文字</u>）
    --------------------------------------------------------------------------
    原文写成 <u>…</u>（Obsidian 原生支持的 HTML 下划线，阅读视图与实时预览都
-   会渲染成 u 元素），样式交给主题，快捷键交给配套插件 folio-mark
-   （Cmd/Ctrl+U 一键加 / 去）。
+   会渲染成 u 元素），样式交给主题。Obsidian 核心没有下划线命令，需要用 HTML
+   标签，或自行在别的插件里绑定快捷键。
 
    两条边界：
      1. HTML 标签内不解析 Markdown —— <u>**粗体**</u>、「<u>[[链接]]</u>」里的
@@ -1788,7 +1807,7 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
      2. 别去动 .cm-underline —— 那是内部链接的类，碰它会把所有链接一起染红。
    ========================================================================== */
 
-body.folio-u-red :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
+body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
   text-decoration-line: underline;
   text-decoration-color: var(--folio-u-color);
   /* 线比默认粗一档、往下压一点，读起来像「批注笔」而不是排版下划线 */
@@ -1954,95 +1973,7 @@ body.theme-dark {
 }
 
 /* ==========================================================================
-   13. 配套插件：选中文工具条（folio-toolbar）
-   --------------------------------------------------------------------------
-   编辑器里选中文字、稍停片刻浮出的一排格式按钮（加粗 / 斜体 / 行内代码 /
-   链接 / 格式转换……）。DOM、交互、定位全在插件里（plugin/folio-toolbar），
-   这里只负责外观：
-
-     · 纸感配色：三级纸底 + 规则色描边 + 柔和投影。背景 / 边 / 前景都用
-       主题变量，纸感与 ChatGPT 两套配色（含深浅）自动跟随，无需另写分支。
-     · 按钮：图标为主，悬浮转墨色、按下压深；`.is-labeled` 打开时才显示文字。
-     · 层级：z-index 走 --layer-popover —— 压得住正文，又不出编辑器外壳。
-
-   位置与显隐由插件写内联样式（position: fixed + top/left + .is-visible），
-   这里不碰 top/left，也不写 display 的例外。
-   ========================================================================== */
-
-.folio-toolbar {
-  position: fixed;
-  z-index: var(--layer-popover, 30);
-  display: none;
-  align-items: center;
-  gap: 1px;
-  padding: 3px;
-  background-color: var(--background-secondary-alt);
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
-  box-shadow: var(--shadow-s);
-  color: var(--folio-ink-soft);
-  font-family: var(--font-interface);
-  /* 工具条本身不参与选中，免得点按钮时把工具条文字卷进选区 */
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.folio-toolbar.is-visible {
-  display: flex;
-}
-
-.folio-toolbar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  height: 26px;
-  min-width: 26px;
-  padding: 0 4px;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: 5px;
-  color: inherit;
-  cursor: pointer;
-  transition: background-color 0.1s ease, color 0.1s ease;
-}
-
-.folio-toolbar-btn:hover {
-  background-color: var(--background-modifier-hover);
-  color: var(--folio-ink);
-}
-
-.folio-toolbar-btn:active {
-  background-color: var(--background-modifier-active-hover);
-}
-
-.folio-toolbar-btn .svg-icon {
-  width: 15px;
-  height: 15px;
-}
-
-.folio-toolbar.is-labeled .folio-toolbar-btn {
-  padding: 0 7px;
-}
-
-.folio-toolbar-label {
-  font-size: 12px;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-/* 行内格式与「格式转换」之间的分隔 */
-.folio-toolbar-sep {
-  width: 1px;
-  align-self: stretch;
-  margin: 3px;
-  background-color: var(--background-modifier-border);
-}
-
-/* ==========================================================================
-   14. 移动端（手机 / 平板）
+   13. 移动端（手机 / 平板）
    --------------------------------------------------------------------------
    主题的几何模型是照桌面端推的，窄屏上有两处不能照搬：
 
