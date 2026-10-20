@@ -5,14 +5,14 @@ Folio Paper 是一个独立实现的 Obsidian 主题。下面列出公开参考�
 
 ## 主题与实现
 
-### Folio · elijahchan2019
+### Folio · elijahchan2019 / elijah7x
 
 - 仓库：https://github.com/elijahchan2019/obsidian-folio-theme
 - 许可：MIT
 - 关系：**名称与早期命名参考，独立实现，未复用其 CSS 代码。**
   本项目早期曾使用 `Folio` 作为主题名，并在本地与官方 Folio 同名同 ID；
   公开版已更名为 **Folio Paper**，以避免与官方主题混淆。
-  本项目不是 elijahchan2019 的官方版本，也不代表其立场。
+  本项目不是 elijahchan2019 / elijah7x 的官方版本，也不代表其立场。
 
 ### Minimal · kepano
 

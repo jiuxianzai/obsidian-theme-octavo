@@ -167,7 +167,7 @@ document.querySelector('.theme-light, .theme-dark')   // 主题是否加载
 
 ## 6. 参考
 
-- Folio（elijahchan2019，MIT）：名称与早期命名参考，独立实现，无代码派生
+- Folio（elijahchan2019 / elijah7x，MIT）：名称与早期命名参考，独立实现，无代码派生
 - Minimal（kepano，MIT）：隐藏 Markdown 语法的思路参考
 - GitHub Alerts：标注块语义分级参考
 - ChatGPT 网页端：现代模式的视觉参考，无隶属关系

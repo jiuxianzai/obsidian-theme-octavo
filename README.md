@@ -167,7 +167,7 @@ Agent 需要知道的约定（详见 `AGENTS.md`）：
 
 | 参考对象 | 用在哪里 | 关系 |
 | --- | --- | --- |
-| [Folio](https://github.com/elijahchan2019/obsidian-folio-theme)（elijahchan2019，MIT） | 主题名中的「Folio」、早期命名与社区主题 ID | **独立实现，未复用其代码**；早期曾与其同名同 ID，公开版已更名 Folio Paper 以免混淆，不代表官方版本 |
+| [Folio](https://github.com/elijahchan2019/obsidian-folio-theme)（elijahchan2019 / elijah7x，MIT） | 主题名中的「Folio」、早期命名与社区主题 ID | **独立实现，未复用其代码**；早期曾与其同名同 ID，公开版已更名 Folio Paper 以免混淆，不代表官方版本 |
 | [Minimal](https://github.com/kepano/obsidian-minimal)（kepano，MIT） | 「隐藏 Markdown 语法」的交互思路 | 参考实现思路，CSS 为本项目自行编写 |
 | [GitHub Alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) | 七类标注块的语义分级与配色骨架 | 参考语义体系，配色与样式按纸感语言重做 |
 | ChatGPT 网页端（OpenAI） | 现代模式的配色与排版观感 | 视觉参考，无隶属或背书关系；未使用其商标素材 |
