@@ -1,36 +1,58 @@
 # Octavo
 
-**一款把笔记排成书的 Obsidian 主题。**
-宋体正文、两端对齐、首行缩进两字、居中书名、朱批红；另有一套克制的现代模式。
-纯 CSS，零插件、零脚本、零构建，安装即用。
+**An editorial, paper-like Obsidian theme with CJK-friendly serif typography.**
+No plugins, no snippets, no build step.
 
-*An editorial, paper-like Obsidian theme with CJK-friendly serif typography. No plugins, no snippets, no build step.*
+## English
+
+**Octavo** is an editorial, paper-like theme for Obsidian, made for comfortable long-form reading and CJK typography. It pairs a serif body face and a warm paper palette with a single vermilion accent, and keeps the interface quiet around your notes.
+
+- **Pure CSS** — no plugins, snippets, or build step required
+- **Two palettes** — Paper (default) and Modern, each with a separately tuned light and dark mode
+- **Optional book layout** — justified text, two-character first-line indent, centered title, and H1–H3 rules. All four are **off by default**; enable them in `Settings → Style Settings → Octavo → Layout`
+- **Careful details** — table column sizing and horizontal scrolling, seven callout types, file explorer icons, mobile spacing, and accessible contrast
+- **Obsidian 1.5.0+** on desktop and mobile
+
+### Install
+
+1. Open `Settings → Appearance → Themes → Manage`, search for **Octavo**, then install and enable it.
+2. Or download the latest release, unzip it, and put the `Octavo` folder in `<your vault>/.obsidian/themes/Octavo/`.
+
+### Optional
+
+Install the community plugin [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) to adjust fonts, line height, content width, layout, and colors from a settings panel. The theme works without it.
+
+## 中文
+
+**一款纸感、书卷气的 Obsidian 主题。**
+宋体正文、舒适栏宽、朱批红；书卷式的两端对齐、首行缩进、居中书名可以按需打开。
+纯 CSS，零插件、零脚本、零构建，安装即用。
 
 ![Octavo · 纸感模式](screenshots/desktop-paper.webp)
 
 ## 为什么叫 Octavo
 
-Octavo（八开本）是西方传统书籍的常见开本。它不追求「像某个 App」，而是让一页笔记更接近一页可以久坐的书：正文收进舒适栏宽，段落有呼吸，标题像章节一样居中，强调色只留一点朱批。
+Octavo（八开本）是西方传统书籍的常见开本。它不追求「像某个 App」，而是让一页笔记更接近一页可以久坐的书：正文收进舒适栏宽，段落有呼吸，标题可以像章节一样居中，强调色只留一点朱批。
 
 ## 特性
 
 | 领域 | 做了什么 |
 | --- | --- |
-| 书卷排版 | 宋体正文、两端对齐、首行缩进两字、居中书名、H1–H3 标题分隔线 |
+| 书卷排版（可选） | 两端对齐、首行缩进两字、居中书名、H1–H3 标题分隔线；默认关闭，在 Style Settings 的「版面」里逐项打开 |
 | 两套观感 | 纸感（默认，暖白纸面 + 墨色）与现代模式（中性灰 + 蓝色强调色） |
 | 浅色 / 深色 | 两套配色都单独校过对比度，深色不是简单反色 |
 | 标题层级 | H1 1.75em 递减到 H6 1.02em，始终大于正文；独立墨色与字重，上下留白充足 |
 | 标注块 | note / tip / important / warning / caution / example / quote 七类语义色 |
 | 表格 | 占满栏宽、列宽平分、长内容换行；超过设定列数才横向滚动，手机默认 3 列 |
 | 编辑器 | 朱批红下划线（`<u>文字</u>`）、暖黄高亮、可选当前行高亮（默认关）、可隐藏 Markdown 语法 |
-| 界面 | 安静的文件树、克制的侧栏、可选聚焦模式与隐藏滚动条 |
+| 界面 | 安静的文件树、克制的侧栏、聚焦模式与隐藏滚动条（默认开） |
 | 手机 | 顶栏不透明、正文与阅读视图对齐、表格列宽与滚动优化、日期输入框修复 |
 
-默认外观不依赖任何插件；文末的 Style Settings 配置块只是可选的调参面板。
+主题样式本身不依赖任何插件；文末的 Style Settings 配置块只是可选的调参面板。
 
 ## 截图
 
-### 纸感模式
+### 纸感模式（截图里开启了书卷排版）
 
 | 浅色 | 深色 |
 | --- | --- |
@@ -66,7 +88,7 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 
 ### 手动安装
 
-1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.0.1.zip`
+1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.1.0.zip`
 2. 解压，把 `Octavo` 文件夹放进你的库：
 
 ```
@@ -127,16 +149,16 @@ body {
 `设置 → Style Settings → Octavo` 面板，可以图形化调整：
 
 - **排版**：正文字体 / 目录字体 / 代码字体、行高、段距、正文栏宽
-- **配色**：现代模式（默认关 = 纸感书卷）
+- **配色**：现代模式（默认关 = 纸感）
 - **标题**：H1–H6 字号、标题上方留白
 - **表格**：每行最多列数、手机每行最多列数
-- **版面**：标题居中、标题分隔线、两端对齐、首行缩进、聚焦模式、取消居中栏宽
-- **专注**：隐藏滚动条、隐藏底部状态栏
+- **版面**：标题居中、标题分隔线、两端对齐、首行缩进（这四项默认全关）、聚焦模式、取消居中栏宽
+- **专注**：隐藏滚动条（默认开）、隐藏底部状态栏
 - **编辑器**：当前行高亮（默认关）、隐藏 Markdown 语法
 - **批注**：红色下划线（朱笔）
 - **文件树**：紧凑行高、显示缩进引导线
 
-Style Settings 只是「遥控器」：不装它，上面的默认外观完全不受影响。
+Style Settings 只是「遥控器」：不装它，主题的默认排版与配色不受影响。
 
 </details>
 
@@ -146,7 +168,8 @@ Style Settings 只是「遥控器」：不装它，上面的默认外观完全�
 - **高亮**：`==文字==`，暖黄荧光笔
 - **标注块**：`> [!note]`、`> [!tip]` 等七类，主题已内置样式，不需要插件
 - **宽表格**：实时预览里超过「每行最多列数」后横向滚动；阅读视图会按栏宽换行；手机上默认 3 列
-- **现代模式**：安装可选的 Style Settings 后在面板里打开；不装则始终是纸感模式
+- **书卷排版**：默认关闭（左对齐、不缩进、标题不居中、无分隔线）。想要书页感，在 `设置 → Style Settings → Octavo → 版面` 里打开「标题居中」「标题分隔线」「正文两端对齐」「段落首行缩进两字」四项即可
+- **现代模式**：安装可选的 Style Settings 后在面板里打开；不装则始终是纸感配色
 
 ## 兼容性
 

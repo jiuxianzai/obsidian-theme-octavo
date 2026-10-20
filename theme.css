@@ -1,12 +1,13 @@
 /* ==========================================================================
    OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   v1.0.1 · 2026-10-20
-   默认：宋体正文 + 两端对齐 + 首行缩进 + 标题居中 + 标题分隔线 + 朱批红
-         + 暖白纸面 / 墨色文字。
-   可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线、左对齐。
+   v1.1.0 · 2026-10-20
+   默认：宋体正文 + 左对齐 + 舒适栏宽 + 朱批红 + 暖白纸面 / 墨色文字。
+   可选：书卷排版 —— 两端对齐、首行缩进、标题居中、标题分隔线，
+         在 Style Settings 的「版面」里逐项打开（默认全关）。
+   可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线。
 
-   纯 CSS：不依赖插件、脚本或构建步骤；安装后即是完整默认外观。
+   纯 CSS：不依赖插件、脚本或构建步骤；排版与配色安装即用。
    可选调参：Style Settings 配置块（不安装不影响默认外观），
              或直接覆盖 body 里的 CSS 变量。
 
@@ -185,12 +186,13 @@ settings:
   -
     id: octavo-modern-mode
     title: 现代模式
-    description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。默认关（= 纸感书卷），打开即切到这套
+    description: 一键切换「配色 + 字体」——中性灰 + 蓝色强调色、无衬线；若开着书卷排版，也会一并压平。默认关（= 纸感）
     type: class-toggle
     default: false
   -
     id: octavo-layout
     title: 版面 · Layout
+    description: 书卷排版默认全关（左对齐、不缩进、标题不居中、无分隔线）；下面四项都打开即回到书页式排版
     type: heading
     level: 1
   -
@@ -202,51 +204,47 @@ settings:
   -
     id: octavo-title-centered
     title: 标题居中（书名式）
-    description: 默认开启，像书页的章名。选「关」后标题左对齐
+    description: 默认关闭，标题左对齐；开启后像书页的章名一样居中
     type: class-select
-    allowEmpty: true
-    default: none
+    default: octavo-no-title-centered
     options:
-      - label: 开（默认）
-        value: none
-      - label: 关
+      - label: 关（默认）
         value: octavo-no-title-centered
+      - label: 开
+        value: octavo-title-centered
   -
     id: octavo-heading-rule
     title: 标题分隔线
-    description: 默认开启，在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
+    description: 默认关闭；开启后在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
     type: class-select
-    allowEmpty: true
-    default: none
+    default: octavo-no-heading-rule
     options:
-      - label: 开（默认）
-        value: none
-      - label: 关
+      - label: 关（默认）
         value: octavo-no-heading-rule
+      - label: 开
+        value: octavo-heading-rule
   -
     id: octavo-justify
     title: 正文两端对齐
-    description: 默认开启，中文书籍排版的常见做法
+    description: 默认关闭，正文左对齐；开启后按中文书籍的做法两端对齐
     type: class-select
-    allowEmpty: true
-    default: none
+    default: octavo-no-justify
     options:
-      - label: 开（默认）
-        value: none
-      - label: 关
+      - label: 关（默认）
         value: octavo-no-justify
+      - label: 开
+        value: octavo-justify
   -
     id: octavo-book-indent
     title: 段落首行缩进两字
-    description: 默认开启；选「关」后改为纯段间距分隔
+    description: 默认关闭，段落之间用间距分隔；开启后首行缩进两字
     type: class-select
-    allowEmpty: true
-    default: none
+    default: octavo-no-book-indent
     options:
-      - label: 开（默认）
-        value: none
-      - label: 关
+      - label: 关（默认）
         value: octavo-no-book-indent
+      - label: 开
+        value: octavo-book-indent
   -
     id: octavo-focus-dim
     title: 聚焦模式
@@ -262,7 +260,7 @@ settings:
     id: octavo-hide-scrollbars
     title: 隐藏滚动条
     type: class-toggle
-    default: false
+    default: true
   -
     id: octavo-hide-status-bar
     title: 隐藏底部状态栏
@@ -295,7 +293,6 @@ settings:
     title: 红色下划线（朱笔）
     description: 默认开启。在笔记里写 <u>文字</u> 即显示为红色下划线；Obsidian 核心没有下划线命令，快捷键需自行绑定或直接用 HTML 标签
     type: class-select
-    allowEmpty: true
     default: none
     options:
       - label: 开（默认）
@@ -557,11 +554,12 @@ body {
 /* ==========================================================================
    2b. 观感方案：现代模式（可选，默认关）
    --------------------------------------------------------------------------
-   一键把「配色 + 字体 + 排版」切成 现代文档产品的观感：
+   一键把「配色 + 字体」切成 现代文档产品的观感：
      配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
      字体 · 无衬线
-     排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
-   关掉 Style Settings 里的「现代模式」即回到 Octavo 的纸感书卷。
+   默认版面本来就是左对齐 / 不缩进 / 标题不居中 / 无分隔线；若用户另外打开了
+   书卷排版，第 3 节末尾那组「现代模式：压平书卷排版」会靠层叠顺序把四项压平，
+   不再使用 !important。关掉 Style Settings 里的「现代模式」即回到纸感配色。
    ========================================================================== */
 
 /* —— 浅色配色 —— */
@@ -666,28 +664,6 @@ body.octavo-modern-mode {
   --h6-font: var(--octavo-text-font);
 }
 
-/* —— 排版：去掉「书」的做法 —— */
-body.octavo-modern-mode .markdown-rendered p,
-body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
-  text-indent: 0 !important;
-}
-body.octavo-modern-mode .markdown-rendered p,
-body.octavo-modern-mode .markdown-rendered li,
-body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line {
-  text-align: left !important;
-}
-body.octavo-modern-mode .inline-title {
-  text-align: left !important;
-}
-body.octavo-modern-mode .markdown-rendered h1,
-body.octavo-modern-mode .markdown-rendered h2,
-body.octavo-modern-mode .markdown-rendered h3,
-body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
-  border-bottom: none !important;
-}
-
 /* 字号层级（现代模式规范：侧边栏 14px / H1 28px / H2 22px / 代码 14px）
    已提升到主题基础层，全局生效，见「1. 字体与排版刻度」与「7. 文件树」。 */
 
@@ -707,20 +683,20 @@ body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
    注意：下面这条补的是**外层**编辑器，而它写成了后代选择器 —— 表格单元格
    进入编辑态时，里层那个编辑器也会被命中，必须在 §5 复位（否则光标一进
    单元格，那一行文字就右移一个字）。 */
-.markdown-source-view.mod-cm6 .cm-sizer {
-  max-width: calc(var(--octavo-content-width) + 2 * var(--size-4-4, 16px)) !important;
-  margin-inline: auto !important;
+.markdown-source-view.mod-cm6 .cm-editor .cm-sizer {
+  max-width: calc(var(--octavo-content-width) + 2 * var(--size-4-4, 16px));
+  margin-inline: auto;
 }
 .markdown-source-view.mod-cm6 .cm-content {
   padding-inline: var(--size-4-4, 16px);
 }
-.markdown-preview-view .markdown-preview-sizer {
-  max-width: var(--octavo-content-width) !important;
-  margin-inline: auto !important;
+.markdown-preview-view.markdown-rendered .markdown-preview-sizer {
+  max-width: var(--octavo-content-width);
+  margin-inline: auto;
 }
-body.octavo-free-width .markdown-source-view.mod-cm6 .cm-sizer,
-body.octavo-free-width .markdown-preview-view .markdown-preview-sizer {
-  max-width: none !important;
+body.octavo-free-width .markdown-source-view.mod-cm6 .cm-editor .cm-sizer,
+body.octavo-free-width .markdown-preview-view.markdown-rendered .markdown-preview-sizer {
+  max-width: none;
 }
 
 /* —— 段落：清晰但不松散 —— */
@@ -733,19 +709,24 @@ body.octavo-free-width .markdown-preview-view .markdown-preview-sizer {
   margin-block: var(--p-spacing);
 }
 
-/* —— 书籍段落：两端对齐 + 首行缩进两字（默认开启，可关）—— */
-body:not(.octavo-no-justify) .markdown-rendered p,
-body:not(.octavo-no-justify) .markdown-rendered li,
-body:not(.octavo-no-justify) .markdown-source-view.mod-cm6 .cm-line {
+/* —— 书籍段落：两端对齐 + 首行缩进两字（可选，默认关闭）——
+   默认是普通文档的左对齐、不缩进；在 Style Settings 的「版面」里打开对应项后，
+   由插件给 body 加 .octavo-justify / .octavo-book-indent，下面几条规则才生效。
+   .octavo-no-* 是「关」的状态类（默认值，保持与旧版存下来的选项值兼容），
+   基础样式本身已经是关，不需要再写规则。 */
+body.octavo-justify .markdown-rendered p,
+body.octavo-justify .markdown-rendered li,
+body.octavo-justify .markdown-source-view.mod-cm6 .cm-line {
   text-align: justify;
-  text-justify: inter-ideograph;
 }
 
-body:not(.octavo-no-book-indent) .markdown-preview-view .el-p > p {
+/* 注：样式检查的 caniuse 数据把 text-indent 标成「部分支持」，指的是 hanging /
+   each-line 两个取值；这里只用 2em 与 0，Chromium 完全支持。 */
+body.octavo-book-indent .markdown-preview-view .el-p > p {
   text-indent: 2em;
 }
 /* 实时预览：只给纯段落行缩进；标题/列表/引用/代码/表格等 HyperMD 行不缩进 */
-body:not(.octavo-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+body.octavo-book-indent .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 2em;
 }
 
@@ -781,21 +762,21 @@ body:not(.octavo-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([cla
   margin-block-end: 0.7em;
 }
 
-/* —— 标题分隔线：H1–H3，阅读视图与实时预览都生效 —— */
-body:not(.octavo-no-heading-rule) .markdown-rendered h1,
-body:not(.octavo-no-heading-rule) .markdown-rendered h2,
-body:not(.octavo-no-heading-rule) .markdown-rendered h3 {
+/* —— 标题分隔线：H1–H3，阅读视图与实时预览都生效（可选，默认关闭）—— */
+body.octavo-heading-rule .markdown-rendered h1,
+body.octavo-heading-rule .markdown-rendered h2,
+body.octavo-heading-rule .markdown-rendered h3 {
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--octavo-rule);
 }
-body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+body.octavo-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.octavo-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.octavo-heading-rule .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   padding-bottom: 0.25em;
   border-bottom: 1px solid var(--octavo-rule);
 }
 
-/* —— 行内标题（文件名）：默认居中，像书页的章名 —— */
+/* —— 行内标题（文件名）：默认左对齐；打开「标题居中」后像书页的章名 —— */
 .inline-title {
   font-family: var(--octavo-text-font);
   font-size: 1.9em;
@@ -805,9 +786,34 @@ body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-
   letter-spacing: 0.01em;
   margin-block-end: 0.9em;
 }
-body:not(.octavo-no-title-centered) .inline-title {
+body.octavo-title-centered .inline-title {
   text-align: center;
   margin-block-start: 0.6em;
+}
+
+/* —— 现代模式：压平书卷排版 ——
+   放在这里是为了排在前面几段书卷规则之后：选择器权重相同，靠后出现的胜出，
+   所以不需要 !important。默认版面本来就是平的，这里只负责「书卷排版 + 现代
+   模式」同时打开时仍然显示为现代文档。 */
+body.octavo-modern-mode .markdown-rendered p,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+  text-indent: 0;
+}
+body.octavo-modern-mode .markdown-rendered p,
+body.octavo-modern-mode .markdown-rendered li,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line {
+  text-align: left;
+}
+body.octavo-modern-mode .inline-title {
+  text-align: left;
+}
+body.octavo-modern-mode .markdown-rendered h1,
+body.octavo-modern-mode .markdown-rendered h2,
+body.octavo-modern-mode .markdown-rendered h3,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+  border-bottom: none;
 }
 
 /* ==========================================================================
@@ -1092,7 +1098,11 @@ body {
    为什么要逐个数写：CSS 数不出「有几列」，只能靠 :has(tr > :nth-child(k))
    一次命中一个 k。这些规则权重完全相同，靠**层叠顺序**取胜 —— 所以 k 必须
    升序写：候选里最大的那个（= 真实列数）在最后，盖住前面的。
-   16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。 */
+   16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。
+
+   样式检查会提示 :has() 有性能风险。这里只按「表格有没有第 k 列」做静态匹配，
+   不监听 DOM 变化；一屏里的表格数量有限，实测没有可感知的开销。删掉这组规则，
+   「超过设定列数才横向滚动」就会失效。 */
 :where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
 :where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
 :where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
@@ -1188,16 +1198,16 @@ body {
       0.45em 0.75em）。漏进来的后果：被激活的单元格凭空多出 16px 左内边距，
       正好是**一个汉字**的宽度（16px 字号下 1em = 16px）；没激活的单元格
       没有这 16px。两下一比，就是「光标一进单元格，那一行文字整体右移一个字」。
-   2) `body:not(.octavo-no-book-indent) … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
+   2) `body.octavo-book-indent … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
       单元格里层的行没有 HyperMD- 类，会被当成纯段落再缩进两个字 ——
-      开着「书籍段落缩进」时，错位从 1 个字变成 3 个字（16px + 2em）。
+      开着「段落首行缩进两字」时，错位从 1 个字变成 3 个字（16px + 2em）。
       而单元格里的段落本就不该有首行缩进（第 3 节原话：表格等 HyperMD 行不缩进）。
-   3) `body:not(.octavo-no-justify) … .cm-line { text-align: justify; text-justify: inter-ideograph }`
-      这个模式**默认就是开的**（@settings 里 default: true）→ 里层这一行被拉成
+   3) `body.octavo-justify … .cm-line { text-align: justify; text-justify: inter-ideograph }`
+      打开「正文两端对齐」后 → 里层这一行被拉成
       两端对齐：单元格里折出来的前几行被撑满、汉字之间被拉开，最后一行照旧不撑
       （实测：第 2 行字距 15.43 → 16.17px、行右缘 198 → 206px；截图里 29 → 33px
       的也是它）→ 看起来就是「有光标和没光标，字间距不一样」。
-      阅读视图的单元格从不两端对齐（`body:not(.octavo-no-justify) .markdown-rendered > p`
+      阅读视图的单元格从不两端对齐（`body.octavo-justify .markdown-rendered > p`
       只认直接子段），没光标的单元格也不是 `.cm-line` —— 所以只有光标进去那一下会变。
       这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
       写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
@@ -1253,12 +1263,11 @@ body {
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content.cm-lineWrapping {
   overflow-wrap: anywhere;
 }
-body:not(.octavo-no-book-indent) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body.octavo-book-indent .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-indent: 0;
 }
-body:not(.octavo-no-justify) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body.octavo-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-align: inherit;
-  text-justify: auto;
 }
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   letter-spacing: normal;
@@ -1394,13 +1403,10 @@ body.octavo-hide-status-bar .status-bar {
   display: none;
 }
 
-/* —— 隐藏滚动条（可关闭）—— */
+/* —— 隐藏滚动条（默认开启，可在 Style Settings 里关闭）—— */
 body.octavo-hide-scrollbars ::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
-body.octavo-hide-scrollbars * {
-  scrollbar-width: none;
 }
 
 /* —— 搜索 / 设置里的输入框：柔化 —— */
@@ -1489,6 +1495,8 @@ select {
 
 /* —— 折叠箭头 → 文件夹「开 / 关」SVG 图标 ——
    用 mask 而不是 background-image，这样图标颜色能跟随 currentColor / 主题墨色。
+   注：样式检查会把 mask 标成「部分支持」（无前缀 mask 到 Chrome 120 才支持），
+   所以下面只写 -webkit-mask；Obsidian 1.4.5 的 Chromium 一直支持这个前缀写法。
 
    align-self: center 不能省：Obsidian 给 .tree-item-self 写的是
    align-items: baseline（不是 center）。::before 里只有空字符串、没有文字，
@@ -1507,13 +1515,11 @@ select {
   margin-inline-end: 7px;
   background-color: var(--octavo-ink-faint);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
   transition: background-color 100ms ease;
 }
 /* 展开状态：换成「打开的文件夹」 */
 .tree-item.nav-folder:not(.is-collapsed) > .nav-folder-title::before {
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2'/%3E%3C/svg%3E");
 }
 /* 根目录（vault）不显示图标 */
 .nav-folder.mod-root > .nav-folder-title::before {
@@ -1541,7 +1547,6 @@ select {
   margin-inline-end: 7px;
   background-color: var(--octavo-ink-faint);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
   transition: background-color 100ms ease;
 }
 .nav-file-title:hover::before {
@@ -1781,8 +1786,6 @@ body.theme-dark .markdown-rendered mark,
 body.theme-dark .markdown-source-view.mod-cm6 .cm-highlight,
 body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
   border-bottom: 2px solid rgba(224, 184, 94, 0.5);
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
 }
 
 /* 侧边栏文件树与面板之间的分隔线收敛 */
@@ -1810,13 +1813,12 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
    ========================================================================== */
 
 body:not(.octavo-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
-  text-decoration-line: underline;
-  text-decoration-color: var(--octavo-u-color);
-  /* 线比默认粗一档、往下压一点，读起来像「批注笔」而不是排版下划线 */
-  text-decoration-thickness: 0.09em;
-  text-underline-offset: 0.18em;
-  /* 字形下伸部分（如「务、字」的钩）不再把线断开，整条连成一笔 */
-  text-decoration-skip-ink: none;
+  /* 用 border 而不是 text-decoration：线条更粗、更靠下，像批注笔；
+     跨行时每一行都有一条，不会被字形的下伸笔画（「务、字」的钩）切断。
+     text-decoration 的 thickness / skip-ink 在样式检查里还会被标成
+     「仅部分支持」，border 没有这个问题。 */
+  text-decoration: none;
+  border-bottom: 0.09em solid var(--octavo-u-color);
 }
 
 /* ==========================================================================
