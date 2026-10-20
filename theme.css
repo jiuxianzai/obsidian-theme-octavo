@@ -1,7 +1,7 @@
 /* ==========================================================================
    OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   v1.0.0 · 2026-10-20
+   v1.0.1 · 2026-10-20
    默认：宋体正文 + 两端对齐 + 首行缩进 + 标题居中 + 标题分隔线 + 朱批红
          + 暖白纸面 / 墨色文字。
    可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线、左对齐。
@@ -109,9 +109,9 @@ settings:
   -
     id: octavo-content-width
     title: 正文栏宽
-    description: 一行大约 30~45 个汉字最舒服
+    description: 一行大约 35~50 个汉字最舒服
     type: variable-number
-    default: 42
+    default: 48
     format: rem
   -
     id: octavo-headings
@@ -276,15 +276,9 @@ settings:
   -
     id: octavo-active-line
     title: 当前行高亮
-    description: 默认开启，给光标所在行加底色，标明当前位置
-    type: class-select
-    allowEmpty: true
-    default: none
-    options:
-      - label: 开（默认）
-        value: none
-      - label: 关
-        value: octavo-no-active-line
+    description: 默认关闭。打开后给光标所在行加底色，标明当前位置
+    type: class-toggle
+    default: false
   -
     id: octavo-hide-markdown
     title: 隐藏 Markdown 语法
@@ -349,7 +343,7 @@ body {
      想单独换色，在这里改即可 —— 不要做成单一色值，
      否则深色套的 #e0736a 也会被一起吃掉。 */
   --octavo-u-color: var(--octavo-bold-color);
-  --octavo-content-width: 42rem;
+  --octavo-content-width: 48rem;
   --octavo-heading-spacing: 1.7em;
   --octavo-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
   --octavo-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §12 */
@@ -1672,11 +1666,20 @@ body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-sele
   opacity: 1;
 }
 
-/* —— 当前行高亮：整行底色，铺满编辑区宽度 ——
+/* 默认关闭：清掉 Obsidian 自带的当前行底色，避免「关了还亮」。 */
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active,
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activeLine,
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* —— 当前行高亮（可选，默认关）：整行底色，铺满编辑区宽度 ——
+   开启方式：给 body 加 octavo-active-line 类，或在 Style Settings 里打开。
    原理：一叠 box-shadow 沿水平方向平铺（每段是行宽的副本）。
    关键：每段的平移量必须 < 行宽，否则段与段之间会空出缝隙。
    原来用 50vw，屏幕一宽 50vw 就超过行宽 → 底色被断成三段。 */
-body:not(.octavo-no-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active {
+body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
   background-color: var(--octavo-active-line-bg);
   --octavo-al-step: calc(var(--octavo-content-width) * 0.7);
   box-shadow:
@@ -1694,7 +1697,7 @@ body:not(.octavo-no-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activ
 
 /* 代码块里的当前行：不要那条横穿整块的全宽色带，
    改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
-body:not(.octavo-no-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
   background-color: var(--octavo-code-line-active) !important;
   box-shadow: none !important;
 }

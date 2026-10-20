@@ -22,7 +22,7 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 | 标题层级 | H1 1.75em 递减到 H6 1.02em，始终大于正文；独立墨色与字重，上下留白充足 |
 | 标注块 | note / tip / important / warning / caution / example / quote 七类语义色 |
 | 表格 | 占满栏宽、列宽平分、长内容换行；超过设定列数才横向滚动，手机默认 3 列 |
-| 编辑器 | 朱批红下划线（`<u>文字</u>`）、暖黄高亮、当前行浅底、可隐藏 Markdown 语法 |
+| 编辑器 | 朱批红下划线（`<u>文字</u>`）、暖黄高亮、可选当前行高亮（默认关）、可隐藏 Markdown 语法 |
 | 界面 | 安静的文件树、克制的侧栏、可选聚焦模式与隐藏滚动条 |
 | 手机 | 顶栏不透明、正文与阅读视图对齐、表格列宽与滚动优化、日期输入框修复 |
 
@@ -66,7 +66,7 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 
 ### 手动安装
 
-1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.0.0.zip`
+1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.0.1.zip`
 2. 解压，把 `Octavo` 文件夹放进你的库：
 
 ```
@@ -106,11 +106,11 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 
 ## 可选调参（纯 CSS，不需要插件）
 
-主题的默认值都在 `theme.css` 顶部的 `body` 变量里。想改，新建一个 CSS 片段，覆盖对应变量即可（`设置 → 外观 → CSS 片段`）：
+主题的默认正文栏宽为 **48rem**（约 35–50 个汉字），行高 1.75。默认值都在 `theme.css` 顶部的 `body` 变量里。想改，新建一个 CSS 片段，覆盖对应变量即可（`设置 → 外观 → CSS 片段`）：
 
 ```css
 body {
-  --octavo-content-width: 46rem;  /* 正文栏宽 */
+  --octavo-content-width: 52rem;  /* 正文栏宽 */
   --octavo-line-height: 1.8;      /* 正文行高 */
   --octavo-para-spacing: 1.1em;   /* 段落间距 */
   --octavo-table-cols: 5;         /* 每行最多几列 */
@@ -132,7 +132,7 @@ body {
 - **表格**：每行最多列数、手机每行最多列数
 - **版面**：标题居中、标题分隔线、两端对齐、首行缩进、聚焦模式、取消居中栏宽
 - **专注**：隐藏滚动条、隐藏底部状态栏
-- **编辑器**：当前行高亮、隐藏 Markdown 语法
+- **编辑器**：当前行高亮（默认关）、隐藏 Markdown 语法
 - **批注**：红色下划线（朱笔）
 - **文件树**：紧凑行高、显示缩进引导线
 
