@@ -357,7 +357,7 @@ body {
   --folio-content-width: 42rem;
   --folio-heading-spacing: 1.7em;
   --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
-  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §13 */
+  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §12 */
 
   --folio-h1-size: 1.75em; /* 28px @16 */
   --folio-h2-size: 1.375em; /* 22px @16 */
@@ -1815,7 +1815,7 @@ body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6)
 }
 
 /* ==========================================================================
-   12. 标注块（Callout）
+   11. 标注块（Callout）
    --------------------------------------------------------------------------
    覆盖 Obsidian 内置的七个语义类型：
      note · tip · important · warning · caution · example · quote
@@ -1970,7 +1970,7 @@ body.theme-dark {
 }
 
 /* ==========================================================================
-   13. 移动端（手机 / 平板）
+   12. 移动端（手机 / 平板）
    --------------------------------------------------------------------------
    主题的几何模型是照桌面端推的，窄屏上有两处不能照搬：
 
