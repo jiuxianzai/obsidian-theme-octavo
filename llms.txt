@@ -1,0 +1,43 @@
+# Folio Paper
+
+> A paper-like, editorial Obsidian theme with CJK-friendly serif typography.
+> Zero plugin dependencies. Light and dark. Desktop and mobile.
+
+## Install
+
+Copy `theme.css` and `manifest.json` into:
+
+```
+<vault>/.obsidian/themes/Folio Paper/
+```
+
+Then enable **Folio Paper** in Settings → Appearance → Themes.
+Do not install any community plugin; the theme works on its own.
+
+## Files
+
+- `theme.css` — the whole theme (no build step)
+- `manifest.json` — name, version, minimum Obsidian version
+- `versions.json` — version history for the community theme registry
+- `AGENTS.md` — instructions for coding agents
+- `CREDITS.md` — attribution and licenses
+- `screenshots/` — desktop and mobile screenshots
+
+## Defaults
+
+- Paper mode: serif body, justified text, 2em first-line indent, centered title,
+  H1–H3 rules, `<u>` in red, active-line highlight.
+- Modern mode: add `folio-modern-mode` to `body` (or use Style Settings).
+- Turn off a default-on layout feature with `folio-no-*` classes
+  (`folio-no-justify`, `folio-no-book-indent`, `folio-no-title-centered`,
+  `folio-no-heading-rule`, `folio-no-u-red`, `folio-no-active-line`).
+- No JS, no remote fonts, no `@import`.
+
+## Credits
+
+Independent implementation. Name inspiration: Folio by elijahchan2019 (MIT).
+Other references: Minimal by kepano (hide-markdown idea), GitHub Alerts
+(callout semantics), ChatGPT web UI (modern-mode visual reference).
+See `CREDITS.md` for details.
+
+License: MIT.

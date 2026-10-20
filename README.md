@@ -141,7 +141,7 @@ body {
 
 ## 给 AI Agent 使用
 
-仓库根目录有 [`AGENTS.md`](AGENTS.md)，里面是给编码 Agent 的机器可读说明。把下面这段直接发给 Agent 即可：
+仓库根目录有 [`AGENTS.md`](AGENTS.md)，里面是给编码 Agent 的机器可读说明；也有更短的 [`llms.txt`](llms.txt)。把下面这段直接发给 Agent 即可：
 
 ```text
 请把这个 Obsidian 主题安装到我的库：https://github.com/jiuxianzai/obsidian-theme-folio

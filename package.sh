@@ -30,6 +30,8 @@ cp "$SRC/theme.css" \
    "$SRC/manifest.json" \
    "$SRC/versions.json" \
    "$SRC/LICENSE" \
+   "$SRC/AGENTS.md" \
+   "$SRC/llms.txt" \
    "$SRC/CREDITS.md" \
    "$SRC/INSTALL.md" \
    "$SRC/README.md" \
