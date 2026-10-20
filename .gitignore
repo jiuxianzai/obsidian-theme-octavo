@@ -5,6 +5,3 @@
 .vscode/
 node_modules/
 __pycache__/
-
-# 本地生成物
-screenshots/.shoot/

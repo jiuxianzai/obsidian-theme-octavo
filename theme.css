@@ -1,36 +1,31 @@
 /* ==========================================================================
-   FOLIO PAPER  ·  一款纸感 / 书卷气的 Obsidian 主题
+   OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   ★ v1.0.0 · 2026-10-20 ★
+   v1.0.0 · 2026-10-20
    默认：宋体正文 + 两端对齐 + 首行缩进 + 标题居中 + 标题分隔线 + 朱批红
          + 暖白纸面 / 墨色文字。
    可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线、左对齐。
-   零插件依赖：不装任何社区插件也能得到完整默认外观。
 
-   设计目标
-     1. 标题字号层层递减，且始终大于正文；颜色与正文区分；上下留白充足
-     2. 复杂文档不费力：行高、段距、栏宽都按「阅读舒适区」调过
-     3. 纸质书感：暖色纸面 / 墨色文字，衬线正文，克制的装饰
-     4. 专注：压低界面噪音，可选「聚焦模式」把非当前行调暗
-     5. 文件树：去掉缩进引导线，紧凑行高，悬浮/选中高亮，接近代码编辑器
+   纯 CSS：不依赖插件、脚本或构建步骤；安装后即是完整默认外观。
+   可选调参：Style Settings 配置块（不安装不影响默认外观），
+             或直接覆盖 body 里的 CSS 变量。
 
-   安装：把本目录放进 <vault>/.obsidian/themes/Folio Paper/
-   启用：Settings → Appearance → Themes 选择「Folio Paper」
-   调参：不装插件即可用；装 Style Settings 后可在面板里改字体 / 字号 / 开关
+   安装：把本目录放进 <vault>/.obsidian/themes/Octavo/
+   启用：Settings → Appearance → Themes 选择「Octavo」
    ========================================================================== */
 
 /* @settings
 
-name: Folio Paper
-id: folio-paper
+name: Octavo
+id: octavo
 settings:
   -
-    id: folio-typography
+    id: octavo-typography
     title: 排版 · Typography
     type: heading
     level: 1
   -
-    id: folio-text-font
+    id: octavo-text-font
     title: 正文字体
     description: 正文与标题的字体
     type: variable-select
@@ -52,7 +47,7 @@ settings:
         label: 系统无衬线
         value: '-apple-system, "SF Pro Text", "PingFang SC", sans-serif'
   -
-    id: folio-tree-font
+    id: octavo-tree-font
     title: 目录 / 文件树字体
     description: 左侧文件树与侧栏面板的字体
     type: variable-select
@@ -74,7 +69,7 @@ settings:
         label: Maple Mono · 等宽
         value: '"Maple Mono", ui-monospace, monospace'
   -
-    id: folio-mono-font
+    id: octavo-mono-font
     title: 代码字体
     description: 代码块与行内代码的字体
     type: variable-select
@@ -93,119 +88,119 @@ settings:
         label: SF Mono
         value: '"SF Mono", ui-monospace, Menlo, monospace'
   -
-    id: folio-line-height
+    id: octavo-line-height
     title: 正文行高
     description: 1.6 ~ 1.9 之间较舒适
     type: variable-number
     default: 1.75
   -
-    id: folio-para-spacing
+    id: octavo-para-spacing
     title: 段落间距
     type: variable-number
     default: 1.05
     format: em
   -
-    id: folio-quote-pad
+    id: octavo-quote-pad
     title: 引用块上下留白
     description: 引用块（阅读视图与实时预览）的上下内边距
     type: variable-number
     default: 0.7
     format: em
   -
-    id: folio-content-width
+    id: octavo-content-width
     title: 正文栏宽
     description: 一行大约 30~45 个汉字最舒服
     type: variable-number
     default: 42
     format: rem
   -
-    id: folio-headings
+    id: octavo-headings
     title: 标题 · Headings
     type: heading
     level: 1
   -
-    id: folio-h1-size
+    id: octavo-h1-size
     title: H1 字号
     type: variable-number
     default: 1.75
     format: em
   -
-    id: folio-h2-size
+    id: octavo-h2-size
     title: H2 字号
     type: variable-number
     default: 1.375
     format: em
   -
-    id: folio-h3-size
+    id: octavo-h3-size
     title: H3 字号
     type: variable-number
     default: 1.32
     format: em
   -
-    id: folio-h4-size
+    id: octavo-h4-size
     title: H4 字号
     type: variable-number
     default: 1.18
     format: em
   -
-    id: folio-h5-size
+    id: octavo-h5-size
     title: H5 字号
     type: variable-number
     default: 1.08
     format: em
   -
-    id: folio-h6-size
+    id: octavo-h6-size
     title: H6 字号
     type: variable-number
     default: 1.02
     format: em
   -
-    id: folio-heading-spacing
+    id: octavo-heading-spacing
     title: 标题上方留白
     type: variable-number
     default: 1.7
     format: em
   -
-    id: folio-table
+    id: octavo-table
     title: 表格 · Table
     type: heading
     level: 1
   -
-    id: folio-table-cols
+    id: octavo-table-cols
     title: 每行最多列数
     description: 列数不超过它时平分铺满整栏；第 N+1 列起表格整体变宽、横向滚动
     type: variable-number
     default: 4
   -
-    id: folio-table-cols-mobile
+    id: octavo-table-cols-mobile
     title: 手机上每行最多列数
     description: 手机屏窄，4 列表平分下来每列只有 ~82px（一行三四个字）。默认降到 3：列宽 ~110px，多出来的列改为横向滚动；桌面不受影响。
     type: variable-number
     default: 3
   -
-    id: folio-palette
+    id: octavo-palette
     title: 配色 · Palette
     type: heading
     level: 1
   -
-    id: folio-modern-mode
+    id: octavo-modern-mode
     title: 现代模式
     description: 一键切换「配色 + 字体 + 排版」——中性灰 + 蓝色强调色、无衬线、左对齐不缩进不居中。默认关（= 纸感书卷），打开即切到这套
     type: class-toggle
     default: false
   -
-    id: folio-layout
+    id: octavo-layout
     title: 版面 · Layout
     type: heading
     level: 1
   -
-    id: folio-free-width
+    id: octavo-free-width
     title: 取消居中栏宽（占满全宽）
     description: 默认把正文约束到舒适栏宽并居中；开启后占满整个宽度
     type: class-toggle
     default: false
   -
-    id: folio-title-centered
+    id: octavo-title-centered
     title: 标题居中（书名式）
     description: 默认开启，像书页的章名。选「关」后标题左对齐
     type: class-select
@@ -215,9 +210,9 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-title-centered
+        value: octavo-no-title-centered
   -
-    id: folio-heading-rule
+    id: octavo-heading-rule
     title: 标题分隔线
     description: 默认开启，在 H1–H3 下方加一条细线（阅读视图与实时预览都生效）
     type: class-select
@@ -227,9 +222,9 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-heading-rule
+        value: octavo-no-heading-rule
   -
-    id: folio-justify
+    id: octavo-justify
     title: 正文两端对齐
     description: 默认开启，中文书籍排版的常见做法
     type: class-select
@@ -239,9 +234,9 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-justify
+        value: octavo-no-justify
   -
-    id: folio-book-indent
+    id: octavo-book-indent
     title: 段落首行缩进两字
     description: 默认开启；选「关」后改为纯段间距分隔
     type: class-select
@@ -251,35 +246,35 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-book-indent
+        value: octavo-no-book-indent
   -
-    id: folio-focus-dim
+    id: octavo-focus-dim
     title: 聚焦模式
     description: 编辑时把非当前段落调暗，只突出正在写的那一行
     type: class-toggle
     default: false
   -
-    id: folio-focus
+    id: octavo-focus
     title: 专注 · Distraction-free
     type: heading
     level: 1
   -
-    id: folio-hide-scrollbars
+    id: octavo-hide-scrollbars
     title: 隐藏滚动条
     type: class-toggle
     default: false
   -
-    id: folio-hide-status-bar
+    id: octavo-hide-status-bar
     title: 隐藏底部状态栏
     type: class-toggle
     default: false
   -
-    id: folio-editor
+    id: octavo-editor
     title: 编辑器 · Editor
     type: heading
     level: 1
   -
-    id: folio-active-line
+    id: octavo-active-line
     title: 当前行高亮
     description: 默认开启，给光标所在行加底色，标明当前位置
     type: class-select
@@ -289,20 +284,20 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-active-line
+        value: octavo-no-active-line
   -
-    id: folio-hide-markdown
+    id: octavo-hide-markdown
     title: 隐藏 Markdown 语法
     description: 参考 Minimal：在实时预览里隐藏 **、*、[[ ]]、# 等标记。字符仍存在，只是不显示
     type: class-toggle
     default: false
   -
-    id: folio-markup
+    id: octavo-markup
     title: 批注 · Markup
     type: heading
     level: 1
   -
-    id: folio-u-red
+    id: octavo-u-red
     title: 红色下划线（朱笔）
     description: 默认开启。在笔记里写 <u>文字</u> 即显示为红色下划线；Obsidian 核心没有下划线命令，快捷键需自行绑定或直接用 HTML 标签
     type: class-select
@@ -312,20 +307,20 @@ settings:
       - label: 开（默认）
         value: none
       - label: 关
-        value: folio-no-u-red
+        value: octavo-no-u-red
   -
-    id: folio-tree
+    id: octavo-tree
     title: 文件树 · File explorer
     type: heading
     level: 1
   -
-    id: folio-tree-compact
+    id: octavo-tree-compact
     title: 文件树紧凑行高
     description: 默认行距宽松舒适；开启后每行更紧凑，一屏看更多
     type: class-toggle
     default: false
   -
-    id: folio-tree-lines
+    id: octavo-tree-lines
     title: 显示缩进引导线
     description: 默认关闭，接近 VSCode 的干净观感
     type: class-toggle
@@ -337,54 +332,54 @@ settings:
    ========================================================================== */
 
 body {
-  /* —— 可被 Style Settings 覆盖的变量 —— */
-  --folio-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-  --folio-sans-font: -apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue",
+  /* —— 可覆盖的变量（Style Settings 或 CSS 片段）—— */
+  --octavo-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  --octavo-sans-font: -apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue",
     "Noto Sans SC", sans-serif;
-  --folio-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --octavo-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
   /* 纸感模式的目录字体：书里的目录与正文同一副字。
-     想回到无衬线，把这里换成 var(--folio-sans-font) 即可。 */
-  --folio-tree-font-paper: var(--folio-text-font);
-  --folio-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
+     想回到无衬线，把这里换成 var(--octavo-sans-font) 即可。 */
+  --octavo-tree-font-paper: var(--octavo-text-font);
+  --octavo-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
 
-  --folio-line-height: 1.75;
-  --folio-para-spacing: 1.05em;
-  --folio-quote-pad: 0.7em; /* 引用块上下内边距：阅读视图与实时预览共用 */
+  --octavo-line-height: 1.75;
+  --octavo-para-spacing: 1.05em;
+  --octavo-quote-pad: 0.7em; /* 引用块上下内边距：阅读视图与实时预览共用 */
   /* 朱笔下划线（<u>）的颜色：默认沿用加粗那支朱批红，浅色 / 深色两套自动跟随。
-     想单独换色，在这里改即可 —— 别在 Style Settings 里做成单一色值，
-     那会把深色套的 #e0736a 一起吃掉。 */
-  --folio-u-color: var(--folio-bold-color);
-  --folio-content-width: 42rem;
-  --folio-heading-spacing: 1.7em;
-  --folio-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
-  --folio-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §12 */
+     想单独换色，在这里改即可 —— 不要做成单一色值，
+     否则深色套的 #e0736a 也会被一起吃掉。 */
+  --octavo-u-color: var(--octavo-bold-color);
+  --octavo-content-width: 42rem;
+  --octavo-heading-spacing: 1.7em;
+  --octavo-table-cols: 4; /* 每行最多列数：超过它才横滚；列宽 = 容器宽 ÷ 这个数 */
+  --octavo-table-cols-mobile: 3; /* 手机上（≤ 50rem 的窄屏）改用它，见 §12 */
 
-  --folio-h1-size: 1.75em; /* 28px @16 */
-  --folio-h2-size: 1.375em; /* 22px @16 */
-  --folio-h3-size: 1.32em;
-  --folio-h4-size: 1.18em;
-  --folio-h5-size: 1.08em;
-  --folio-h6-size: 1.02em;
+  --octavo-h1-size: 1.75em; /* 28px @16 */
+  --octavo-h2-size: 1.375em; /* 22px @16 */
+  --octavo-h3-size: 1.32em;
+  --octavo-h4-size: 1.18em;
+  --octavo-h5-size: 1.08em;
+  --octavo-h6-size: 1.02em;
 
   /* —— 正文字体 / 代码字体：显式接管，避免被 Appearance 里的手动字体设置压过 —— */
-  --font-text: var(--folio-text-font);
-  --font-text-theme: var(--folio-text-font);
-  --font-monospace: var(--folio-mono-font);
-  --font-monospace-theme: var(--folio-mono-font);
+  --font-text: var(--octavo-text-font);
+  --font-text-theme: var(--octavo-text-font);
+  --font-monospace: var(--octavo-mono-font);
+  --font-monospace-theme: var(--octavo-mono-font);
 
   /* —— 行高 / 段距（字号由 Obsidian 的 Appearance → Font size 控制）—— */
-  --line-height-normal: var(--folio-line-height);
-  --line-height-tight: calc(var(--folio-line-height) - 0.2);
-  --p-spacing: var(--folio-para-spacing);
-  --heading-spacing: var(--folio-heading-spacing);
+  --line-height-normal: var(--octavo-line-height);
+  --line-height-tight: calc(var(--octavo-line-height) - 0.2);
+  --p-spacing: var(--octavo-para-spacing);
+  --heading-spacing: var(--octavo-heading-spacing);
 
   /* —— 标题刻度：层层递减，且都大于正文（1em）—— */
-  --h1-size: var(--folio-h1-size);
-  --h2-size: var(--folio-h2-size);
-  --h3-size: var(--folio-h3-size);
-  --h4-size: var(--folio-h4-size);
-  --h5-size: var(--folio-h5-size);
-  --h6-size: var(--folio-h6-size);
+  --h1-size: var(--octavo-h1-size);
+  --h2-size: var(--octavo-h2-size);
+  --h3-size: var(--octavo-h3-size);
+  --h4-size: var(--octavo-h4-size);
+  --h5-size: var(--octavo-h5-size);
+  --h6-size: var(--octavo-h6-size);
 
   --h1-weight: 700;
   --h2-weight: 700;
@@ -401,11 +396,11 @@ body {
   --h6-line-height: 1.5;
 
   /* —— 阅读栏宽 —— */
-  --file-line-width: var(--folio-content-width);
+  --file-line-width: var(--octavo-content-width);
 
   /* —— 强调 / 字重 —— */
   --bold-weight: 650;
-  --bold-color: var(--folio-bold-color);
+  --bold-color: var(--octavo-bold-color);
   --italic-weight: inherit;
 
   /* —— 列表与缩进引导 —— */
@@ -417,10 +412,10 @@ body {
      注意：实时预览里 Obsidian 自己那条 `.…is-live-preview .HyperMD-quote` 的
      优先级比主题里同名的 3 类选择器更高，所以背景不能只写在主题规则里，必须
      写进 --blockquote-background-color，让 Obsidian 的原生规则也用它。 */
-  --blockquote-border-color: var(--folio-rule);
+  --blockquote-border-color: var(--octavo-rule);
   --blockquote-border-thickness: 3px;
-  --blockquote-background-color: var(--folio-quote-bg);
-  --blockquote-color: var(--folio-ink-soft);
+  --blockquote-background-color: var(--octavo-quote-bg);
+  --blockquote-color: var(--octavo-ink-soft);
   --blockquote-font-style: italic;
   --blockquote-style: italic;
 
@@ -445,57 +440,57 @@ body {
    muted 用于列表符、未解析链接等「需要看见」的次要信息；
    faint 只给禁用态与占位符，不要再喂给状态栏文字。 */
 body.theme-light {
-  --folio-paper: #fcfbf8;
-  --folio-paper-2: #f4f2ec;
-  --folio-paper-3: #eae7df;
-  --folio-ink-strong: #1c1813;
-  --folio-ink: #26211a;
-  --folio-ink-soft: #514a3f;
-  --folio-ink-muted: #726a5c;
-  --folio-ink-faint: #8a8173;
-  --folio-rule: #e7e3da;
-  --folio-active-line-bg: #f2ede6;
+  --octavo-paper: #fcfbf8;
+  --octavo-paper-2: #f4f2ec;
+  --octavo-paper-3: #eae7df;
+  --octavo-ink-strong: #1c1813;
+  --octavo-ink: #26211a;
+  --octavo-ink-soft: #514a3f;
+  --octavo-ink-muted: #726a5c;
+  --octavo-ink-faint: #8a8173;
+  --octavo-rule: #e7e3da;
+  --octavo-active-line-bg: #f2ede6;
   /* 朱批红：与代码 keyword（#cf222e）刻意留出差距，
      否则「加粗」和「行内代码」共用同一支红笔，强调会被互相稀释。 */
-  --folio-bold-color: #b03a2e;
+  --octavo-bold-color: #b03a2e;
   /* 代码块底与纸面同温（暖中性），不要再放冷蓝灰的 #f6f8fa：
      在暖纸上那会像贴了一张网页截图。 */
-  --folio-code-block-bg: #f5f3ed;
-  --folio-code-block-border: #e8e5db;
-  --folio-code-line-active: #ece9e0;
-  --folio-quote-bg: #f5f2e9;
+  --octavo-code-block-bg: #f5f3ed;
+  --octavo-code-block-border: #e8e5db;
+  --octavo-code-line-active: #ece9e0;
+  --octavo-quote-bg: #f5f2e9;
 
-  --folio-heading-strong: #14110c;
-  --folio-heading: #241f18;
-  --folio-heading-muted: #4a4237;
+  --octavo-heading-strong: #14110c;
+  --octavo-heading: #241f18;
+  --octavo-heading-muted: #4a4237;
 
-  --background-primary: var(--folio-paper);
-  --background-primary-alt: var(--folio-paper-2);
-  --background-secondary: var(--folio-paper-2);
-  --background-secondary-alt: var(--folio-paper-3);
-  --background-modifier-border: var(--folio-rule);
+  --background-primary: var(--octavo-paper);
+  --background-primary-alt: var(--octavo-paper-2);
+  --background-secondary: var(--octavo-paper-2);
+  --background-secondary-alt: var(--octavo-paper-3);
+  --background-modifier-border: var(--octavo-rule);
   --background-modifier-border-hover: #d9d5cc;
   --background-modifier-hover: rgba(38, 33, 26, 0.055);
   --background-modifier-active-hover: rgba(38, 33, 26, 0.09);
 
-  --text-normal: var(--folio-ink);
-  --text-muted: var(--folio-ink-muted);
-  --text-faint: var(--folio-ink-faint);
+  --text-normal: var(--octavo-ink);
+  --text-muted: var(--octavo-ink-muted);
+  --text-faint: var(--octavo-ink-faint);
   --text-accent: #8a5a2b;
   --text-accent-hover: #a06a33;
   --text-selection: rgba(138, 90, 43, 0.16);
   --text-highlight-bg: rgba(214, 178, 92, 0.32);
 
-  --interactive-normal: var(--folio-paper-2);
-  --interactive-hover: var(--folio-paper-3);
+  --interactive-normal: var(--octavo-paper-2);
+  --interactive-hover: var(--octavo-paper-3);
   --interactive-accent: #8a5a2b;
   --interactive-accent-hover: #a06a33;
   /* 压在 interactive-accent 上的前景色（复选框、按钮、日历「今天」）。
      必须显式定义：不定义就交给 Obsidian 默认，而默认并不认识你的强调色。 */
   --text-on-accent: #ffffff; /* on #8a5a2b = 5.87:1 */
 
-  --divider-color: var(--folio-rule);
-  --hr-color: var(--folio-rule);
+  --divider-color: var(--octavo-rule);
+  --hr-color: var(--octavo-rule);
 }
 
 /* —— 深色：炭墨纸 ——
@@ -503,40 +498,40 @@ body.theme-light {
      ink 12.1 · soft 7.7 · muted 5.3 · faint 4.6
    深色下 faint 极易掉到 3:1 以下，这里抬到 4.6 以保证占位符也读得出来。 */
 body.theme-dark {
-  --folio-paper: #1b1a17;
-  --folio-paper-2: #232120;
-  --folio-paper-3: #2b2926;
-  --folio-ink-strong: #f2ede2;
-  --folio-ink: #ddd7ca;
-  --folio-ink-soft: #b3ac9d;
-  --folio-ink-muted: #948d80;
-  --folio-ink-faint: #8a8377;
-  --folio-rule: #35322d;
-  --folio-active-line-bg: #322b20;
-  --folio-bold-color: #e0736a;
+  --octavo-paper: #1b1a17;
+  --octavo-paper-2: #232120;
+  --octavo-paper-3: #2b2926;
+  --octavo-ink-strong: #f2ede2;
+  --octavo-ink: #ddd7ca;
+  --octavo-ink-soft: #b3ac9d;
+  --octavo-ink-muted: #948d80;
+  --octavo-ink-faint: #8a8377;
+  --octavo-rule: #35322d;
+  --octavo-active-line-bg: #322b20;
+  --octavo-bold-color: #e0736a;
   /* 原来用中性灰 #2b2b2b，在暖炭纸上偏冷；而且它与 paper-3 #2b2926
      只差 1.02:1 —— 代码块和三级底同亮度，边界全靠边框。改回炭纸色。 */
-  --folio-code-block-bg: #232120;
-  --folio-code-block-border: #3a3630;
-  --folio-code-line-active: #2c2a26;
-  --folio-quote-bg: #262420;
+  --octavo-code-block-bg: #232120;
+  --octavo-code-block-border: #3a3630;
+  --octavo-code-line-active: #2c2a26;
+  --octavo-quote-bg: #262420;
 
-  --folio-heading-strong: #fbf7ee;
-  --folio-heading: #efe9dc;
-  --folio-heading-muted: #c3bcac;
+  --octavo-heading-strong: #fbf7ee;
+  --octavo-heading: #efe9dc;
+  --octavo-heading-muted: #c3bcac;
 
-  --background-primary: var(--folio-paper);
-  --background-primary-alt: var(--folio-paper-2);
-  --background-secondary: var(--folio-paper-2);
-  --background-secondary-alt: var(--folio-paper-3);
-  --background-modifier-border: var(--folio-rule);
+  --background-primary: var(--octavo-paper);
+  --background-primary-alt: var(--octavo-paper-2);
+  --background-secondary: var(--octavo-paper-2);
+  --background-secondary-alt: var(--octavo-paper-3);
+  --background-modifier-border: var(--octavo-rule);
   --background-modifier-border-hover: #45413a;
   --background-modifier-hover: rgba(242, 237, 226, 0.06);
   --background-modifier-active-hover: rgba(242, 237, 226, 0.1);
 
-  --text-normal: var(--folio-ink);
-  --text-muted: var(--folio-ink-muted);
-  --text-faint: var(--folio-ink-faint);
+  --text-normal: var(--octavo-ink);
+  --text-muted: var(--octavo-ink-muted);
+  --text-faint: var(--octavo-ink-faint);
   --text-accent: #d9a566;
   --text-accent-hover: #e6b87e;
   --text-selection: rgba(217, 165, 102, 0.2);
@@ -544,25 +539,25 @@ body.theme-dark {
      高亮改用更亮的黄（合成 #635633，与选区差 1.63:1），并配一条下划线，见 §9。 */
   --text-highlight-bg: rgba(240, 201, 106, 0.34);
 
-  --interactive-normal: var(--folio-paper-2);
-  --interactive-hover: var(--folio-paper-3);
+  --interactive-normal: var(--octavo-paper-2);
+  --interactive-hover: var(--octavo-paper-3);
   --interactive-accent: #c89154;
   --interactive-accent-hover: #d9a566;
   /* 深色的强调色是「浅金」，只有压深字才安全：白字压 #c89154 仅 2.75:1 */
   --text-on-accent: #1b1a17; /* on #c89154 = 6.33:1 */
 
-  --divider-color: var(--folio-rule);
-  --hr-color: var(--folio-rule);
+  --divider-color: var(--octavo-rule);
+  --hr-color: var(--octavo-rule);
 }
 
 /* 标题颜色：与正文明确区分（更深 / 更亮 + 更重字重） */
 body {
-  --h1-color: var(--folio-heading-strong);
-  --h2-color: var(--folio-heading-strong);
-  --h3-color: var(--folio-heading);
-  --h4-color: var(--folio-heading);
-  --h5-color: var(--folio-heading-muted);
-  --h6-color: var(--folio-heading-muted);
+  --h1-color: var(--octavo-heading-strong);
+  --h2-color: var(--octavo-heading-strong);
+  --h3-color: var(--octavo-heading);
+  --h4-color: var(--octavo-heading);
+  --h5-color: var(--octavo-heading-muted);
+  --h6-color: var(--octavo-heading-muted);
 }
 
 /* ==========================================================================
@@ -572,33 +567,33 @@ body {
      配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
      字体 · 无衬线
      排版 · 左对齐、段落不缩进、标题不居中、标题无分隔线
-   关掉 Style Settings 里的「现代模式」即回到 Folio Paper 的纸感书卷。
+   关掉 Style Settings 里的「现代模式」即回到 Octavo 的纸感书卷。
    ========================================================================== */
 
 /* —— 浅色配色 —— */
-body.theme-light.folio-modern-mode {
-  --folio-paper: #ffffff;
-  --folio-paper-2: #f9f9f9;
-  --folio-paper-3: #f3f3f3;
-  --folio-rule: #e5e5e5;
+body.theme-light.octavo-modern-mode {
+  --octavo-paper: #ffffff;
+  --octavo-paper-2: #f9f9f9;
+  --octavo-paper-3: #f3f3f3;
+  --octavo-rule: #e5e5e5;
 
-  --folio-ink-strong: #212121;
-  --folio-ink: #212121;
-  --folio-ink-soft: #6b6b6b;
-  --folio-ink-muted: #727272; /* 原 #8f8f8f 只有 3.23:1；侧边栏（paper-2）上也要 4.5:1 */
-  --folio-ink-faint: #949494; /* 原 #b4b4b4 只有 2.07:1，复选框几乎隐形 */
+  --octavo-ink-strong: #212121;
+  --octavo-ink: #212121;
+  --octavo-ink-soft: #6b6b6b;
+  --octavo-ink-muted: #727272; /* 原 #8f8f8f 只有 3.23:1；侧边栏（paper-2）上也要 4.5:1 */
+  --octavo-ink-faint: #949494; /* 原 #b4b4b4 只有 2.07:1，复选框几乎隐形 */
 
-  --folio-heading-strong: #212121;
-  --folio-heading: #212121;
-  --folio-heading-muted: #6b6b6b;
+  --octavo-heading-strong: #212121;
+  --octavo-heading: #212121;
+  --octavo-heading-muted: #6b6b6b;
 
-  --folio-quote-bg: #f9f9f9;
-  --folio-active-line-bg: #f4f4f4;
+  --octavo-quote-bg: #f9f9f9;
+  --octavo-active-line-bg: #f4f4f4;
 
   /* 代码块：现代模式是中性灰底，不要继承纸感的暖底 */
-  --folio-code-block-bg: #f6f6f6;
-  --folio-code-block-border: #e9e9e9;
-  --folio-code-line-active: #ededed;
+  --octavo-code-block-bg: #f6f6f6;
+  --octavo-code-block-border: #e9e9e9;
+  --octavo-code-line-active: #ededed;
 
   /* 蓝色分两个角色：
        文字（链接 / 标签）→ #2563eb，白底 5.17:1，够正文 AA
@@ -623,30 +618,30 @@ body.theme-light.folio-modern-mode {
    三级底的语义要读清楚：#212121 正文纸面（基准）；#171717 更沉的侧边栏；
    #262626 浮出的面板。原来 paper-3 是 #303030，比正文还亮，
    于是 212121 → 171717 → 303030 不是一条坡道，侧边栏里嵌面板会「凸」出来。 */
-body.theme-dark.folio-modern-mode {
-  --folio-paper: #212121;
-  --folio-paper-2: #171717;
-  --folio-paper-3: #262626;
-  --folio-rule: #424242;
+body.theme-dark.octavo-modern-mode {
+  --octavo-paper: #212121;
+  --octavo-paper-2: #171717;
+  --octavo-paper-3: #262626;
+  --octavo-rule: #424242;
 
-  --folio-ink-strong: #ececec;
-  --folio-ink: #ececec;
-  --folio-ink-soft: #b4b4b4;
-  --folio-ink-muted: #8f8f8f;
-  --folio-ink-faint: #6b6b6b;
+  --octavo-ink-strong: #ececec;
+  --octavo-ink: #ececec;
+  --octavo-ink-soft: #b4b4b4;
+  --octavo-ink-muted: #8f8f8f;
+  --octavo-ink-faint: #6b6b6b;
 
-  --folio-heading-strong: #ececec;
-  --folio-heading: #ececec;
-  --folio-heading-muted: #b4b4b4;
+  --octavo-heading-strong: #ececec;
+  --octavo-heading: #ececec;
+  --octavo-heading-muted: #b4b4b4;
 
-  --folio-quote-bg: #2a2a2a;
+  --octavo-quote-bg: #2a2a2a;
   /* 原来与引用块同为 #2a2a2a：引用里的当前行、引用块本身分不出边界 */
-  --folio-active-line-bg: #2f2f2f;
+  --octavo-active-line-bg: #2f2f2f;
 
   /* 代码块比纸面更沉一档（凹进去），而不是浮起来 */
-  --folio-code-block-bg: #1a1a1a;
-  --folio-code-block-border: #333333;
-  --folio-code-line-active: #262626;
+  --octavo-code-block-bg: #1a1a1a;
+  --octavo-code-block-border: #333333;
+  --octavo-code-line-active: #262626;
 
   /* 深色底的正文链接要更亮：品牌蓝 #3983f7 on #212121 只有 4.42:1，差一口气 */
   --text-accent: #5c9bff;
@@ -662,40 +657,40 @@ body.theme-dark.folio-modern-mode {
   --text-highlight-bg: rgba(224, 184, 94, 0.26); /* 合成 #534831，与选区靠色相区分 */
 }
 
-/* —— 字体：正文无衬线；标题沿用 Folio Paper 纸感的衬线字体 ——
+/* —— 字体：正文无衬线；标题沿用 Octavo 纸感的衬线字体 ——
    Obsidian 的标题字体跟 --font-text 是分开的（--h1-font…--h6-font，默认 inherit），
    所以把正文切成无衬线后，标题仍可单独指回纸感字体。 */
-body.folio-modern-mode {
-  --font-text: var(--folio-sans-font);
-  --font-text-theme: var(--folio-sans-font);
+body.octavo-modern-mode {
+  --font-text: var(--octavo-sans-font);
+  --font-text-theme: var(--octavo-sans-font);
 
-  --h1-font: var(--folio-text-font);
-  --h2-font: var(--folio-text-font);
-  --h3-font: var(--folio-text-font);
-  --h4-font: var(--folio-text-font);
-  --h5-font: var(--folio-text-font);
-  --h6-font: var(--folio-text-font);
+  --h1-font: var(--octavo-text-font);
+  --h2-font: var(--octavo-text-font);
+  --h3-font: var(--octavo-text-font);
+  --h4-font: var(--octavo-text-font);
+  --h5-font: var(--octavo-text-font);
+  --h6-font: var(--octavo-text-font);
 }
 
 /* —— 排版：去掉「书」的做法 —— */
-body.folio-modern-mode .markdown-rendered p,
-body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+body.octavo-modern-mode .markdown-rendered p,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 0 !important;
 }
-body.folio-modern-mode .markdown-rendered p,
-body.folio-modern-mode .markdown-rendered li,
-body.folio-modern-mode .markdown-source-view.mod-cm6 .cm-line {
+body.octavo-modern-mode .markdown-rendered p,
+body.octavo-modern-mode .markdown-rendered li,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .cm-line {
   text-align: left !important;
 }
-body.folio-modern-mode .inline-title {
+body.octavo-modern-mode .inline-title {
   text-align: left !important;
 }
-body.folio-modern-mode .markdown-rendered h1,
-body.folio-modern-mode .markdown-rendered h2,
-body.folio-modern-mode .markdown-rendered h3,
-body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+body.octavo-modern-mode .markdown-rendered h1,
+body.octavo-modern-mode .markdown-rendered h2,
+body.octavo-modern-mode .markdown-rendered h3,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   border-bottom: none !important;
 }
 
@@ -719,18 +714,18 @@ body.folio-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
    进入编辑态时，里层那个编辑器也会被命中，必须在 §5 复位（否则光标一进
    单元格，那一行文字就右移一个字）。 */
 .markdown-source-view.mod-cm6 .cm-sizer {
-  max-width: calc(var(--folio-content-width) + 2 * var(--size-4-4, 16px)) !important;
+  max-width: calc(var(--octavo-content-width) + 2 * var(--size-4-4, 16px)) !important;
   margin-inline: auto !important;
 }
 .markdown-source-view.mod-cm6 .cm-content {
   padding-inline: var(--size-4-4, 16px);
 }
 .markdown-preview-view .markdown-preview-sizer {
-  max-width: var(--folio-content-width) !important;
+  max-width: var(--octavo-content-width) !important;
   margin-inline: auto !important;
 }
-body.folio-free-width .markdown-source-view.mod-cm6 .cm-sizer,
-body.folio-free-width .markdown-preview-view .markdown-preview-sizer {
+body.octavo-free-width .markdown-source-view.mod-cm6 .cm-sizer,
+body.octavo-free-width .markdown-preview-view .markdown-preview-sizer {
   max-width: none !important;
 }
 
@@ -745,18 +740,18 @@ body.folio-free-width .markdown-preview-view .markdown-preview-sizer {
 }
 
 /* —— 书籍段落：两端对齐 + 首行缩进两字（默认开启，可关）—— */
-body:not(.folio-no-justify) .markdown-rendered p,
-body:not(.folio-no-justify) .markdown-rendered li,
-body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-line {
+body:not(.octavo-no-justify) .markdown-rendered p,
+body:not(.octavo-no-justify) .markdown-rendered li,
+body:not(.octavo-no-justify) .markdown-source-view.mod-cm6 .cm-line {
   text-align: justify;
   text-justify: inter-ideograph;
 }
 
-body:not(.folio-no-book-indent) .markdown-preview-view .el-p > p {
+body:not(.octavo-no-book-indent) .markdown-preview-view .el-p > p {
   text-indent: 2em;
 }
 /* 实时预览：只给纯段落行缩进；标题/列表/引用/代码/表格等 HyperMD 行不缩进 */
-body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
+body:not(.octavo-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([class*="HyperMD-"]) {
   text-indent: 2em;
 }
 
@@ -776,7 +771,7 @@ body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([clas
 .markdown-rendered h6,
 .markdown-source-view.mod-cm6 .HyperMD-header {
   letter-spacing: 0.005em;
-  margin-block-start: var(--folio-heading-spacing);
+  margin-block-start: var(--octavo-heading-spacing);
   margin-block-end: 0.55em;
 }
 
@@ -793,30 +788,30 @@ body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-line:not([clas
 }
 
 /* —— 标题分隔线：H1–H3，阅读视图与实时预览都生效 —— */
-body:not(.folio-no-heading-rule) .markdown-rendered h1,
-body:not(.folio-no-heading-rule) .markdown-rendered h2,
-body:not(.folio-no-heading-rule) .markdown-rendered h3 {
+body:not(.octavo-no-heading-rule) .markdown-rendered h1,
+body:not(.octavo-no-heading-rule) .markdown-rendered h2,
+body:not(.octavo-no-heading-rule) .markdown-rendered h3 {
   padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--folio-rule);
+  border-bottom: 1px solid var(--octavo-rule);
 }
-body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-1,
-body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-2,
-body:not(.folio-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-3 {
+body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-1,
+body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-2,
+body:not(.octavo-no-heading-rule) .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   padding-bottom: 0.25em;
-  border-bottom: 1px solid var(--folio-rule);
+  border-bottom: 1px solid var(--octavo-rule);
 }
 
 /* —— 行内标题（文件名）：默认居中，像书页的章名 —— */
 .inline-title {
-  font-family: var(--folio-text-font);
+  font-family: var(--octavo-text-font);
   font-size: 1.9em;
   font-weight: 700;
-  color: var(--folio-heading-strong);
+  color: var(--octavo-heading-strong);
   line-height: 1.25;
   letter-spacing: 0.01em;
   margin-block-end: 0.9em;
 }
-body:not(.folio-no-title-centered) .inline-title {
+body:not(.octavo-no-title-centered) .inline-title {
   text-align: center;
   margin-block-start: 0.6em;
 }
@@ -834,7 +829,7 @@ body:not(.folio-no-title-centered) .inline-title {
   margin-block: var(--list-spacing);
 }
 .markdown-rendered li::marker {
-  color: var(--folio-ink-muted);
+  color: var(--octavo-ink-muted);
 }
 
 /* —— 引用：浅色圆角背景 + 单色左边线 ——
@@ -843,16 +838,16 @@ body:not(.folio-no-title-centered) .inline-title {
    编辑器选择器带上 .is-live-preview，跟 Obsidian 原生规则同级，靠「主题后加载」获胜。 */
 .markdown-rendered blockquote,
 .markdown-source-view.mod-cm6.is-live-preview .HyperMD-quote {
-  color: var(--folio-ink-soft);
+  color: var(--octavo-ink-soft);
   font-style: italic;
-  background-color: var(--folio-quote-bg);
+  background-color: var(--octavo-quote-bg);
 }
 
 /* 阅读视图：整块圆角背景。
    Obsidian 会把 blockquote 的 :first-child / :last-child 外边距清零，
    所以上下留白只能靠 padding 给，否则文字会贴到圆角边上。 */
 .markdown-rendered blockquote {
-  padding: var(--folio-quote-pad) 1.1em;
+  padding: var(--octavo-quote-pad) 1.1em;
   border-radius: 8px;
 }
 
@@ -866,12 +861,12 @@ body:not(.folio-no-title-centered) .inline-title {
   padding-inline: 1em;
 }
 .markdown-source-view.mod-cm6 .HyperMD-quote:not(.HyperMD-quote + .HyperMD-quote) {
-  padding-block-start: var(--folio-quote-pad);
+  padding-block-start: var(--octavo-quote-pad);
   border-start-start-radius: 8px;
   border-start-end-radius: 8px;
 }
 .markdown-source-view.mod-cm6 .HyperMD-quote:not(:has(+ .HyperMD-quote)) {
-  padding-block-end: var(--folio-quote-pad);
+  padding-block-end: var(--octavo-quote-pad);
   border-end-start-radius: 8px;
   border-end-end-radius: 8px;
 }
@@ -880,7 +875,7 @@ body:not(.folio-no-title-centered) .inline-title {
 .markdown-rendered hr,
 .markdown-source-view.mod-cm6 .cm-line hr {
   border: none;
-  border-top: 1px solid var(--folio-rule);
+  border-top: 1px solid var(--octavo-rule);
   width: 38%;
   margin: 2.2em auto;
 }
@@ -900,7 +895,7 @@ body.theme-light {
   --code-tag: #116329;
   --code-property: #0550ae;
   --code-punctuation: #57606a;
-  --folio-code-class: #953800;
+  --octavo-code-class: #953800;
   --code-size: 0.88em;
 }
 body.theme-dark {
@@ -914,7 +909,7 @@ body.theme-dark {
   --code-tag: #f78c6c;
   --code-property: #89ddff;
   --code-punctuation: #89ddff;
-  --folio-code-class: #ffcb6b;
+  --octavo-code-class: #ffcb6b;
   --code-size: 0.88em;
 }
 /* app.css 把 class-name / builtin 并进了 function 色，这里单独拎出来 */
@@ -922,14 +917,14 @@ body.theme-dark {
 .markdown-rendered pre .token.builtin,
 .cm-type,
 .cm-builtin {
-  color: var(--folio-code-class);
+  color: var(--octavo-code-class);
 }
 
 /* —— 代码块容器：底色 / 圆角 / 细边框 —— */
 .markdown-rendered pre,
 .markdown-source-view.mod-cm6 .cm-preview-code-block {
-  background: var(--folio-code-block-bg) !important;
-  border: 1px solid var(--folio-code-block-border);
+  background: var(--octavo-code-block-bg) !important;
+  border: 1px solid var(--octavo-code-block-border);
   border-radius: 12px;
   overflow: hidden;
   margin: 1.15em 0;
@@ -971,7 +966,7 @@ body.theme-dark {
    逐行铺底、中间行直角，只给一整段的首 / 末行圆角。
    注意：不要给「围栏相邻行」额外加圆角 —— 围栏可见时那会留下缺口。 */
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
-  background: var(--folio-code-block-bg) !important;
+  background: var(--octavo-code-block-bg) !important;
   border-radius: 0 !important;
   font-size: 13px;
   line-height: 1.7;
@@ -990,10 +985,10 @@ body.theme-dark {
    ========================================================================== */
 
 body {
-  --table-header-background: var(--folio-paper-2);
-  --table-header-color: var(--folio-heading);
+  --table-header-background: var(--octavo-paper-2);
+  --table-header-color: var(--octavo-heading);
   --table-row-alt-background: transparent;
-  --table-border-color: var(--folio-rule);
+  --table-border-color: var(--octavo-rule);
   --table-row-background-hover: var(--background-modifier-hover);
   --table-white-space: normal; /* 允许换行，而不是省略号截断 */
 }
@@ -1065,7 +1060,7 @@ body {
   overflow: visible;
   text-overflow: clip;
   vertical-align: top;
-  border-color: var(--folio-rule);
+  border-color: var(--octavo-rule);
 }
 .markdown-rendered th,
 .markdown-rendered td {
@@ -1089,13 +1084,13 @@ body {
 }
 
 /* —— 「每行最多列数」是怎么生效的 ——
-   列数**不超过** --folio-table-cols：表格就是容器宽的 100%，各列平分 ——
+   列数**不超过** --octavo-table-cols：表格就是容器宽的 100%，各列平分 ——
    一点都不滚（不是「差几像素才滚」，是正好 100%）。
    一旦**多出**一列：把表格的最小宽度抬到 (列数 ÷ 设定值) × 容器宽，各列因此
    始终占「容器宽 ÷ 设定值」、不肯让位 → 表格变宽 → 容器横向滚动。
 
    百分比是相对**实际容器**算的（表格的包含块），这一点是上一版出问题的地方：
-   上一版拿 `--folio-content-width ÷ 列数` 算绝对值，只要面板内宽比「正文栏宽」
+   上一版拿 `--octavo-content-width ÷ 列数` 算绝对值，只要面板内宽比「正文栏宽」
    设置窄几像素（窗口差一点、外边距、滚动条），4 列就会顶出几像素的滚动条。
    现在 ≤ 设定值的列数一定正好 100%；窗口比栏宽还窄时，也只是各列一起变窄，
    不会提前开始滚。
@@ -1104,21 +1099,21 @@ body {
    一次命中一个 k。这些规则权重完全相同，靠**层叠顺序**取胜 —— 所以 k 必须
    升序写：候选里最大的那个（= 真实列数）在最后，盖住前面的。
    16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。 */
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--folio-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--folio-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--octavo-table-cols)); }
+:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--octavo-table-cols)); }
 
 /* —— 实时预览：同一份「撑开」要写在 .table-wrapper 上，不能只写在表格上 ——
    表格的两个「+」把手是 wrapper 的绝对定位子元素（app.css：
@@ -1136,21 +1131,21 @@ body {
 .markdown-source-view.mod-cm6 .cm-table-widget table {
   min-width: 0;
 }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--folio-table-cols)); }
-.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--folio-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--octavo-table-cols)); }
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--octavo-table-cols)); }
 
 /* 实时预览：表容器横向滚动。
    overflow-y 必须显式关掉：容器一旦成为滚动盒，写不写都从 auto 派生，
@@ -1199,16 +1194,16 @@ body {
       0.45em 0.75em）。漏进来的后果：被激活的单元格凭空多出 16px 左内边距，
       正好是**一个汉字**的宽度（16px 字号下 1em = 16px）；没激活的单元格
       没有这 16px。两下一比，就是「光标一进单元格，那一行文字整体右移一个字」。
-   2) `body:not(.folio-no-book-indent) … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
+   2) `body:not(.octavo-no-book-indent) … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
       单元格里层的行没有 HyperMD- 类，会被当成纯段落再缩进两个字 ——
       开着「书籍段落缩进」时，错位从 1 个字变成 3 个字（16px + 2em）。
       而单元格里的段落本就不该有首行缩进（第 3 节原话：表格等 HyperMD 行不缩进）。
-   3) `body:not(.folio-no-justify) … .cm-line { text-align: justify; text-justify: inter-ideograph }`
+   3) `body:not(.octavo-no-justify) … .cm-line { text-align: justify; text-justify: inter-ideograph }`
       这个模式**默认就是开的**（@settings 里 default: true）→ 里层这一行被拉成
       两端对齐：单元格里折出来的前几行被撑满、汉字之间被拉开，最后一行照旧不撑
       （实测：第 2 行字距 15.43 → 16.17px、行右缘 198 → 206px；截图里 29 → 33px
       的也是它）→ 看起来就是「有光标和没光标，字间距不一样」。
-      阅读视图的单元格从不两端对齐（`body:not(.folio-no-justify) .markdown-rendered > p`
+      阅读视图的单元格从不两端对齐（`body:not(.octavo-no-justify) .markdown-rendered > p`
       只认直接子段），没光标的单元格也不是 `.cm-line` —— 所以只有光标进去那一下会变。
       这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
       写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
@@ -1236,7 +1231,7 @@ body {
    一行都不碰。
 
    ⚠️ 为什么 padding 那条还要 `!important` + 物理属性（真事，不是预防性地写）：
-   手机上的 `folio-mobile.css` 片段（snippets/folio-mobile.css）里有一条
+   手机上的 `octavo-mobile.css` 片段（snippets/octavo-mobile.css）里有一条
      `body.is-mobile .markdown-source-view.mod-cm6 .cm-content { padding-inline: 14px }`
    —— 权重 **0-4-1**，正好比这条复位的 0-4-0 高一位。于是桌面上怎么都量不出的
    那 16px 级的漏，在手机上稳稳复现：iPhone 15/16 Pro（393pt、17px 字号）上
@@ -1264,10 +1259,10 @@ body {
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content.cm-lineWrapping {
   overflow-wrap: anywhere;
 }
-body:not(.folio-no-book-indent) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body:not(.octavo-no-book-indent) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-indent: 0;
 }
-body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
+body:not(.octavo-no-justify) .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   text-align: inherit;
   text-justify: auto;
 }
@@ -1328,7 +1323,7 @@ body:not(.folio-no-justify) .markdown-source-view.mod-cm6 .cm-table-widget .cm-l
 body {
   --tag-background: transparent;
   --tag-color: var(--text-accent);
-  --tag-border-color: var(--folio-rule);
+  --tag-border-color: var(--octavo-rule);
 }
 .tag,
 .cm-hashtag {
@@ -1343,8 +1338,8 @@ body {
   --link-decoration: none;
   --link-decoration-hover: underline;
   --link-external-color: var(--text-accent);
-  --link-unresolved-color: var(--folio-ink-muted);
-  --link-unresolved-decoration-color: var(--folio-rule);
+  --link-unresolved-color: var(--octavo-ink-muted);
+  --link-unresolved-decoration-color: var(--octavo-rule);
 }
 
 /* 任务框：圆角、克制。
@@ -1352,7 +1347,7 @@ body {
 .markdown-rendered input[type="checkbox"],
 .task-list-item-checkbox {
   border-radius: 4px;
-  border-color: var(--folio-ink-muted);
+  border-color: var(--octavo-ink-muted);
 }
 
 /* ==========================================================================
@@ -1361,7 +1356,7 @@ body {
 
 /* —— 侧边栏 / 标签栏：去掉多余描边与阴影 —— */
 .workspace-tab-header-container {
-  border-bottom: 1px solid var(--folio-rule);
+  border-bottom: 1px solid var(--octavo-rule);
 }
 .workspace-tab-header.is-active {
   background: transparent;
@@ -1384,7 +1379,7 @@ body {
 /* —— 面板标题（Files / Search / Tags…）—— */
 .workspace-leaf-content .view-header,
 .view-header {
-  border-bottom: 1px solid var(--folio-rule);
+  border-bottom: 1px solid var(--octavo-rule);
   background: transparent;
 }
 .view-header-title {
@@ -1395,22 +1390,22 @@ body {
 
 /* —— 状态栏 —— */
 .status-bar {
-  border-top: 1px solid var(--folio-rule);
+  border-top: 1px solid var(--octavo-rule);
   background: var(--background-secondary);
   /* 状态栏是 12px 的正文，必须 ≥4.5:1；faint 是给禁用/占位用的，扛不住 */
   color: var(--text-muted);
   font-size: var(--font-ui-small);
 }
-body.folio-hide-status-bar .status-bar {
+body.octavo-hide-status-bar .status-bar {
   display: none;
 }
 
 /* —— 隐藏滚动条（可关闭）—— */
-body.folio-hide-scrollbars ::-webkit-scrollbar {
+body.octavo-hide-scrollbars ::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-body.folio-hide-scrollbars * {
+body.octavo-hide-scrollbars * {
   scrollbar-width: none;
 }
 
@@ -1430,7 +1425,7 @@ select {
 .mod-left-split .workspace-leaf-content,
 .mod-right-split .workspace-leaf-content,
 .nav-files-container {
-  font-family: var(--folio-tree-font);
+  font-family: var(--octavo-tree-font);
 }
 
 /* —— 用 Obsidian 的导航变量统一控制行距 / 圆角 / 缩进 / 字号 —— */
@@ -1442,7 +1437,7 @@ select {
   --nav-item-size: 14px;                /* 现代模式：侧边栏会话名称 14px */
   --nav-item-weight: 400;
   --nav-item-weight-active: 600;        /* 选中：字重 + 底色，不画左侧竖条 */
-  --nav-item-color: var(--folio-ink-soft);
+  --nav-item-color: var(--octavo-ink-soft);
   --nav-item-color-hover: var(--text-normal);
   --nav-item-color-active: var(--text-normal);
   --nav-item-background-hover: var(--background-modifier-hover);
@@ -1516,7 +1511,7 @@ select {
   width: 15px;
   height: 15px;
   margin-inline-end: 7px;
-  background-color: var(--folio-ink-faint);
+  background-color: var(--octavo-ink-faint);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
   transition: background-color 100ms ease;
@@ -1531,7 +1526,7 @@ select {
   display: none;
 }
 .nav-folder-title:hover::before {
-  background-color: var(--folio-ink-soft);
+  background-color: var(--octavo-ink-soft);
 }
 .nav-folder-title.is-active::before {
   background-color: var(--text-accent);
@@ -1550,13 +1545,13 @@ select {
   width: 15px;
   height: 15px;
   margin-inline-end: 7px;
-  background-color: var(--folio-ink-faint);
+  background-color: var(--octavo-ink-faint);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z'/%3E%3Cpolyline points='13 2 13 9 20 9'/%3E%3C/svg%3E") center / contain no-repeat;
   transition: background-color 100ms ease;
 }
 .nav-file-title:hover::before {
-  background-color: var(--folio-ink-soft);
+  background-color: var(--octavo-ink-soft);
 }
 .nav-file-title.is-active::before {
   background-color: var(--text-accent);
@@ -1565,14 +1560,14 @@ select {
 /* 文件夹文字：中等字重 + 更深的墨色 */
 .nav-folder-title-content {
   font-weight: 500;
-  color: var(--folio-ink);
+  color: var(--octavo-ink);
 }
 
 /* 选中文件：左侧强调竖条 —— 只有 现代模式画。
    纸感模式不要它（竖条是 App 的「选中控件」，不是纸上的记号），
    那边的选中态只靠底色 + 字重区分，见 7 节末尾的纸感文件树块。
    注意挂在 ::after 上：::before 已经给了「文件」图标，不能互相顶掉。 */
-body.folio-modern-mode .nav-file-title.is-active::after {
+body.octavo-modern-mode .nav-file-title.is-active::after {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
@@ -1583,68 +1578,68 @@ body.folio-modern-mode .nav-file-title.is-active::after {
 }
 
 /* 可选：紧凑行距 */
-body.folio-tree-compact .nav-files-container {
+body.octavo-tree-compact .nav-files-container {
   --nav-item-padding: 2px 8px;
   --nav-item-margin-bottom: 0px;
 }
 
 /* 可选：显示缩进引导线 */
-body.folio-tree-lines .nav-files-container {
+body.octavo-tree-lines .nav-files-container {
   --nav-indentation-guide-width: 1px;
-  --nav-indentation-guide-color: var(--folio-rule);
+  --nav-indentation-guide-color: var(--octavo-rule);
 }
 
 /* —— 纸感模式：把文件树做成一本书的目录 ——
    现代模式保留上面那套代码编辑器式无衬线；默认的纸感模式则
    侧栏换成正文衬线 + 更轻的印刷符号 + 页边标记式的选中态。
-   只在 :not(.folio-modern-mode) 下生效，现代模式一个像素都不动。 */
+   只在 :not(.octavo-modern-mode) 下生效，现代模式一个像素都不动。 */
 
 /* 目录用正文字体（书里的目录和正文同一副字），默认 Iowan + 思源宋体。
-   想改回无衬线：把 --folio-tree-font-paper 换成 var(--folio-sans-font)。 */
-body:not(.folio-modern-mode) .mod-left-split .workspace-leaf-content,
-body:not(.folio-modern-mode) .mod-right-split .workspace-leaf-content,
-body:not(.folio-modern-mode) .nav-files-container {
-  font-family: var(--folio-tree-font-paper);
+   想改回无衬线：把 --octavo-tree-font-paper 换成 var(--octavo-sans-font)。 */
+body:not(.octavo-modern-mode) .mod-left-split .workspace-leaf-content,
+body:not(.octavo-modern-mode) .mod-right-split .workspace-leaf-content,
+body:not(.octavo-modern-mode) .nav-files-container {
+  font-family: var(--octavo-tree-font-paper);
 }
 
-body:not(.folio-modern-mode) .nav-files-container {
+body:not(.octavo-modern-mode) .nav-files-container {
   /* 书页的行距比 VSCode 松一档；圆角收小，别像个 App 的胶囊 */
   --nav-item-padding: 6px 8px;
   --nav-item-radius: 4px;
-  --nav-item-color-active: var(--folio-heading-strong);
+  --nav-item-color-active: var(--octavo-heading-strong);
 }
 
 /* 中文在衬线体下略松一点更好读；只动字距，不动颜色 ——
    .nav-folder-title-content 有显式 color，碰它会盖掉 is-active 的继承色。 */
-body:not(.folio-modern-mode) :is(.nav-folder-title-content, .nav-file-title-content) {
+body:not(.octavo-modern-mode) :is(.nav-folder-title-content, .nav-file-title-content) {
   letter-spacing: 0.01em;
 }
 
 /* 文件夹 / 文件图标退到背景里：它们是印刷符号，不是 UI 控件 */
-body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title)::before {
+body:not(.octavo-modern-mode) :is(.nav-folder-title, .nav-file-title)::before {
   opacity: 0.6;
   transition: opacity 120ms ease, background-color 120ms ease;
 }
-body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title):hover::before,
-body:not(.folio-modern-mode) :is(.nav-folder-title, .nav-file-title).is-active::before {
+body:not(.octavo-modern-mode) :is(.nav-folder-title, .nav-file-title):hover::before,
+body:not(.octavo-modern-mode) :is(.nav-folder-title, .nav-file-title).is-active::before {
   opacity: 1;
 }
 
 /* 「文件树紧凑行高」在纸感模式下也要生效 ——
-   上面那条的优先级比 body.folio-tree-compact 高，得在这里重新收紧一次。 */
-body:not(.folio-modern-mode).folio-tree-compact .nav-files-container {
+   上面那条的优先级比 body.octavo-tree-compact 高，得在这里重新收紧一次。 */
+body:not(.octavo-modern-mode).octavo-tree-compact .nav-files-container {
   --nav-item-padding: 3px 8px;
   --nav-item-margin-bottom: 0px;
 }
 
 /* 侧栏面板标题（「文件」/「搜索」）像书页的页眉：
    只作用于左右侧栏，不动正文视图的 header。 */
-body:not(.folio-modern-mode) .mod-left-split .view-header-title,
-body:not(.folio-modern-mode) .mod-right-split .view-header-title {
-  font-family: var(--folio-text-font);
+body:not(.octavo-modern-mode) .mod-left-split .view-header-title,
+body:not(.octavo-modern-mode) .mod-right-split .view-header-title {
+  font-family: var(--octavo-text-font);
   font-size: 13px;
   letter-spacing: 0.08em;
-  color: var(--folio-heading);
+  color: var(--octavo-heading);
 }
 
 /* ==========================================================================
@@ -1655,25 +1650,25 @@ body:not(.folio-modern-mode) .mod-right-split .view-header-title {
    表格就会一直保持原样（看起来像被高亮/没被调暗），所以这里两类都要列上。
    ========================================================================== */
 
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block {
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block {
   opacity: 0.32;
   transition: opacity 160ms ease;
 }
 
 /* 亮起：光标所在行（.cm-active / .cm-activeLine）、鼠标悬停行与块、标题，
    以及「光标所在行里的块部件」和「正在编辑的表格」 */
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line:hover,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-header,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active .cm-embed-block,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine .cm-embed-block,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:hover,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:focus-within,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.is-selected,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.has-selection,
-body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-selected) {
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line:hover,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-header,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-active .cm-embed-block,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.cm-activeLine .cm-embed-block,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:hover,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:focus-within,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.is-selected,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block.has-selection,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-selected) {
   opacity: 1;
 }
 
@@ -1681,26 +1676,26 @@ body.folio-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-selec
    原理：一叠 box-shadow 沿水平方向平铺（每段是行宽的副本）。
    关键：每段的平移量必须 < 行宽，否则段与段之间会空出缝隙。
    原来用 50vw，屏幕一宽 50vw 就超过行宽 → 底色被断成三段。 */
-body:not(.folio-no-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active {
-  background-color: var(--folio-active-line-bg);
-  --folio-al-step: calc(var(--folio-content-width) * 0.7);
+body:not(.octavo-no-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active {
+  background-color: var(--octavo-active-line-bg);
+  --octavo-al-step: calc(var(--octavo-content-width) * 0.7);
   box-shadow:
-    calc(-1 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(-2 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(-3 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(-4 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(-5 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(1 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(2 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(3 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(4 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg),
-    calc(5 * var(--folio-al-step)) 0 0 var(--folio-active-line-bg);
+    calc(-1 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(-2 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(-3 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(-4 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(-5 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(1 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(2 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(3 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(4 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg),
+    calc(5 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg);
 }
 
 /* 代码块里的当前行：不要那条横穿整块的全宽色带，
    改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
-body:not(.folio-no-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
-  background-color: var(--folio-code-line-active) !important;
+body:not(.octavo-no-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+  background-color: var(--octavo-code-line-active) !important;
   box-shadow: none !important;
 }
 
@@ -1715,7 +1710,7 @@ body:not(.folio-no-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-c
    保留其宽度、把字形变透明，专门给光标当落点。因为它在行尾，这点占位看不出来。
    ========================================================================== */
 
-body.folio-hide-markdown .markdown-source-view.is-live-preview :is(
+body.octavo-hide-markdown .markdown-source-view.is-live-preview :is(
     .cm-formatting.cm-formatting-code.cm-inline-code,
     .cm-formatting.cm-formatting-em,
     .cm-formatting.cm-formatting-strikethrough,
@@ -1730,7 +1725,7 @@ body.folio-hide-markdown .markdown-source-view.is-live-preview :is(
 }
 
 /* 当前行、标记位于行尾：保留宽度当光标落点（字形透明） */
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
+body.octavo-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
     .cm-formatting.cm-formatting-code.cm-inline-code,
     .cm-formatting.cm-formatting-em,
     .cm-formatting.cm-formatting-strikethrough,
@@ -1747,7 +1742,7 @@ body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-activ
 }
 
 /* 同上，但个别空行结构里行尾是 <br>（单独一条，避免 :has 不被支持时连带整条失效） */
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
+body.octavo-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-active :is(
     .cm-formatting.cm-formatting-code.cm-inline-code,
     .cm-formatting.cm-formatting-em,
     .cm-formatting.cm-formatting-strikethrough,
@@ -1762,7 +1757,7 @@ body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-line.cm-activ
   -webkit-text-fill-color: transparent;
   caret-color: var(--text-normal);
 }
-body.folio-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-quote {
+body.octavo-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-quote {
   opacity: 0;
 }
 
@@ -1790,7 +1785,7 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
 /* 侧边栏文件树与面板之间的分隔线收敛 */
 .workspace-split.mod-left-split .workspace-leaf-content,
 .workspace-split.mod-right-split .workspace-leaf-content {
-  border-color: var(--folio-rule);
+  border-color: var(--octavo-rule);
 }
 
 /* 让「阅读/编辑」时的光标颜色跟随墨色 */
@@ -1811,9 +1806,9 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
      2. 别去动 .cm-underline —— 那是内部链接的类，碰它会把所有链接一起染红。
    ========================================================================== */
 
-body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
+body:not(.octavo-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
   text-decoration-line: underline;
-  text-decoration-color: var(--folio-u-color);
+  text-decoration-color: var(--octavo-u-color);
   /* 线比默认粗一档、往下压一点，读起来像「批注笔」而不是排版下划线 */
   text-decoration-thickness: 0.09em;
   text-underline-offset: 0.18em;
@@ -1829,7 +1824,7 @@ body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6)
    （各自的长别名 hint / attention / cite 一并认，写法见下）
 
    做法借 GitHub Alerts（NOTE / TIP / IMPORTANT / WARNING / CAUTION）的骨架 ——
-   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Folio Paper 的纸感语言：
+   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Octavo 的纸感语言：
      · 左边一条 3px 语义色竖线（与引用块同宽），其余三边不封口
      · 底色只铺 7%（深色 10%），比 GitHub 更淡，纸面仍是主角
      · 只有标题与图标吃语义色，正文保持墨色 —— 正文对比度完全不受影响
@@ -1839,31 +1834,31 @@ body:not(.folio-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6)
    两个坑，记在这里：
      1. 不碰 Obsidian 的 --callout-color。它 1.13 起从「R, G, B 三元组」改成
         「完整颜色值」，主题若依赖它就被钉死在某个版本上。这里用自己的
-        --folio-co（仍是三元组），只喂给自己的 rgba()。
-     2. --folio-co 必须在基础规则里给默认值（note）。否则未列出的类型
+        --octavo-co（仍是三元组），只喂给自己的 rgba()。
+     2. --octavo-co 必须在基础规则里给默认值（note）。否则未列出的类型
         （info / success / danger / bug …）拿到 undefined，整块会掉样式。
    ========================================================================== */
 
 /* —— 语义色：浅色一套、深色一套（"R, G, B" 三元组）—— */
 body.theme-light {
-  --folio-co-note: 47, 93, 158; /* 靛蓝 */
-  --folio-co-tip: 43, 122, 75; /* 松绿 */
-  --folio-co-important: 107, 74, 168; /* 紫 */
-  --folio-co-warning: 138, 90, 18; /* 琥珀 */
-  --folio-co-caution: 176, 58, 46; /* 朱批红：和加粗、红下划线共用一支笔 */
-  --folio-co-example: 74, 96, 118; /* 石墨青 */
-  --folio-co-quote: 107, 95, 71; /* 暖褐：引用那一档 */
-  --folio-co-alpha: 0.07;
+  --octavo-co-note: 47, 93, 158; /* 靛蓝 */
+  --octavo-co-tip: 43, 122, 75; /* 松绿 */
+  --octavo-co-important: 107, 74, 168; /* 紫 */
+  --octavo-co-warning: 138, 90, 18; /* 琥珀 */
+  --octavo-co-caution: 176, 58, 46; /* 朱批红：和加粗、红下划线共用一支笔 */
+  --octavo-co-example: 74, 96, 118; /* 石墨青 */
+  --octavo-co-quote: 107, 95, 71; /* 暖褐：引用那一档 */
+  --octavo-co-alpha: 0.07;
 }
 body.theme-dark {
-  --folio-co-note: 122, 167, 232;
-  --folio-co-tip: 98, 192, 138;
-  --folio-co-important: 183, 156, 240;
-  --folio-co-warning: 217, 169, 79;
-  --folio-co-caution: 224, 115, 106;
-  --folio-co-example: 147, 179, 201;
-  --folio-co-quote: 176, 164, 140;
-  --folio-co-alpha: 0.1;
+  --octavo-co-note: 122, 167, 232;
+  --octavo-co-tip: 98, 192, 138;
+  --octavo-co-important: 183, 156, 240;
+  --octavo-co-warning: 217, 169, 79;
+  --octavo-co-caution: 224, 115, 106;
+  --octavo-co-example: 147, 179, 201;
+  --octavo-co-quote: 176, 164, 140;
+  --octavo-co-alpha: 0.1;
 }
 
 /* —— 类型 → 语义色与图标 ——
@@ -1874,31 +1869,31 @@ body.theme-dark {
        important → 圆圈警示（三角给 warning、八边形给 caution，正好三档递进）
    其余类型保留 Obsidian 自己的图标：note=pencil、example=list、quote=quote-glyph。 */
 .callout {
-  --folio-co: var(--folio-co-note);
+  --octavo-co: var(--octavo-co-note);
 }
 .callout[data-callout="tip"],
 .callout[data-callout="hint"] {
-  --folio-co: var(--folio-co-tip);
+  --octavo-co: var(--octavo-co-tip);
   --callout-icon: lucide-lightbulb;
 }
 .callout[data-callout="important"] {
-  --folio-co: var(--folio-co-important);
+  --octavo-co: var(--octavo-co-important);
   --callout-icon: lucide-alert-circle;
 }
 .callout[data-callout="warning"],
 .callout[data-callout="attention"] {
-  --folio-co: var(--folio-co-warning);
+  --octavo-co: var(--octavo-co-warning);
 }
 .callout[data-callout="caution"] {
-  --folio-co: var(--folio-co-caution);
+  --octavo-co: var(--octavo-co-caution);
   --callout-icon: lucide-alert-octagon;
 }
 .callout[data-callout="example"] {
-  --folio-co: var(--folio-co-example);
+  --octavo-co: var(--octavo-co-example);
 }
 .callout[data-callout="quote"],
 .callout[data-callout="cite"] {
-  --folio-co: var(--folio-co-quote);
+  --octavo-co: var(--octavo-co-quote);
 }
 
 /* —— 基础形态 —— */
@@ -1917,12 +1912,12 @@ body.theme-dark {
   --callout-title-padding: 0 1.05em;
   --callout-content-padding: 0.4em 1.05em 0;
   /* 标注块里的表格边框：Obsidian 会在 .callout 上把它改成 callout 色的 25%
-     混合，那个色来自 --callout-color（不是我们的 --folio-co），会漏出青色 /
+     混合，那个色来自 --callout-color（不是我们的 --octavo-co），会漏出青色 /
      橙色。这里用同一支语义色重新调一遍。 */
-  --table-border-color: rgba(var(--folio-co), 0.3);
+  --table-border-color: rgba(var(--octavo-co), 0.3);
 
-  background-color: rgba(var(--folio-co), var(--folio-co-alpha));
-  border-left: 3px solid rgb(var(--folio-co));
+  background-color: rgba(var(--octavo-co), var(--octavo-co-alpha));
+  border-left: 3px solid rgb(var(--octavo-co));
   border-radius: 0 8px 8px 0;
   padding: 0.75em 0;
   margin: 1.1em 0;
@@ -1933,7 +1928,7 @@ body.theme-dark {
   align-items: center;
   gap: 0.5em;
   padding: 0 1.05em;
-  color: rgb(var(--folio-co));
+  color: rgb(var(--octavo-co));
   font-size: 0.95em;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -1943,14 +1938,14 @@ body.theme-dark {
    （0,2,0），只写 `.callout-icon` 会被它盖掉 —— 那样图标仍旧走
    --callout-color，tip 与 important 会双双变成同一个青色，正是当初撞车的地方。 */
 .callout .callout-icon .svg-icon {
-  color: rgb(var(--folio-co));
+  color: rgb(var(--octavo-co));
 }
 
 .callout .callout-icon,
 .callout .callout-fold {
   display: flex;
   align-items: center;
-  color: rgb(var(--folio-co));
+  color: rgb(var(--octavo-co));
 }
 
 .callout .callout-content {
@@ -2001,7 +1996,7 @@ body.theme-dark {
    ⚠️ 撤掉这 16px 之后，手机上的正文左右留白就只剩页边距（Obsidian 默认
    --file-margins-x: 24px）。别把它调到 16px 以下：表格组件的「padding 24px +
    margin -16px」要靠这 16px 兜住，否则行/列把手会被屏幕边缘切掉。
-   （snippets/folio-mobile.css 把页边距收成 18px，就是按这条来的。）
+   （snippets/octavo-mobile.css 把页边距收成 18px，就是按这条来的。）
 
    ⚠️ 手机上「宋体纸感」会退化：iOS 没预装中文衬线（Songti SC 在 WKWebView 里
    命中不了），正文中文会回落到系统无衬线（PingFang），只有西文还是 Iowan 衬线
@@ -2014,7 +2009,7 @@ body.theme-dark {
     padding-inline: 0;
   }
   body.is-mobile {
-    --folio-table-cols: var(--folio-table-cols-mobile, 3);
+    --octavo-table-cols: var(--octavo-table-cols-mobile, 3);
   }
 }
 
