@@ -65,7 +65,7 @@ The theme itself depends on no plugins; the Style Settings block at the end of `
 
 ### Manual install
 
-1. Download the latest `octavo-v1.1.2.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
+1. Download the latest `octavo-v1.1.3.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
 2. Unzip it and put the `Octavo` folder into your vault:
 
 ```
