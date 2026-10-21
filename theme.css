@@ -1,19 +1,6 @@
-/* ==========================================================================
-   OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
-   --------------------------------------------------------------------------
-   v1.1.4 · 2026-10-21
-   默认：宋体正文 + 左对齐 + 舒适栏宽 + 朱批红 + 暖白纸面 / 墨色文字。
-   可选：书卷排版 —— 两端对齐、首行缩进、标题居中、标题分隔线，
-         在 Style Settings 的「版面」里逐项打开（默认全关）。
-   可选：现代模式（Modern）—— 中性灰 + 蓝色强调色、无衬线。
-
-   纯 CSS：不依赖插件、脚本或构建步骤；排版与配色安装即用。
-   可选调参：Style Settings 配置块（不安装不影响默认外观），
-             或直接覆盖 body 里的 CSS 变量。
-
-   安装：把本目录放进 <vault>/.obsidian/themes/Octavo/
-   启用：Settings → Appearance → Themes 选择「Octavo」
-   ========================================================================== */
+/* OCTAVO · 纸感 / 书卷气的 Obsidian 主题
+   v1.1.5 · 2026-10-21 · 纯 CSS：无插件、无脚本、无构建
+   安装：<vault>/.obsidian/themes/Octavo/  →  Settings → Appearance → Themes */
 
 /* @settings
 
@@ -324,9 +311,7 @@ settings:
     default: false
 */
 
-/* ==========================================================================
-   1. 字体与排版刻度
-   ========================================================================== */
+/* ===== 1. 字体与排版刻度 ===== */
 
 body {
   /* —— 可覆盖的变量（Style Settings 或 CSS 片段）—— */
@@ -426,9 +411,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* ==========================================================================
-   2. 调色板 —— 暖色纸面 / 墨色文字
-   ========================================================================== */
+/* ===== 2. 调色板 —— 暖色纸面 / 墨色文字 ===== */
 
 /* —— 浅色：浅白纸张 ——
    对比度备注（on 纸面 / paper-2 / paper-3，WCAG）：
@@ -557,16 +540,9 @@ body {
   --h6-color: var(--octavo-heading-muted);
 }
 
-/* ==========================================================================
-   2b. 观感方案：现代模式（可选，默认关）
-   --------------------------------------------------------------------------
-   一键把「配色 + 字体」切成 现代文档产品的观感：
-     配色 · 中性灰 + 蓝色强调色（文字 #2563eb / 品牌填充 #3983f7）
-     字体 · 无衬线
-   默认版面本来就是左对齐 / 不缩进 / 标题不居中 / 无分隔线；若用户另外打开了
-   书卷排版，第 3 节末尾那组「现代模式：压平书卷排版」会靠层叠顺序把四项压平，
-   不再使用 !important。关掉 Style Settings 里的「现代模式」即回到纸感配色。
-   ========================================================================== */
+/* ===== 2b. 现代模式（可选，默认关）=====
+   一键把配色 + 字体切成中性灰 / 蓝色强调 + 无衬线；书卷排版靠层叠顺序压平，
+   不用 !important。关掉即回纸感。 */
 
 /* —— 浅色配色 —— */
 body.theme-light.octavo-modern-mode {
@@ -673,22 +649,12 @@ body.octavo-modern-mode {
 /* 字号层级（现代模式规范：侧边栏 14px / H1 28px / H2 22px / 代码 14px）
    已提升到主题基础层，全局生效，见「1. 字体与排版刻度」与「7. 文件树」。 */
 
-/* ==========================================================================
-   3. 正文排版
-   ========================================================================== */
+/* ===== 3. 正文排版 ===== */
 
-/* —— 默认约束到舒适栏宽并居中（可用「取消居中栏宽」关闭）——
-   实时预览的栏容器多留 32px：Obsidian 的表格组件是「padding 16px +
-   margin 0 -16px」，边框盒天生比文字行宽出 16px（那 16px 是给它行/列
-   「+」把手留的槽）。把 32px 让给编辑器、再给 .cm-content 补 16px 内边距，
-   表格就正好落进槽里；否则面板只要比栏宽宽不到 32px，CodeMirror 的
-   .cm-scroller（overflow-x: auto）就会多出十几像素的横向滚动 —— 与列数
-   无关，只有 1 列也照样。
-   代价：窗口比「栏宽 + 32px」更窄时，正文会跟着窄最多 32px（总好过整个
-   编辑器能左右滑）。
-   注意：下面这条补的是**外层**编辑器，而它写成了后代选择器 —— 表格单元格
-   进入编辑态时，里层那个编辑器也会被命中，必须在 §5 复位（否则光标一进
-   单元格，那一行文字就右移一个字）。 */
+/* —— 默认约束到舒适栏宽并居中 ——
+   实时预览的栏容器多留 32px：表格组件是「padding 16px + margin -16px」，边框盒
+   天生宽 16px；再给 .cm-content 补 16px，表格才落进把手槽，否则 1 列也会横滚。
+   注意这是后代选择器，会漏进单元格里层编辑器，§5 必须复位。 */
 .markdown-source-view.mod-cm6 .cm-editor .cm-sizer {
   max-width: calc(var(--octavo-content-width) + 2 * var(--size-4-4, 16px));
   margin-inline: auto;
@@ -822,9 +788,7 @@ body.octavo-modern-mode .markdown-source-view.mod-cm6 .HyperMD-header-3 {
   border-bottom: none;
 }
 
-/* ==========================================================================
-   4. 列表 / 引用 / 分隔线 / 代码
-   ========================================================================== */
+/* ===== 4. 列表 / 引用 / 分隔线 / 代码 ===== */
 
 /* —— 列表：舒服的间距，去掉默认缩进引导线 —— */
 .markdown-rendered ul,
@@ -986,9 +950,7 @@ body.theme-dark {
   border-end-end-radius: 12px !important;
 }
 
-/* ==========================================================================
-   5. 表格 / 标签 / 链接 / 任务框
-   ========================================================================== */
+/* ===== 5. 表格 / 标签 / 链接 / 任务框 ===== */
 
 body {
   --table-header-background: var(--octavo-paper-2);
@@ -1075,16 +1037,9 @@ body {
 .markdown-rendered td {
   padding: 0.45em 0.75em;
 }
-/* 实时预览的同一份内边距要写在 .table-cell-wrapper 上 —— 两个视图的内边距
-   不在同一个元素上，必须分别写，写一处只会「一个视图生效」：
-     · 阅读视图：td / th 自带内边距（Obsidian 默认 var(--size-2-2) var(--size-4-2)
-       = 4px 8px，被上面那条抬到 0.45em 0.75em）。
-     · 实时预览：Obsidian 把单元格的内边距全归到里层的 .table-cell-wrapper
-       （app.css：`.cm-table-widget th, td { padding: 0 }`，权重 0-4-1，盖得住
-       上面那条 .markdown-rendered td），所以真正要调的是 wrapper。
-   不改这条的后果：实时预览的单元格只有 8px / 4px，比阅读视图窄一圈，行高
-   也跟着矮 6.4px（实测 33.8px vs 40.17px）——同一篇笔记切两个视图，表格
-   就像换了一份。行高不用另外调：两个视图都用 --table-line-height。 */
+/* —— 实时预览的内边距写在 .table-cell-wrapper 上 ——
+   阅读视图吃 td / th 的 padding，实时预览吃里层 wrapper 的 padding；只写一处会
+   「一个视图生效」。不改的话实时预览单元格窄一圈、行高矮 6.4px。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper {
   padding: 0.45em 0.75em;
 }
@@ -1108,17 +1063,9 @@ body {
 }
 
 /* —— 宽表格的「右缘提示」——
-   「每行最多列数」的代价：6 列表在 4 列上限下，前 4 列正好铺满滚动盒，
-   右边看起来就是一条完整的封口 —— 和第 4 列结尾一模一样，没人知道还有
-   两列藏在后面。macOS 的覆盖式滚动条又只在滑动时出现（主题默认还把它
-   藏了），所以光靠滚动条不够。
-   这里给「超过上限」的阅读视图表格加一条 22px 的纸色渐隐：它固定在滚动
-   盒右缘、不随内容横移，右缘因此永远「没封口」，一眼就知道还能往右。
-   滚动到最右时渐隐自动退场（animation-timeline: scroll），不会把最后一列
-   一直罩着；不支持滚动驱动动画的旧版 Obsidian 会保留静态渐隐 —— 同样能
-   看出还有内容，只是不会自动消失。
-   只加在 .el-table 上：实时预览的滚动盒里还挂着「+」列把手，盖一层渐隐
-   会挡住把手；标注块里的表格已经改成按 100% 换行，不会横向溢出。 */
+   超过列数上限时，滚动盒右缘加 22px 纸色渐隐；滚到最右自动退场
+   （animation-timeline: scroll），旧版保留静态渐隐。
+   只加在 .el-table 上：实时预览的渐隐会挡住「+」列把手，标注块里的表格已改成换行。 */
 @keyframes octavo-table-edge-fade {
   from { opacity: 1; }
   to { opacity: 0; }
@@ -1146,33 +1093,11 @@ body {
   }
 }
 
-/* —— 「每行最多列数」是怎么生效的 ——
-   列数**不超过** --octavo-table-cols：表格就是容器宽的 100%，各列平分 ——
-   一点都不滚（不是「差几像素才滚」，是正好 100%）。
-   一旦**多出**一列：把表格的最小宽度抬到 (列数 ÷ 设定值) × 容器宽，各列因此
-   始终占「容器宽 ÷ 设定值」、不肯让位 → 表格变宽 → 容器横向滚动。
-
-   百分比是相对**实际容器**算的（表格的包含块），这一点是上一版出问题的地方：
-   上一版拿 `--octavo-content-width ÷ 列数` 算绝对值，只要面板内宽比「正文栏宽」
-   设置窄几像素（窗口差一点、外边距、滚动条），4 列就会顶出几像素的滚动条。
-   现在 ≤ 设定值的列数一定正好 100%；窗口比栏宽还窄时，也只是各列一起变窄，
-   不会提前开始滚。
-
-   为什么要逐个数写：CSS 数不出「有几列」，只能靠 :has(tr > :nth-child(k))
-   一次命中一个 k。这些规则权重完全相同，靠**层叠顺序**取胜 —— 所以 k 必须
-   升序写：候选里最大的那个（= 真实列数）在最后，盖住前面的。
-   16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。
-
-   ⚠️ 这组只写给 `.el-table > table`：阅读视图里 Obsidian 才会给表格套滚动盒。
-   标注块里的表格不会被套（实测 .callout-content > table），若也把它撑到
-   150%，多出来的列会被 .callout 的圆角直接裁掉 —— 而且那儿没有一条贴在
-   表格上的滚动条，看起来就是「表格被截断了」。没有滚动盒的场合保持 100%，
-   让各列自己换行：宁可窄一点，也不要看起来缺了一块。旧版 Obsidian
-   （没有 .el-table 的版本）同样落进这一类，也一并受益。
-
-   样式检查会提示 :has() 有性能风险。这里只按「表格有没有第 k 列」做静态匹配，
-   不监听 DOM 变化；一屏里的表格数量有限，实测没有可感知的开销。删掉这组规则，
-   「超过设定列数才横向滚动」就会失效。 */
+/* —— 「每行最多列数」怎么生效 ——
+   ≤ 设定值：表格 100% 宽、各列平分；多一列：min-width = (列数 ÷ 设定值) × 100%，
+   表格变宽、容器横滚。百分比相对实际容器算，窗口比栏宽窄也不会提前滚。
+   为什么要逐个 nth-child 写：CSS 数不出列数；权重相同，靠升序层叠，16 列封顶。
+   ⚠️ 只写给 .el-table > table：标注块里的表格没有滚动盒，撑到 150% 会被圆角裁掉。 */
 .el-table > table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
 .el-table > table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
 .el-table > table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
@@ -1189,19 +1114,10 @@ body {
 .el-table > table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--octavo-table-cols)); }
 .el-table > table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--octavo-table-cols)); }
 
-/* —— 实时预览：同一份「撑开」要写在 .table-wrapper 上，不能只写在表格上 ——
-   表格的两个「+」把手是 wrapper 的绝对定位子元素（app.css：
-   `.table-col-btn { inset-inline-start: 100% }`、`.table-row-btn { top: 100% }`），
-   也就是说它们贴着 **wrapper 的右缘 / 下缘**。只要 wrapper 还是 100%（＝容器宽）
-   而表格比它宽，那把「+」就会叠在表格内容上 —— 手机上（设定 3 列 + 4 列表）
-   实测：表格 438.66px、wrapper 329px，把手落在表格里侧 109.66px 处，
-   正好压在「备注」那一列的字上。桌面上列数一超过设定值同样会中（只是平时少见）。
-   修法：把同一份 min-width 挪到 wrapper 上 —— wrapper 与表格同宽
-   （表格是 `width: 100%`，跟着 wrapper 走），把手自然贴住表格右缘，
-   而且跟着内容一起横向滚走（它落在组件 16/24px 的把手槽里）。
-   表格宽度、可滚量、「≤ 设定列数一点都不滚」三条验收全部不变。
-   ⚠️ 表格那层必须同时把 min-width 归零：两代都撑会变成 (k ÷ 设定值)²。
-   阅读视图没有这两个把手（也没有这个组件），由上面 `.el-table` 那组负责。 */
+/* —— 实时预览：同一份「撑开」要写在 .table-wrapper 上 ——
+   「+」把手贴着 wrapper 的右 / 下缘；wrapper 还是 100% 而表格更宽时，把手会压在
+   表格内容上（手机上实测压住「备注」列）。把 min-width 挪到 wrapper，
+   表格那层同时归零，否则撑两次变成 (k ÷ 设定值)²。 */
 .markdown-source-view.mod-cm6 .cm-table-widget table {
   min-width: 0;
 }
@@ -1230,91 +1146,21 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
 }
-/* 实时预览里「滚的是 .cm-table-widget，不是 .table-wrapper」—— wrapper 要交回给外层。
-   wrapper 里挂着 Obsidian 的两个绝对定位「+」把手：
-     · .table-col-btn  inset-inline-start: 100%; width: 16px → 右边探出 16px
-     · .table-row-btn  top: 100%;               height: 16px → 下边探出 16px
-   wrapper 自己没有 padding，兜不住这 16px。一旦它成了滚动盒（就是下面给阅读视图
-   写的那条 `.markdown-rendered .table-wrapper` —— 实时预览的表格组件**也带
-   .markdown-rendered 类**，会被一起命中），这 16px 就成了实打实可滚的余量：
-   表格哪怕只有 1 列、正好 100% 宽，容器也能左右滑 16px，滑到底右边多一条空白，
-   看起来就像表格没铺满。滚动盒还有两个副作用：多出一条 15px 的横向滚动条
-   （每张表下面白白多 15px 空白），以及 `overflow-y: hidden` 把下面的「+」行把手
-   裁掉（实测悬停 opacity 永远是 0，点不到）。
-   .cm-table-widget 天生就是干这个的：padding: 16px + margin: 0 -16px，四周正好
-   留出 16px 的槽，把手落在槽里 —— ≤ 设定列数时 scrollWidth 正好等于 clientWidth
-   （一个像素都不多），> 设定列数时按表格的超出量滚。
-   实测（真实 app.css，1100×1000，1/2/4/6 列）：
-     原样：1/2/4 列 wrapper 可滚 16px（＝把手宽），且每张表下多 15px 滚动条；6 列 wrapper 滚 320px
-     修复：1/2/4 列 0px；6 列改由 .cm-table-widget 滚 304px；两个把手都能悬停到（opacity 1）
-     阅读视图两版完全一致（1/2/4 列 0px；6 列 336px），补容器那条路不受影响。 */
+/* —— 实时预览滚的是 .cm-table-widget，不是 .table-wrapper ——
+   wrapper 下缘 / 右缘挂着 Obsidian 的两个「+」把手（各向外探 16px）；它一旦成为滚动盒，
+   1 列表也能左右滑 16px、每张表下多一条 15px 滚动条、行把手还会被裁掉。
+   .cm-table-widget 自带 padding 16px + margin -16px，四周正好是把手槽。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
   width: 100%;
   overflow: visible;
 }
 
-/* —— 单元格里层编辑器的「内边距 / 缩进 / 对齐 / 字距 / 最小宽」复位 ——
-   光标点进某个单元格时，Obsidian 会在那个 <td> 里再挂一个 CodeMirror：
-   .table-cell-wrapper > .cm-editor > .cm-scroller > .cm-content > .cm-line
-   （见 app.js editTableCell()：新建 wrapper → 原来的 .table-cell-wrapper 隐藏
-   → 把里层编辑器塞进同一个 <td>）。第 3 节有四条规则会一起漏进这个里层编辑器
-   （它们要么写成后代选择器、要么直接命中里层的 `.cm-line`），再搭上 app.css
-   给里层编辑器定的两条规矩（flex 子项的 `min-width: auto`、被改掉的
-   `overflow-wrap`）—— 六条的症状清一色是「有光标 / 没光标两个样」：
-
-   1) `.markdown-source-view.mod-cm6 .cm-content { padding-inline: 16px }`
-      那是给外层编辑器补的（抵消表格组件的「padding 16px + margin -16px」），
-      里层并不需要 —— 它的内边距本来就由 .table-cell-wrapper 提供（上面那条
-      0.45em 0.75em）。漏进来的后果：被激活的单元格凭空多出 16px 左内边距，
-      正好是**一个汉字**的宽度（16px 字号下 1em = 16px）；没激活的单元格
-      没有这 16px。两下一比，就是「光标一进单元格，那一行文字整体右移一个字」。
-   2) `body.octavo-book-indent … .cm-line:not([class*="HyperMD-"]) { text-indent: 2em }`
-      单元格里层的行没有 HyperMD- 类，会被当成纯段落再缩进两个字 ——
-      开着「段落首行缩进两字」时，错位从 1 个字变成 3 个字（16px + 2em）。
-      而单元格里的段落本就不该有首行缩进（第 3 节原话：表格等 HyperMD 行不缩进）。
-   3) `body.octavo-justify … .cm-line { text-align: justify; text-justify: inter-ideograph }`
-      打开「正文两端对齐」后 → 里层这一行被拉成
-      两端对齐：单元格里折出来的前几行被撑满、汉字之间被拉开，最后一行照旧不撑
-      （实测：第 2 行字距 15.43 → 16.17px、行右缘 198 → 206px；截图里 29 → 33px
-      的也是它）→ 看起来就是「有光标和没光标，字间距不一样」。
-      阅读视图的单元格从不两端对齐（`body.octavo-justify .markdown-rendered > p`
-      只认直接子段），没光标的单元格也不是 `.cm-line` —— 所以只有光标进去那一下会变。
-      这里复位成 `inherit` 而不是 `left`：列的居中对齐（`| :---: |`）是 Obsidian
-      写在 td 的 `align` 属性上的，认它才不会被这条复位掉。
-
-   4) `.markdown-source-view.mod-cm6 .cm-line { letter-spacing: 0.01em }`（第 3 节
-      「段落：清晰但不松散」）→ 里层这一行自带 0.01em（16px 字号 = 0.16px/字），
-      而**没光标**的单元格没有这条 —— 表格组件是 `.cm-content` 的直接子元素
-      （实测祖先链：.cm-table-widget → .cm-content → .cm-contentContainer →
-      .cm-sizer → .cm-scroller），根本不在任何 `.cm-line` 里，继承不到。
-      一行三四十字就差 5px 上下，正好把折行点顶过去：实测同一格（33 字）没光标时
-      是 16+17 两行、行高 64.98px，光标一进去变 16+16+1 三行、89.78px —— 看起来
-      就是「光标一进单元格，文字横向重排、整行还变高」。复位成 normal 后逐行一致。
-
-   5) `min-width: 0` —— 第五条复位，**窄列（手机上）**才现形的那种。
-      里层 `.cm-content` 是 `.cm-scroller`（overflow-x: auto）的 flex 子项，而
-      flex 子项的 `min-width` 默认是 `auto` ＝「最长不可断词」的宽度。列一窄，
-      这一下就顶穿单元格：实测手机（393px 视口）一张 4 列表，列宽 74px、单元格
-      内容宽 49px，点进「2024.11.14」那格后 `.cm-content` 变成 80.08px ——
-      比整格还宽，于是这格不再折行（没光标 [6,4] 两行 → 有光标 [10] 一行），
-      文字溢出格子、格子里自己横滚。`min-width: 0` 把它按回单元格宽度，
-      两个状态重新逐行一致。只写在内层，正文那个外层编辑器不受影响。
-
-   六条复位的权重都不低于被复位的那条（padding 那条更高、且加了 `!important`），
-   不依赖书写顺序；作用范围仅限于「表格组件里的里层编辑器」，正文与阅读视图
-   一行都不碰。
-
-   ⚠️ 为什么 padding 那条还要 `!important` + 物理属性（真事，不是预防性地写）：
-   手机上的 `octavo-mobile.css` 片段（snippets/octavo-mobile.css）里有一条
-     `body.is-mobile .markdown-source-view.mod-cm6 .cm-content { padding-inline: 14px }`
-   —— 权重 **0-4-1**，正好比这条复位的 0-4-0 高一位。于是桌面上怎么都量不出的
-   那 16px 级的漏，在手机上稳稳复现：iPhone 15/16 Pro（393pt、17px 字号）上
-   实测「没光标 12.75px（＝ wrapper 的 0.75em）→ 光标一进去 26.75px
-   （12.75 + 漏进来的 14px）」，80px 的格子只剩 26.5px 放字，于是**一个字一行**。
-   两边的修法：片段那边不再给 `.cm-content` 写内边距（见它的文件头），
-   这边把复位写成「逻辑 + 物理 + WebKit 旧写法 + !important」四保险 ——
-   `!important` 不看权重，谁也别想再漏进来；范围仍限于表格组件内部，
-   正文一行都不碰。 */
+/* —— 单元格里层编辑器复位 ——
+   光标点进单元格时，Obsidian 会在 td 里再挂一个 CodeMirror；§3 的四条规则会漏进去
+   （padding 16px / 首行缩进 2em / 两端对齐 / 字距 0.01em），表现为「有光标、没光标两个样」。
+   这里逐条归零：padding、text-indent、text-align、letter-spacing、min-width。
+   ⚠️ padding 那条要 !important + 物理属性：手机上 octavo-mobile.css 的
+   `padding-inline: 14px` 权重 0-4-1，会盖掉复位，导致 80px 的格子一个字一行。 */
 .markdown-source-view.mod-cm6 .cm-table-widget .cm-content {
   padding-inline: 0 !important;
   padding-left: 0 !important;
@@ -1349,45 +1195,21 @@ body.octavo-justify .markdown-source-view.mod-cm6 .cm-table-widget .cm-line {
   -webkit-padding-end: 0 !important;
 }
 
-/* 阅读视图：Obsidian 不包表格容器（只在实时预览里包），宽表格会按栏宽换行。
-   这里保留 .table-wrapper 的滚动样式：若用户自己用插件补了同名容器，就能直接滚；
-   没有容器时选择器落空，什么也不影响。
-   ⚠️ `.markdown-rendered` 实时预览的表格组件也带（见上一节），所以这条会连实时
-   预览那层 wrapper 一起命中 —— 那一层靠上面 `.cm-table-widget .table-wrapper
-   { overflow: visible }` 按权重压回去（0-4-0 > 0-2-0）。删那条会立刻复发
-   「≤ 设定列数也能左右滑 16px + 每张表下多 15px 空白」。
-   另：Obsidian 在 .markdown-preview-sizer 上没给 overflow，所以表格的溢出
-   会一直冒到 .markdown-preview-view（它由 overflow-y: auto 派生出 overflow-x:
-   auto）—— 那才是「整块面板横滚」的由来。 */
+/* —— 阅读视图的 .table-wrapper ——
+   Obsidian 只在实时预览里包表格容器；这里保留滚动样式，用户自己补同名容器时能滚，
+   没有容器时选择器落空、什么也不影响。
+   ⚠️ .markdown-rendered 也命中实时预览，靠 `.cm-table-widget .table-wrapper
+   { overflow: visible }`（0-4-0）压回去；删了会复发「≤ 设定列数也能滑 16px」。 */
 .markdown-rendered .table-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-/* 阅读视图：正文本身不再横向滚动。
-   Obsidian 给 .markdown-preview-view 只写了 overflow-y: auto，overflow-x
-   因此从 visible 派生为 auto —— 正文里只要有什么东西宽出一丁点（或者你
-   横向拖一下笔记），整块面板就能左右滑几像素，看起来就像表格在滚。
-   表格该横滚的地方由 .table-wrapper 自己负责（它是独立的滚动容器，不受
-   这里影响），所以正文这一层直接夹住。
-
-   夹在**栏容器**（.markdown-preview-sizer）上，而不是面板上：
-     · 栏容器竖轴是 visible → `overflow-x: clip` 原样保留，是真正的 clip：
-       既没有横向滚动盒，也吃不到 macOS 的橡皮筋横拖。
-     · 夹在面板上会被降级成 hidden（app.css 给面板写了 overflow-y: auto，
-       Chromium 里 `clip` + 滚动轴 = hidden），而 hidden 仍是滚动盒 ——
-       触控板照样能横拖，等于没夹（实测过，加 !important 也一样）。
-
-   但不能让 clip 贴着文字边缘：栏容器的边框盒就是「文字左缘」，而有两类东西
-   天生在它外面 —— 直接夹会把它俩一起裁掉：
-     · 标题/列表的折叠箭头：`margin-inline-start: -22px`（手机 -20px）；
-       裁掉之后不只是看不见，连点都点不到，阅读视图里就没法折叠标题了
-       （实测夹在栏容器上时，桌面六条标题的箭头全部整根落在裁剪区外）。
-     · 属性面板：手机版 app.css 给 `.metadata-content` 写了
-       `transform: translateX(-12px); width: calc(100% + 24px)`，有意左右各
-       外扩 12px 到页边距里（桌面 ±4px）。
-   所以给裁剪框向外放 24px（`overflow-clip-margin`）—— 这个「外扩」只放宽
-   裁剪范围，不产生滚动盒，原来的目的（正文横滚不动）一点没丢。 */
+/* —— 阅读视图：正文本身不横滚 ——
+   夹在 .markdown-preview-sizer 上（竖轴 visible，overflow-x: clip 才是真 clip）；
+   夹在面板上会退化成 hidden，仍是滚动盒，触控板照样能横拖。
+   clip 外扩 24px，避免裁掉折叠箭头（margin-inline-start: -22px）和手机上
+   左右各外扩 12px 的属性面板。 */
 .markdown-preview-view .markdown-preview-sizer {
   overflow-x: clip;
   overflow-clip-margin: 24px;
@@ -1423,9 +1245,7 @@ body {
   border-color: var(--octavo-ink-muted);
 }
 
-/* ==========================================================================
-   6. 界面外壳：安静、克制（专注）
-   ========================================================================== */
+/* ===== 6. 界面外壳：安静、克制（专注） ===== */
 
 /* —— 侧边栏 / 标签栏：去掉多余描边与阴影 —— */
 .workspace-tab-header-container {
@@ -1479,23 +1299,11 @@ body.octavo-hide-scrollbars ::-webkit-scrollbar {
   height: 0;
 }
 
-/* —— 表格的横向滚动条：细、暖灰、跟着纸面走 ——
-   上面那条会把所有滚动条压成 0。对正文没问题，但对宽表格是致命的：
-   阅读视图的 `.el-table`、实时预览的 `.cm-table-widget` 都是横向滚动盒，
-   滚动条一没，表格就只剩一个「被裁掉的右缘」—— 4 列上限下，6 列表看起来
-   和 4 列表一模一样，没人知道右边还有两列。
-   这里只给「表格滚动盒」破例保留一条细滚动条：没有溢出时它不会出现，
-   有溢出时才出现。标注块里的 .callout-content 也带 overflow-x: auto，
-   一并给上，宽表格在标注块里同样能看出「还能往右滑」。
-
-   颜色取主题自己的 paper-2（#F4F2EC，表头 / 侧栏那层暖纸色）：
-   轨道直接用 paper-2，滑块在同一支纸上兑 18% 墨色 —— 浅色下是 #CFCCC6，
-   深色下是 #44423F，和纸面始终同族。悬停再兑到 34%，不抢正文。
-   两套写法都要给：
-     · Chromium 121+ / 现行 Obsidian 认标准属性 scrollbar-color，
-       macOS 的覆盖式滚动条也会跟着染色；
-     · 旧版 Electron（Obsidian 1.5–1.8）不认标准属性，落到
-       ::-webkit-scrollbar 这条。 */
+/* —— 表格横向滚动条：细、暖灰、跟着纸面走 ——
+   全局滚动条被压成 0，但宽表格需要一条提示；只给 .el-table / .cm-table-widget /
+   .callout-content 破例。轨道取 paper-2，滑块 = paper-2 兑 18% 墨
+   （浅 #CFCCC6 / 深 #44423F），悬停 34%。
+   标准 scrollbar-color 给现行 Chromium，::-webkit-scrollbar 兜旧版 Electron。 */
 body :is(.el-table, .cm-table-widget, .callout-content) {
   --octavo-scrollbar-track: var(--octavo-paper-2);
   --octavo-scrollbar-thumb: color-mix(in srgb, var(--octavo-ink) 18%, var(--octavo-paper-2));
@@ -1540,9 +1348,7 @@ select {
   border-radius: 6px;
 }
 
-/* ==========================================================================
-   7. 文件树 —— 接近 VSCode 的干净观感
-   ========================================================================== */
+/* ===== 7. 文件树 —— 接近 VSCode 的干净观感 ===== */
 
 /* —— 字体：侧栏 / 文件树使用「目录字体」—— */
 .mod-left-split .workspace-leaf-content,
@@ -1581,16 +1387,10 @@ select {
   --nav-indentation-guide-color: transparent;
 }
 
-/* —— 子级缩进：写成 padding，不靠 margin ——
-   文件树开启「无限滚动 / 虚拟化」后，Obsidian 会按测量到的行位置，给每行套上
-   inline 的 margin / padding（都带 !important）来复用同一批 DOM。这条路径会把
-   子级容器的 margin 折算掉，只剩 padding 还算数 —— 表现就是文件与上级目录
-   几乎平齐、没有层级（实测一级只剩 ~6px）。
-   所以这里把整份缩进（22px = 文件夹图标 15px + 间距 7px）都放进
-   padding-inline-start：无论 Obsidian 走不走那条折算，子项文件名都稳定落在
-   父文件夹名下方。margin 归零，避免两条路径叠加成 44px。
-   顺带：padding 也正好是缩进引导线的落点，打开「显示缩进引导线」时竖线会落在
-   子项左侧的留白里，不会压在文字上。 */
+/* —— 子级缩进写成 padding，不靠 margin ——
+   文件树虚拟化会给每行套 inline 的 margin / padding（!important），margin 会被
+   折算掉；整份 22px 缩进放进 padding-inline-start，层级才稳定。
+   margin 归零，避免两条路径叠加成 44px。 */
 .nav-files-container .tree-item-children,
 .nav-files-container .nav-folder-children {
   margin-inline-start: 0 !important;
@@ -1616,16 +1416,10 @@ select {
   position: relative;
 }
 
-/* —— 折叠箭头 → 文件夹「开 / 关」SVG 图标 ——
-   用 mask 而不是 background-image，这样图标颜色能跟随 currentColor / 主题墨色。
-   注：样式检查会把 mask 标成「部分支持」（无前缀 mask 到 Chrome 120 才支持），
-   所以下面只写 -webkit-mask；Obsidian 1.4.5 的 Chromium 一直支持这个前缀写法。
-
-   align-self: center 不能省：Obsidian 给 .tree-item-self 写的是
-   align-items: baseline（不是 center）。::before 里只有空字符串、没有文字，
-   它的基线就落在自己底边上 —— 15px 的图标于是「坐」在文字基线上，比文字的中线
-   高约 3px。写成 center，图标才跟文字对齐（preview.html 早先把这一行 stub 成
-   align-items: center，正好把这个错位盖住了，别改回去）。 */
+/* —— 折叠箭头 → 文件夹开 / 关 SVG ——
+   用 mask 才能跟随 currentColor；只写 -webkit-mask（无前缀 mask 到 Chrome 120）。
+   align-self: center 不能省：.tree-item-self 是 baseline，空 ::before 会坐在基线上，
+   比文字中线高约 3px。 */
 .nav-folder-title .collapse-icon {
   display: none;
 }
@@ -1764,13 +1558,9 @@ body:not(.octavo-modern-mode) .mod-right-split .view-header-title {
   color: var(--octavo-heading);
 }
 
-/* ==========================================================================
-   8. 专注模式：把非当前内容调暗，突出「光标所在行」与「鼠标悬停行」
-   --------------------------------------------------------------------------
-   注意：编辑器里除了逐行的 .cm-line，还有一类「块级部件」——表格、嵌入、代码块
-   预览等，它们是 .cm-embed-block，并不是 .cm-line。只调暗 .cm-line 会漏掉表格，
-   表格就会一直保持原样（看起来像被高亮/没被调暗），所以这里两类都要列上。
-   ========================================================================== */
+/* ===== 8. 专注模式 =====
+   调暗非当前行时，.cm-embed-block（表格 / 嵌入 / 代码块预览）也要一起列上，
+   否则它们保持原样，看起来像被高亮。 */
 
 body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line,
 body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block {
@@ -1830,16 +1620,10 @@ body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock
   box-shadow: none !important;
 }
 
-/* ==========================================================================
-   8b. 隐藏 Markdown 语法（参考 Minimal 的 Hide Markdown syntax）
-   --------------------------------------------------------------------------
-   核心结论：标记只有在「成为该行最后一个元素」时（例如刚打完 ## 的空标题），
-   才不能做成 0 宽——那时光标没有落点，会消失、且后续输入会跑到标记前面（标题
-   写不出来）。标记后面只要还有内容，光标就被后面的文字「托住」，可以安全地
-   做成 0 宽、完全不留占位（和 Minimal 观感一致）。
-   做法：默认全部 display: none；只把「当前行里位于行尾的标记」重新放出来，
-   保留其宽度、把字形变透明，专门给光标当落点。因为它在行尾，这点占位看不出来。
-   ========================================================================== */
+/* ===== 8b. 隐藏 Markdown 语法（参考 Minimal）=====
+   标记只在「行尾、后面没有内容」时不能做成 0 宽——那时光标没有落点会消失。
+   做法：默认 display: none；只把当前行行尾的标记放出来，宽度保留、字形透明，
+   专门给光标当落点。 */
 
 body.octavo-hide-markdown .markdown-source-view.is-live-preview :is(
     .cm-formatting.cm-formatting-code.cm-inline-code,
@@ -1892,9 +1676,7 @@ body.octavo-hide-markdown .markdown-source-view.is-live-preview .cm-formatting-q
   opacity: 0;
 }
 
-/* ==========================================================================
-   9. 杂项收尾
-   ========================================================================== */
+/* ===== 9. 杂项收尾 ===== */
 
 /* 选中文字更柔和 */
 ::selection {
@@ -1922,18 +1704,10 @@ body.theme-dark .markdown-source-view.mod-cm6 span.cm-highlight {
   border-left-color: var(--text-accent);
 }
 
-/* ==========================================================================
-   10. 朱笔 · 红色下划线（<u>文字</u>）
-   --------------------------------------------------------------------------
-   原文写成 <u>…</u>（Obsidian 原生支持的 HTML 下划线，阅读视图与实时预览都
-   会渲染成 u 元素），样式交给主题。Obsidian 核心没有下划线命令，需要用 HTML
-   标签，或自行在别的插件里绑定快捷键。
-
-   两条边界：
-     1. HTML 标签内不解析 Markdown —— <u>**粗体**</u>、「<u>[[链接]]</u>」里的
-        加粗与链接不会生效，这是 Obsidian 的既定行为，不是主题的锅。
-     2. 别去动 .cm-underline —— 那是内部链接的类，碰它会把所有链接一起染红。
-   ========================================================================== */
+/* ===== 10. 朱笔 · 红色下划线 =====
+   写 <u>…</u>，阅读视图与实时预览都渲染成 u 元素。两条边界：
+   1) HTML 标签内不解析 Markdown，<u>**粗体**</u> 不会变粗；
+   2) 别碰 .cm-underline——那是内部链接的类，会把所有链接一起染红。 */
 
 body:not(.octavo-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6) :is(u, ins) {
   /* 用 border 而不是 text-decoration：线条更粗、更靠下，像批注笔；
@@ -1944,28 +1718,12 @@ body:not(.octavo-no-u-red) :is(.markdown-rendered, .markdown-source-view.mod-cm6
   border-bottom: 0.09em solid var(--octavo-u-color);
 }
 
-/* ==========================================================================
-   11. 标注块（Callout）
-   --------------------------------------------------------------------------
-   覆盖 Obsidian 内置的七个语义类型：
-     note · tip · important · warning · caution · example · quote
-   （各自的长别名 hint / attention / cite 一并认，写法见下）
-
-   做法借 GitHub Alerts（NOTE / TIP / IMPORTANT / WARNING / CAUTION）的骨架 ——
-   一条语义色竖线 + 语义色标题 + 极浅的同色底 —— 但换成 Octavo 的纸感语言：
-     · 左边一条 3px 语义色竖线（与引用块同宽），其余三边不封口
-     · 底色只铺 7%（深色 10%），比 GitHub 更淡，纸面仍是主角
-     · 只有标题与图标吃语义色，正文保持墨色 —— 正文对比度完全不受影响
-     · 圆角只留右侧 8px（与引用块一致）；左侧两角削成直角，让 3px 竖线
-       从上到下贴齐，不被圆角切出一个缺口
-
-   两个坑，记在这里：
-     1. 不碰 Obsidian 的 --callout-color。它 1.13 起从「R, G, B 三元组」改成
-        「完整颜色值」，主题若依赖它就被钉死在某个版本上。这里用自己的
-        --octavo-co（仍是三元组），只喂给自己的 rgba()。
-     2. --octavo-co 必须在基础规则里给默认值（note）。否则未列出的类型
-        （info / success / danger / bug …）拿到 undefined，整块会掉样式。
-   ========================================================================== */
+/* ===== 11. 标注块（Callout）=====
+   覆盖 note / tip / important / warning / caution / example / quote，含长别名。
+   骨架借 GitHub Alerts：3px 语义色竖线 + 语义色标题 + 7%（深色 10%）同色底，
+   只给标题与图标上色，正文仍是墨色。两个坑：
+   1) 不碰 --callout-color（1.13 起从三元组改成完整颜色值）；
+   2) --octavo-co 必须在基础规则里给默认值，否则未列出的类型整块掉样式。 */
 
 /* —— 语义色：浅色一套、深色一套（"R, G, B" 三元组）—— */
 body.theme-light {
@@ -2110,39 +1868,15 @@ body.theme-dark {
   margin: 0.7em 0;
 }
 
-/* ==========================================================================
-   12. 移动端（手机 / 平板）
-   --------------------------------------------------------------------------
-   主题的几何模型是照桌面端推的，窄屏上有两处不能照搬：
-
-   一 · 正文栏宽：桌面那 16px 的 `.cm-content` 内边距（§3）是给表格组件的
-        「padding 16px + margin -16px」让把手槽用的。手机上 Obsidian 自己就给了
-        页边距（--file-margins-x），组件的 -16px 外扩正好落在里面 —— 槽已经有了，
-        再补 16px 只是把正文白窄一圈。实测 393px 视口（iPhone 15/16 Pro）：
-          实时预览正文 313px  vs  阅读视图 345px
-        同一篇笔记切个视图就重排一次，段落折行位置还会变；表格也从 329px 被压到
-        297px（每列 82px → 74px）。窄屏下把这 16px 撤掉，正文与阅读视图对齐、
-        表格回到 329px，行/列把手仍在页边距的槽里（组件自身的 padding 24px 没动）。
-
-   二 · 表格列数：手机上 4 列平分下来每列只有 ~82px，一行三四个字（截图里
-        「满月酒合购金」那样）。默认降到 3 列：列宽 ~110px，第 4 列起表格整体
-        变宽、横向滚动 —— 宁可滑一下，也不要一格一行。桌面不受影响。
-
-   阈值 50rem（= 800px）是「窄屏」的近似：比它宽的多半是平板，栏宽上限已经
-   起作用，照桌面模型走更合适。两条都只对 `body.is-mobile` 生效，桌面一个
-   像素都不动。
-
-   ⚠️ 撤掉这 16px 之后，手机上的正文左右留白就只剩页边距（Obsidian 默认
-   --file-margins-x: 24px）。别把它调到 16px 以下：表格组件的「padding 24px +
-   margin -16px」要靠这 16px 兜住，否则行/列把手会被屏幕边缘切掉。
-   （snippets/octavo-mobile.css 把页边距收成 18px，就是按这条来的。）
-
-   ⚠️ 手机上「宋体纸感」会退化：iOS 没预装中文衬线（Songti SC 在 WKWebView 里
-   命中不了），正文中文会回落到系统无衬线（PingFang），只有西文还是 Iowan 衬线
-   （实测截图里「1027」是 old-style 数字、汉字是黑体）。装任意一款中文衬线
-   （思源宋体 / Noto Serif SC / 宋体 SC）后本主题会自动命中；不想装字体的话，
-   把「正文字体」切成「系统无衬线」，至少两端一致。
-   ========================================================================== */
+/* ===== 12. 移动端（手机 / 平板）=====
+   两处不能照搬桌面：
+   1) 正文的 16px 内边距：桌面是给表格「padding 16px + margin -16px」让把手槽的；
+      手机 Obsidian 自己给了页边距，再补 16px 只会让正文比阅读视图窄一圈
+      （393px 实测 313 vs 345px）。只撤这 16px，把手仍在页边距槽里；
+      ⚠️ 别把 --file-margins-x 调到 16px 以下，否则把手会被屏幕边缘切掉。
+   2) 表格列数：4 列在手机上每列 ~82px，一行三四个字；默认降到 3 列（~110px），
+      第 4 列起横向滚动。阈值 50rem 视作「窄屏」，桌面不受影响。
+   ⚠️ iOS 没有中文衬线，Songti SC 在 WKWebView 里命中不了，中文会回落到苹方。 */
 @media (max-width: 50rem) {
   body.is-mobile .markdown-source-view.mod-cm6 .cm-content {
     padding-inline: 0;
@@ -2180,17 +1914,9 @@ body.theme-dark {
   }
 }
 
-/* —— 手机外壳两处：都是「悬浮层（floating nav）」带来的，桌面没有 ——
-
-   一 · 顶部透明：Obsidian 的手机导航条默认是**半透明 + 模糊**的（药丸底的
-        `--raised-background` = 65% 纸色，`.view-header` 自己 `background: transparent`），
-       正文往上滚就从底下透出来 —— 状态栏那一条、标题条、按钮药丸里都能看见字，
-       和标题叠在一起。这不是系统限制，CSS 就能改：把药丸底、标题条、以及状态栏
-       那一条（`--view-header-top-offset` = max(安全区, 12px)）都换成不透明纸底。
-
-   二 · 属性面板的日期输入框：iOS 把原生的小日历图标画在框**左端、压在数值上**
-       （实测框只有 95px，塞不下「图标 + 2026/10/19」）。把图标藏掉（iOS 上点整个框
-       就会弹滚轮，不靠它）并给足宽度。桌面上这个图标在右端、不挡字，所以只改手机。 */
+/* —— 手机外壳两处（桌面没有）——
+   1) 顶部导航条默认半透明 + 模糊，正文会从底下透出来；换成不透明纸底。
+   2) iOS 把日历图标画在日期框左端、压住数值；藏掉图标并给足宽度。 */
 body.is-mobile {
   --raised-background: var(--background-primary);
 }
