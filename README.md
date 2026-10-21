@@ -65,7 +65,7 @@ The theme itself depends on no plugins; the Style Settings block at the end of `
 
 ### Manual install
 
-1. Download the latest `octavo-v1.1.3.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
+1. Download the latest `octavo-v1.1.4.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
 2. Unzip it and put the `Octavo` folder into your vault:
 
 ```
@@ -124,7 +124,7 @@ Everything works without this; the variables are only for people who like to tin
 - **Typography**: body / outline / code fonts, line height, paragraph spacing, body measure
 - **Colors**: Modern mode (off = Paper)
 - **Headings**: H1–H6 sizes, space above headings
-- **Tables**: max columns per row, max columns on mobile
+- **Tables**: max columns per row, max columns on mobile, hide the table scrollbar (off by default)
 - **Layout**: centered title, title rules, justified text, first-line indent (all four off by default), focus mode, un-center the measure
 - **Focus**: hide scrollbars (on by default), hide the status bar
 - **Editor**: current-line highlight (off by default), hide Markdown syntax

@@ -1,7 +1,7 @@
 /* ==========================================================================
    OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   v1.1.3 · 2026-10-21
+   v1.1.4 · 2026-10-21
    默认：宋体正文 + 左对齐 + 舒适栏宽 + 朱批红 + 暖白纸面 / 墨色文字。
    可选：书卷排版 —— 两端对齐、首行缩进、标题居中、标题分隔线，
          在 Style Settings 的「版面」里逐项打开（默认全关）。
@@ -178,6 +178,12 @@ settings:
     description: 手机屏窄，4 列表平分下来每列只有 ~82px（一行三四个字）。默认降到 3：列宽 ~110px，多出来的列改为横向滚动；桌面不受影响。
     type: variable-number
     default: 3
+  -
+    id: octavo-hide-table-scrollbar
+    title: 隐藏表格滚动条
+    description: 默认关闭：宽表格下方保留一条纸色细滚动条，提示右边还有列。打开后滚动条完全隐藏，表格仍可横向滚动，只靠右缘的纸色渐隐提示还有内容
+    type: class-toggle
+    default: false
   -
     id: octavo-palette
     title: 配色 · Palette
@@ -1512,6 +1518,18 @@ body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb
 }
 body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb:hover {
   background-color: var(--octavo-scrollbar-thumb-hover);
+}
+
+/* —— 可选：连表格这条细滚动条也藏掉 ——
+   Style Settings → 表格 → 「隐藏表格滚动条」，默认关。
+   打开后表格照旧可以横向滚动（触控板 / Shift+滚轮 / 拖拽），只是不再画
+   滚动条：右缘那条纸色渐隐还在，滚动到最右自动退场，所以「右边还有列」
+   仍然看得出来。偏好极简、不想看见任何滚动条的人用这个。 */
+body.octavo-hide-table-scrollbar :is(.el-table, .cm-table-widget, .callout-content) {
+  scrollbar-width: none;
+}
+body.octavo-hide-table-scrollbar :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar {
+  height: 0;
 }
 
 /* —— 搜索 / 设置里的输入框：柔化 —— */

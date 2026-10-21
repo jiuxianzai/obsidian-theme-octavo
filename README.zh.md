@@ -66,7 +66,7 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 
 ### 手动安装
 
-1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.1.3.zip`
+1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.1.4.zip`
 2. 解压，把 `Octavo` 文件夹放进你的库：
 
 ```
@@ -129,7 +129,7 @@ body {
 - **排版**：正文字体 / 目录字体 / 代码字体、行高、段距、正文栏宽
 - **配色**：现代模式（默认关 = 纸感）
 - **标题**：H1–H6 字号、标题上方留白
-- **表格**：每行最多列数、手机每行最多列数
+- **表格**：每行最多列数、手机每行最多列数、隐藏表格滚动条（默认关）
 - **版面**：标题居中、标题分隔线、两端对齐、首行缩进（这四项默认全关）、聚焦模式、取消居中栏宽
 - **专注**：隐藏滚动条（默认开）、隐藏底部状态栏
 - **编辑器**：当前行高亮（默认关）、隐藏 Markdown 语法
