@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.6 · 2026-10-21
+
+- 修复：实时预览中光标停在代码块内时，该行被「当前行重置」规则清成 `transparent`，露出纸面色，代码块被横切开一道白缝，看起来像上下两条互不相连的高亮条
+- 代码块内的当前行改用 `--octavo-code-line-active`（浅色 `#ece9e0` / 深色 `#2c2a26`，比块面深一档），且不再受「当前行高亮」开关影响
+- 重置规则加上 `:not(.HyperMD-codeblock)`，只管正文行；底色与配色方案未作任何改动
+
 ## 1.1.5 · 2026-10-21
 
 - 体积：`theme.css` 从 102.6 KB 压到 78.0 KB（−22%），消除社区目录的「Theme CSS file is larger than recommended」警告

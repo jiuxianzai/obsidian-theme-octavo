@@ -1,5 +1,5 @@
 /* OCTAVO · 纸感 / 书卷气的 Obsidian 主题
-   v1.1.5 · 2026-10-21 · 纯 CSS：无插件、无脚本、无构建
+   v1.1.6 · 2026-10-21 · 纯 CSS：无插件、无脚本、无构建
    安装：<vault>/.obsidian/themes/Octavo/  →  Settings → Appearance → Themes */
 
 /* @settings
@@ -1584,10 +1584,10 @@ body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-sele
   opacity: 1;
 }
 
-/* 默认关闭：清掉 Obsidian 自带的当前行底色，避免「关了还亮」。 */
-body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active,
-body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activeLine,
-body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+/* 默认关闭：清掉 Obsidian 自带的当前行底色，避免「关了还亮」。
+   代码块行排除在外 —— 那里不能用 transparent，会露出纸面，见下文。 */
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active:not(.HyperMD-codeblock),
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activeLine:not(.HyperMD-codeblock) {
   background-color: transparent !important;
   box-shadow: none !important;
 }
@@ -1613,9 +1613,11 @@ body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
     calc(5 * var(--octavo-al-step)) 0 0 var(--octavo-active-line-bg);
 }
 
-/* 代码块里的当前行：不要那条横穿整块的全宽色带，
-   改用略深一档的代码底色 —— 高亮仍落在代码块内部。 */
-body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active {
+/* 代码块里的当前行：不要横穿整块的全宽色带，改用略深一档的代码底色。
+   必须无条件生效：清成 transparent 会露出纸面，整块被横切开一道白缝，
+   看起来像上下两个互不相连的高亮条。 */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-activeLine {
   background-color: var(--octavo-code-line-active) !important;
   box-shadow: none !important;
 }
