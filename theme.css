@@ -1,7 +1,7 @@
 /* ==========================================================================
    OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   v1.1.0 · 2026-10-20
+   v1.1.1 · 2026-10-21
    默认：宋体正文 + 左对齐 + 舒适栏宽 + 朱批红 + 暖白纸面 / 墨色文字。
    可选：书卷排版 —— 两端对齐、首行缩进、标题居中、标题分隔线，
          在 Style Settings 的「版面」里逐项打开（默认全关）。
@@ -1060,7 +1060,10 @@ body {
   overflow: visible;
   text-overflow: clip;
   vertical-align: top;
-  border-color: var(--octavo-rule);
+  /* 认 --table-border-color，而不是写死 --octavo-rule：标注块会在 .callout 上
+     把这条变量改成自己的语义色（见 §11），写死就会把标注块里的表格边框
+     退回到中性灰。 */
+  border-color: var(--table-border-color);
 }
 .markdown-rendered th,
 .markdown-rendered td {
@@ -1083,6 +1086,60 @@ body {
   margin-block: var(--p-spacing);
 }
 
+/* 阅读视图的表格容器：Obsidian 1.9+ 会给每张阅读视图表格套一层
+   `<div class="el-table" style="overflow-x: auto">`。它才是真正的横向滚动盒，
+   所以两件事都交给它：
+     · 上下留白挪到容器上。表格自己带 margin 时，滚动条落在 margin 外面，
+       跟表格之间空出 16.8px，看起来像一条漂着的横杠（手机上尤其明显）。
+     · overflow-y 显式关掉。横滚盒一旦成为滚动容器，竖轴写不写都会从 auto
+       派生；macOS「始终显示滚动条」下就多一条没用的竖滚动条。 */
+.el-table {
+  margin-block: var(--p-spacing);
+  overflow-y: hidden;
+}
+.el-table > table {
+  margin-block: 0;
+}
+
+/* —— 宽表格的「右缘提示」——
+   「每行最多列数」的代价：6 列表在 4 列上限下，前 4 列正好铺满滚动盒，
+   右边看起来就是一条完整的封口 —— 和第 4 列结尾一模一样，没人知道还有
+   两列藏在后面。macOS 的覆盖式滚动条又只在滑动时出现（主题默认还把它
+   藏了），所以光靠滚动条不够。
+   这里给「超过上限」的阅读视图表格加一条 22px 的纸色渐隐：它固定在滚动
+   盒右缘、不随内容横移，右缘因此永远「没封口」，一眼就知道还能往右。
+   滚动到最右时渐隐自动退场（animation-timeline: scroll），不会把最后一列
+   一直罩着；不支持滚动驱动动画的旧版 Obsidian 会保留静态渐隐 —— 同样能
+   看出还有内容，只是不会自动消失。
+   只加在 .el-table 上：实时预览的滚动盒里还挂着「+」列把手，盖一层渐隐
+   会挡住把手；标注块里的表格已经改成按 100% 换行，不会横向溢出。 */
+@keyframes octavo-table-edge-fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+.el-table:has(tr > :nth-child(5)) {
+  position: relative;
+}
+.el-table:has(tr > :nth-child(5))::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 22px;
+  background: linear-gradient(to right, transparent, var(--background-primary));
+  pointer-events: none;
+}
+/* 只有支持「滚动驱动动画」的引擎才把渐隐绑到横向滚动位置。
+   旧版 Chromium 不认识 animation-timeline；若把 animation 写在基础规则里，
+   它会当成 0s 的普通动画，fill: both 直接把 opacity 停在 0 —— 渐隐反而没了。
+   放在 @supports 里，旧版就保留上面那条静态渐隐。 */
+@supports (animation-timeline: scroll()) {
+  .el-table:has(tr > :nth-child(5))::after {
+    animation: octavo-table-edge-fade linear both;
+    animation-timeline: scroll(nearest inline);
+  }
+}
+
 /* —— 「每行最多列数」是怎么生效的 ——
    列数**不超过** --octavo-table-cols：表格就是容器宽的 100%，各列平分 ——
    一点都不滚（不是「差几像素才滚」，是正好 100%）。
@@ -1100,24 +1157,31 @@ body {
    升序写：候选里最大的那个（= 真实列数）在最后，盖住前面的。
    16 列封顶；再多的话只有前 16 列撑开宽度，各列会被挤窄一点。
 
+   ⚠️ 这组只写给 `.el-table > table`：阅读视图里 Obsidian 才会给表格套滚动盒。
+   标注块里的表格不会被套（实测 .callout-content > table），若也把它撑到
+   150%，多出来的列会被 .callout 的圆角直接裁掉 —— 而且那儿没有一条贴在
+   表格上的滚动条，看起来就是「表格被截断了」。没有滚动盒的场合保持 100%，
+   让各列自己换行：宁可窄一点，也不要看起来缺了一块。旧版 Obsidian
+   （没有 .el-table 的版本）同样落进这一类，也一并受益。
+
    样式检查会提示 :has() 有性能风险。这里只按「表格有没有第 k 列」做静态匹配，
    不监听 DOM 变化；一屏里的表格数量有限，实测没有可感知的开销。删掉这组规则，
    「超过设定列数才横向滚动」就会失效。 */
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--octavo-table-cols)); }
-:where(.markdown-rendered, .markdown-source-view.mod-cm6) table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(2)) { min-width: calc(100% * 2 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(3)) { min-width: calc(100% * 3 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(4)) { min-width: calc(100% * 4 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(5)) { min-width: calc(100% * 5 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(6)) { min-width: calc(100% * 6 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(7)) { min-width: calc(100% * 7 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(8)) { min-width: calc(100% * 8 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(9)) { min-width: calc(100% * 9 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(10)) { min-width: calc(100% * 10 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(11)) { min-width: calc(100% * 11 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(12)) { min-width: calc(100% * 12 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(13)) { min-width: calc(100% * 13 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(14)) { min-width: calc(100% * 14 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(15)) { min-width: calc(100% * 15 / var(--octavo-table-cols)); }
+.el-table > table:has(tr > :nth-child(16)) { min-width: calc(100% * 16 / var(--octavo-table-cols)); }
 
 /* —— 实时预览：同一份「撑开」要写在 .table-wrapper 上，不能只写在表格上 ——
    表格的两个「+」把手是 wrapper 的绝对定位子元素（app.css：
@@ -1131,7 +1195,7 @@ body {
    而且跟着内容一起横向滚走（它落在组件 16/24px 的把手槽里）。
    表格宽度、可滚量、「≤ 设定列数一点都不滚」三条验收全部不变。
    ⚠️ 表格那层必须同时把 min-width 归零：两代都撑会变成 (k ÷ 设定值)²。
-   阅读视图里没有这两个把手（也没有这个组件），那儿照旧撑表格 —— 上面 15 条一条不动。 */
+   阅读视图没有这两个把手（也没有这个组件），由上面 `.el-table` 那组负责。 */
 .markdown-source-view.mod-cm6 .cm-table-widget table {
   min-width: 0;
 }
@@ -1407,6 +1471,34 @@ body.octavo-hide-status-bar .status-bar {
 body.octavo-hide-scrollbars ::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+/* —— 表格的横向滚动条：始终给一条细的 ——
+   上面那条会把所有滚动条压成 0。对正文没问题，但对宽表格是致命的：
+   阅读视图的 `.el-table`、实时预览的 `.cm-table-widget` 都是横向滚动盒，
+   滚动条一没，表格就只剩一个「被裁掉的右缘」—— 4 列上限下，6 列表看起来
+   和 4 列表一模一样，没人知道右边还有两列。
+   这里只给「表格滚动盒」破例保留一条 9px 的细滚动条：没有溢出时它不会
+   出现，有溢出时才出现；颜色用 ink-faint，和纸面差一档，不抢正文。
+   标注块里的 .callout-content 也带 overflow-x: auto，一并给上，宽表格在
+   标注块里同样能看出「还能往右滑」。 */
+body :is(.el-table, .cm-table-widget, .callout-content) {
+  overscroll-behavior-x: contain;
+}
+body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar {
+  height: 9px;
+}
+body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-track {
+  background: transparent;
+}
+body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb {
+  background-color: var(--octavo-ink-faint);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 9px;
+}
+body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb:hover {
+  background-color: var(--octavo-ink-muted);
 }
 
 /* —— 搜索 / 设置里的输入框：柔化 —— */
@@ -1918,8 +2010,19 @@ body.theme-dark {
   --callout-content-padding: 0.4em 1.05em 0;
   /* 标注块里的表格边框：Obsidian 会在 .callout 上把它改成 callout 色的 25%
      混合，那个色来自 --callout-color（不是我们的 --octavo-co），会漏出青色 /
-     橙色。这里用同一支语义色重新调一遍。 */
+     橙色。这里用同一支语义色重新调一遍。
+     ⚠️ 光设变量还不够：§5 的单元格规则必须写 border-color: var(--table-border-color)，
+     不能再写死 --octavo-rule，否则变量会被那条直接声明盖掉。 */
   --table-border-color: rgba(var(--octavo-co), 0.3);
+  /* Obsidian 给表头单独留了一条 --table-header-border-color（默认引用
+     --table-border-color），它在 body 上就已经解析成中性灰了；只改
+     --table-border-color 的话，表体是语义色、表头还是灰的。这里一并给。 */
+  --table-header-border-color: rgba(var(--octavo-co), 0.3);
+  /* 表头底色也要跟着语义色走。默认的 paper-2 是暖灰，铺在蓝 / 绿 / 琥珀色的
+     标注块里像贴了一块补丁；这里叠一层更浅的同色，表头仍比正文深一档，
+     但不再跑出色相。 */
+  --table-header-background: rgba(var(--octavo-co), 0.06);
+  --table-header-background-hover: rgba(var(--octavo-co), 0.1);
 
   background-color: rgba(var(--octavo-co), var(--octavo-co-alpha));
   border-left: 3px solid rgb(var(--octavo-co));
@@ -2015,6 +2118,34 @@ body.theme-dark {
   }
   body.is-mobile {
     --octavo-table-cols: var(--octavo-table-cols-mobile, 3);
+  }
+  /* 手机上的单元格：左右内边距从 0.75em（12px）收到 0.6em（9.6px）。
+     3 列 345px 的表格里，每列因此多出约 5px 放字，最后几个字不至于
+     单独掉到下一行。只收内边距，不动字号 —— 表格与正文同字号更好读。 */
+  body.is-mobile .markdown-rendered th,
+  body.is-mobile .markdown-rendered td,
+  body.is-mobile .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper {
+    padding: 0.42em 0.6em;
+  }
+  /* 手机上上限是 3 列，所以「第 4 列」才是溢出。桌面那组从第 5 列起，
+     这里补一条 4 列起；6 列时两条都命中，属性相同，不会叠加。 */
+  body.is-mobile .el-table:has(tr > :nth-child(4)) {
+    position: relative;
+  }
+  body.is-mobile .el-table:has(tr > :nth-child(4))::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 18px;
+    background: linear-gradient(to right, transparent, var(--background-primary));
+    pointer-events: none;
+  }
+  @supports (animation-timeline: scroll()) {
+    body.is-mobile .el-table:has(tr > :nth-child(4))::after {
+      animation: octavo-table-edge-fade linear both;
+      animation-timeline: scroll(nearest inline);
+    }
   }
 }
 
