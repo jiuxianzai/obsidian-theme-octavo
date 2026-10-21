@@ -1,7 +1,7 @@
 /* ==========================================================================
    OCTAVO  ·  一款纸感 / 书卷气的 Obsidian 主题
    --------------------------------------------------------------------------
-   v1.1.1 · 2026-10-21
+   v1.1.2 · 2026-10-21
    默认：宋体正文 + 左对齐 + 舒适栏宽 + 朱批红 + 暖白纸面 / 墨色文字。
    可选：书卷排版 —— 两端对齐、首行缩进、标题居中、标题分隔线，
          在 Style Settings 的「版面」里逐项打开（默认全关）。
@@ -1473,32 +1473,41 @@ body.octavo-hide-scrollbars ::-webkit-scrollbar {
   height: 0;
 }
 
-/* —— 表格的横向滚动条：始终给一条细的 ——
+/* —— 表格的横向滚动条：细、暖灰、跟着纸面走 ——
    上面那条会把所有滚动条压成 0。对正文没问题，但对宽表格是致命的：
    阅读视图的 `.el-table`、实时预览的 `.cm-table-widget` 都是横向滚动盒，
    滚动条一没，表格就只剩一个「被裁掉的右缘」—— 4 列上限下，6 列表看起来
    和 4 列表一模一样，没人知道右边还有两列。
-   这里只给「表格滚动盒」破例保留一条 9px 的细滚动条：没有溢出时它不会
-   出现，有溢出时才出现；颜色用 ink-faint，和纸面差一档，不抢正文。
-   标注块里的 .callout-content 也带 overflow-x: auto，一并给上，宽表格在
-   标注块里同样能看出「还能往右滑」。 */
+   这里只给「表格滚动盒」破例保留一条细滚动条：没有溢出时它不会出现，
+   有溢出时才出现。标注块里的 .callout-content 也带 overflow-x: auto，
+   一并给上，宽表格在标注块里同样能看出「还能往右滑」。
+
+   颜色不用写死的灰：墨色按 26% 混进纸面，浅色下是暖灰、深色下是暖白，
+   和正文同一支墨。悬停加深一档，仍然不抢正文。
+   两套写法都要给：
+     · Chromium 121+ / 现行 Obsidian 认标准属性 scrollbar-color，
+       macOS 的覆盖式滚动条也会跟着染色；
+     · 旧版 Electron（Obsidian 1.5–1.8）不认标准属性，落到
+       ::-webkit-scrollbar 这条。 */
 body :is(.el-table, .cm-table-widget, .callout-content) {
   overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--octavo-ink) 26%, transparent) transparent;
 }
 body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar {
-  height: 9px;
+  height: 8px;
 }
 body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-track {
   background: transparent;
 }
 body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb {
-  background-color: var(--octavo-ink-faint);
+  background-color: color-mix(in srgb, var(--octavo-ink) 26%, transparent);
   background-clip: padding-box;
   border: 2px solid transparent;
-  border-radius: 9px;
+  border-radius: 8px;
 }
 body :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar-thumb:hover {
-  background-color: var(--octavo-ink-muted);
+  background-color: color-mix(in srgb, var(--octavo-ink) 45%, transparent);
 }
 
 /* —— 搜索 / 设置里的输入框：柔化 —— */

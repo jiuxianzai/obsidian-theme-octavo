@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.1.2 · 2026-10-21
 
+- 表格：横向滚动条改为「墨色 26% 混纸面」的暖灰细条，不再出现系统默认的深灰粗条；同时写标准 `scrollbar-color`（macOS 覆盖式滚动条也染色）与旧版 `::-webkit-scrollbar` 两套，悬停加深一档
 - 文档：`README.md` 改为英文主文档，中文全文移到 `README.zh.md`，两边顶部互相链接；修复社区目录「README does not appear to contain English text」警告
 
 ## 1.1.1 · 2026-10-21
