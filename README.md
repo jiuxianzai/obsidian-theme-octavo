@@ -3,192 +3,165 @@
 **An editorial, paper-like Obsidian theme with CJK-friendly serif typography.**
 No plugins, no snippets, no build step.
 
-## English
+[中文说明](README.zh.md)
 
 **Octavo** is an editorial, paper-like theme for Obsidian, made for comfortable long-form reading and CJK typography. It pairs a serif body face and a warm paper palette with a single vermilion accent, and keeps the interface quiet around your notes.
 
-- **Pure CSS** — no plugins, snippets, or build step required
-- **Two palettes** — Paper (default) and Modern, each with a separately tuned light and dark mode
-- **Optional book layout** — justified text, two-character first-line indent, centered title, and H1–H3 rules. All four are **off by default**; enable them in `Settings → Style Settings → Octavo → Layout`
-- **Careful details** — table column sizing and horizontal scrolling, seven callout types, file explorer icons, mobile spacing, and accessible contrast
-- **Obsidian 1.5.0+** on desktop and mobile
+![Octavo · Paper mode](screenshots/desktop-paper.webp)
 
-### Install
+## Why "Octavo"
 
-1. Open `Settings → Appearance → Themes → Manage`, search for **Octavo**, then install and enable it.
-2. Or download the latest release, unzip it, and put the `Octavo` folder in `<your vault>/.obsidian/themes/Octavo/`.
+Octavo is a traditional Western book format — one eighth of a full sheet. The name is a small manifesto: the theme doesn't try to look like a specific app; it tries to make a note feel like a page you can sit with. The text is pulled into a comfortable measure, paragraphs breathe, headings can center like chapter titles, and the accent color is spent sparingly, like a vermilion annotation.
 
-### Optional
+## Features
 
-Install the community plugin [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) to adjust fonts, line height, content width, layout, and colors from a settings panel. The theme works without it.
-
-## 中文
-
-**一款纸感、书卷气的 Obsidian 主题。**
-宋体正文、舒适栏宽、朱批红；书卷式的两端对齐、首行缩进、居中书名可以按需打开。
-纯 CSS，零插件、零脚本、零构建，安装即用。
-
-![Octavo · 纸感模式](screenshots/desktop-paper.webp)
-
-## 为什么叫 Octavo
-
-Octavo（八开本）是西方传统书籍的常见开本。它不追求「像某个 App」，而是让一页笔记更接近一页可以久坐的书：正文收进舒适栏宽，段落有呼吸，标题可以像章节一样居中，强调色只留一点朱批。
-
-## 特性
-
-| 领域 | 做了什么 |
+| Area | What it does |
 | --- | --- |
-| 书卷排版（可选） | 两端对齐、首行缩进两字、居中书名、H1–H3 标题分隔线；默认关闭，在 Style Settings 的「版面」里逐项打开 |
-| 两套观感 | 纸感（默认，暖白纸面 + 墨色）与现代模式（中性灰 + 蓝色强调色） |
-| 浅色 / 深色 | 两套配色都单独校过对比度，深色不是简单反色 |
-| 标题层级 | H1 1.75em 递减到 H6 1.02em，始终大于正文；独立墨色与字重，上下留白充足 |
-| 标注块 | note / tip / important / warning / caution / example / quote 七类语义色 |
-| 表格 | 占满栏宽、列宽平分、长内容换行；超过设定列数才横向滚动，阅读视图右缘渐隐提示还有列，手机默认 3 列 |
-| 编辑器 | 朱批红下划线（`<u>文字</u>`）、暖黄高亮、可选当前行高亮（默认关）、可隐藏 Markdown 语法 |
-| 界面 | 安静的文件树、克制的侧栏、聚焦模式与隐藏滚动条（默认开） |
-| 手机 | 顶栏不透明、正文与阅读视图对齐、表格列宽与滚动优化、日期输入框修复 |
+| Book layout (optional) | Justified text, two-character first-line indent, centered title, H1–H3 rules; off by default, enable each in Style Settings → Layout |
+| Two looks | Paper (default: warm white paper + ink) and Modern (neutral gray + blue accent) |
+| Light / dark | Both palettes individually contrast-checked; dark is not a simple inversion |
+| Heading scale | H1 1.75em down to H6 1.02em, always above body text; distinct ink and weight, generous spacing |
+| Callouts | Semantic colors for note / tip / important / warning / caution / example / quote |
+| Tables | Full width, evenly split columns, long content wraps; horizontal scroll only past the configured column count, with a right-edge fade in reading view, 3 columns on mobile by default |
+| Editor | Vermilion underline (`<u>text</u>`), warm yellow highlight, optional current-line highlight (off by default), hide Markdown syntax |
+| Interface | Quiet file explorer, restrained sidebar, focus mode, hidden scrollbars (on by default) |
+| Mobile | Opaque top bar, body aligned with reading view, table width and scroll fixes, date input fix |
 
-主题样式本身不依赖任何插件；文末的 Style Settings 配置块只是可选的调参面板。
+The theme itself depends on no plugins; the Style Settings block at the end of `theme.css` is only an optional control panel.
 
-## 截图
+## Screenshots
 
-### 纸感模式（截图里开启了书卷排版）
+### Paper mode (book layout enabled in the screenshot)
 
-| 浅色 | 深色 |
+| Light | Dark |
 | --- | --- |
-| ![纸感浅色](screenshots/desktop-paper.webp) | ![纸感深色](screenshots/desktop-paper-dark.webp) |
+| ![Paper light](screenshots/desktop-paper.webp) | ![Paper dark](screenshots/desktop-paper-dark.webp) |
 
-### 现代模式（可选）
+### Modern mode (optional)
 
-![现代模式](screenshots/desktop-modern.webp)
+![Modern mode](screenshots/desktop-modern.webp)
 
-### 标注块 / 表格 / 编辑器
+### Callouts / tables / editor
 
-| 标注块 | 表格 |
+| Callouts | Tables |
 | --- | --- |
-| ![标注块](screenshots/desktop-callouts.webp) | ![表格](screenshots/desktop-table.webp) |
+| ![Callouts](screenshots/desktop-callouts.webp) | ![Tables](screenshots/desktop-table.webp) |
 
-![编辑器](screenshots/desktop-editor.webp)
+![Editor](screenshots/desktop-editor.webp)
 
-### 手机端
+### Mobile
 
 <p align="left">
-  <img src="screenshots/mobile-paper.webp" width="260" alt="手机纸感模式">
-  <img src="screenshots/mobile-modern.webp" width="260" alt="手机现代模式">
-  <img src="screenshots/mobile-table.webp" width="260" alt="手机表格">
+  <img src="screenshots/mobile-paper.webp" width="260" alt="Mobile paper mode">
+  <img src="screenshots/mobile-modern.webp" width="260" alt="Mobile modern mode">
+  <img src="screenshots/mobile-table.webp" width="260" alt="Mobile tables">
 </p>
 
-## 安装
+## Install
 
-### 从社区主题市场
+### From the community theme browser
 
-主题已按社区目录要求准备好。上架后：
+`Settings → Appearance → Themes → Manage`, search for **Octavo**, then install and enable it.
 
-`设置 → 外观 → 主题 → 管理`，搜索 **Octavo**，安装并启用。
+### Manual install
 
-### 手动安装
-
-1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.1.1.zip`
-2. 解压，把 `Octavo` 文件夹放进你的库：
+1. Download the latest `octavo-v1.1.1.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
+2. Unzip it and put the `Octavo` folder into your vault:
 
 ```
-<你的库>/.obsidian/themes/Octavo/
+<your vault>/.obsidian/themes/Octavo/
 ├── manifest.json
 └── theme.css
 ```
 
-3. 打开 `设置 → 外观 → 主题`，选择 **Octavo**
+3. Open `Settings → Appearance → Themes` and select **Octavo**.
 
-> `manifest.json` 与 `theme.css` 必须在**同一层**，不要多套一层文件夹。
+> `manifest.json` and `theme.css` must sit at the **same level** — don't nest another folder.
 
-### 更新
+### Update
 
-在 `设置 → 外观 → 主题 → 管理` 里检查更新；手动安装的用户替换 `theme.css` 即可。
+Check for updates in `Settings → Appearance → Themes → Manage`. Manual installs only need to replace `theme.css`.
 
-## 推荐设置
+## Recommended settings
 
-- `设置 → 外观 → Base color`：**Light** 或 **Dark** 都可以，两套配色分别设计过
-- `设置 → 外观 → Font size`：**16**（字号层级按 16px 正文设计）
-- 如果以前装过其他主题的 CSS 片段，建议先关掉，避免样式打架
-- 不需要安装任何社区插件，也不需要导入任何片段或脚本
+- `Settings → Appearance → Base color`: **Light** or **Dark** — both palettes are designed
+- `Settings → Appearance → Font size`: **16** (the type scale is designed around 16px body text)
+- If you previously installed CSS snippets from other themes, disable them to avoid conflicts
+- No community plugins, snippets, or scripts are required
 
-## 字体（可选）
+## Fonts (optional)
 
-主题默认使用系统字体，**不装任何字体也能正常显示**。想更接近设计效果，可以自行安装（均为免费字体）：
+The theme uses system fonts by default and **works without installing anything**. For a closer match to the design, you can install these free fonts:
 
-| 用途 | 字体 | 说明 |
+| Use | Font | Notes |
 | --- | --- | --- |
-| 中文正文（纸感） | **思源宋体** / Noto Serif CJK SC | 不装会回退到系统宋体 Songti SC；Windows 回退到系统衬线 |
-| 备选正文 | **霞鹜文楷** LXGW WenKai | 可在自定义变量里切换 |
-| 代码 | **Maple Mono** | 不装会回退到系统等宽字体 |
+| Chinese body (Paper) | **Noto Serif CJK SC** / 思源宋体 | Falls back to Songti SC on macOS, to a system serif on Windows |
+| Alternative body | **LXGW WenKai** / 霞鹜文楷 | Can be switched via a custom variable |
+| Code | **Maple Mono** | Falls back to a system monospace font |
 
-> **手机上（iOS）**：系统没有预装中文衬线，`Songti SC` 在 iOS 的 WebView 里也命中不了，
-> 正文中文会回落到系统无衬线（苹方），只有西文还是衬线。想要「宋体纸感」，
-> 得先在手机上装一款中文衬线（思源宋体 / Noto Serif SC / 宋体 SC）。
+> **On mobile (iOS)**: the system ships no Chinese serif, and `Songti SC` doesn't resolve inside iOS WebViews. Chinese body text falls back to the system sans-serif (PingFang); only Latin text stays serif. For the full paper feel, install a Chinese serif on the device (Noto Serif SC / Songti SC).
 
-## 可选调参（纯 CSS，不需要插件）
+## Tuning (pure CSS, no plugin)
 
-主题的默认正文栏宽为 **48rem**（约 35–50 个汉字），行高 1.75。默认值都在 `theme.css` 顶部的 `body` 变量里。想改，新建一个 CSS 片段，覆盖对应变量即可（`设置 → 外观 → CSS 片段`）：
+The default measure is **48rem** (roughly 35–50 CJK characters) with a 1.75 line height. Defaults live in the `body` variables at the top of `theme.css`. To change them, create a CSS snippet overriding the variables (`Settings → Appearance → CSS snippets`):
 
 ```css
 body {
-  --octavo-content-width: 52rem;  /* 正文栏宽 */
-  --octavo-line-height: 1.8;      /* 正文行高 */
-  --octavo-para-spacing: 1.1em;   /* 段落间距 */
-  --octavo-table-cols: 5;         /* 每行最多几列 */
+  --octavo-content-width: 52rem;  /* body measure */
+  --octavo-line-height: 1.8;      /* body line height */
+  --octavo-para-spacing: 1.1em;   /* paragraph spacing */
+  --octavo-table-cols: 5;         /* max columns per row */
 }
 ```
 
-不改也能完整使用；这些变量只是留给愿意折腾的人。
+Everything works without this; the variables are only for people who like to tinker.
 
 <details>
-<summary>可选：用 Style Settings 调参（不安装不影响任何默认样式）</summary>
+<summary>Optional: tune with Style Settings (not installing changes nothing)</summary>
 
-`theme.css` 顶部有一段 `/* @settings */` 配置。安装社区插件
-[Style Settings](https://github.com/mgmeyers/obsidian-style-settings) 后，会出现
-`设置 → Style Settings → Octavo` 面板，可以图形化调整：
+`theme.css` starts with a `/* @settings */` block. With the community plugin [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) installed, a `Settings → Style Settings → Octavo` panel appears with:
 
-- **排版**：正文字体 / 目录字体 / 代码字体、行高、段距、正文栏宽
-- **配色**：现代模式（默认关 = 纸感）
-- **标题**：H1–H6 字号、标题上方留白
-- **表格**：每行最多列数、手机每行最多列数
-- **版面**：标题居中、标题分隔线、两端对齐、首行缩进（这四项默认全关）、聚焦模式、取消居中栏宽
-- **专注**：隐藏滚动条（默认开）、隐藏底部状态栏
-- **编辑器**：当前行高亮（默认关）、隐藏 Markdown 语法
-- **批注**：红色下划线（朱笔）
-- **文件树**：紧凑行高、显示缩进引导线
+- **Typography**: body / outline / code fonts, line height, paragraph spacing, body measure
+- **Colors**: Modern mode (off = Paper)
+- **Headings**: H1–H6 sizes, space above headings
+- **Tables**: max columns per row, max columns on mobile
+- **Layout**: centered title, title rules, justified text, first-line indent (all four off by default), focus mode, un-center the measure
+- **Focus**: hide scrollbars (on by default), hide the status bar
+- **Editor**: current-line highlight (off by default), hide Markdown syntax
+- **Annotations**: vermilion underline
+- **File explorer**: compact row height, indent guides
 
-Style Settings 只是「遥控器」：不装它，主题的默认排版与配色不受影响。
+Style Settings is only a remote control: without it, the theme's default layout and colors are unchanged.
 
 </details>
 
-## 日常使用
+## Day-to-day usage
 
-- **红色下划线**：在笔记里写 `<u>要强调的话</u>`。Obsidian 核心没有「下划线」命令，主题也不绑定快捷键
-- **高亮**：`==文字==`，暖黄荧光笔
-- **标注块**：`> [!note]`、`> [!tip]` 等七类，主题已内置样式，不需要插件
-- **宽表格**：实时预览与阅读视图里，超过「每行最多列数」后横向滚动；阅读视图右缘有一条纸色渐隐，滚动到最右自动退场，提醒你右边还有列。标注块里的表格没有独立滚动盒，会按容器宽度换行，表头与边框跟随标注语义色。手机上默认 3 列
-- **书卷排版**：默认关闭（左对齐、不缩进、标题不居中、无分隔线）。想要书页感，在 `设置 → Style Settings → Octavo → 版面` 里打开「标题居中」「标题分隔线」「正文两端对齐」「段落首行缩进两字」四项即可
-- **现代模式**：安装可选的 Style Settings 后在面板里打开；不装则始终是纸感配色
+- **Vermilion underline**: write `<u>text to emphasize</u>`. Obsidian core has no underline command, and the theme binds no hotkey.
+- **Highlight**: `==text==`, a warm yellow marker.
+- **Callouts**: `> [!note]`, `> [!tip]`, and five more; styled out of the box, no plugin needed.
+- **Wide tables**: in live preview and reading view, tables scroll horizontally past the configured column count. In reading view the right edge fades to paper, and the fade retires when you reach the last column. Tables inside callouts have no separate scroll box; they wrap to the container width, and headers and borders follow the callout's semantic color. Three columns on mobile by default.
+- **Book layout**: off by default (left-aligned, no indent, title not centered, no rules). For the book-page feel, enable "Centered title", "Title rules", "Justify text", and "First-line indent" in `Settings → Style Settings → Octavo → Layout`.
+- **Modern mode**: enable it in the Style Settings panel; without the plugin the theme stays Paper.
 
-## 兼容性
+## Compatibility
 
-- Obsidian **1.5.0+**，桌面端与移动端
-- 浅色 / 深色模式
-- 不加载网络字体、不使用 `@import`、不包含 JavaScript
-- 不修改 Obsidian 的任何设置文件
+- Obsidian **1.5.0+**, desktop and mobile
+- Light / dark modes
+- No web fonts, no `@import`, no JavaScript
+- Does not modify any of Obsidian's settings files
 
-## 参考与致谢
+## Credits
 
-- **Folio**（[elijahchan2019 / elijah7x](https://github.com/elijahchan2019/obsidian-folio-theme)，MIT）：主题早期曾用名 `Folio` / `Folio Paper`，公开版定名 **Octavo**，以免与社区主题 Folio 混淆。本项目是独立实现，未复用其 CSS 代码，也不代表其官方版本。
-- **Minimal**（[kepano](https://github.com/kepano/obsidian-minimal)，MIT）：「隐藏 Markdown 语法」的交互思路参考。相关 CSS 为本项目自行编写。
-- **GitHub Alerts**：七类标注块的语义分级参考；配色与样式按纸感语言重做。
-- **ChatGPT 网页端**（OpenAI）：现代模式的配色与排版观感参考，无隶属或背书关系。
-- **中文书籍排版传统**：两端对齐、首行缩进、居中书名、朱批。
-- **VS Code / Bear**：文件树结构与字体选择的观感参考。
+- **Folio** ([elijahchan2019 / elijah7x](https://github.com/elijahchan2019/obsidian-folio-theme), MIT): the theme was called `Folio` / `Folio Paper` early on and was renamed **Octavo** for the public release to avoid confusion with the community theme Folio. This project is an independent implementation; it reuses none of Folio's CSS and is not an official version of it.
+- **Minimal** ([kepano](https://github.com/kepano/obsidian-minimal), MIT): inspiration for the "hide Markdown syntax" interaction. The CSS here was written for this project.
+- **GitHub Alerts**: reference for the semantic levels of the seven callout types; colors and styling reworked for the paper language.
+- **ChatGPT web** (OpenAI): visual reference for Modern mode colors and typography; no affiliation or endorsement.
+- **Chinese book typography**: justification, first-line indent, centered titles, vermilion annotation.
+- **VS Code / Bear**: reference for file-explorer structure and font choices.
 
-字体（均未打包进主题，仅作为字体栈候选）：Iowan Old Style（macOS 系统字体）、思源宋体 / Noto Serif CJK SC（SIL OFL 1.1）、霞鹜文楷 LXGW WenKai（SIL OFL 1.1）、Maple Mono（SIL OFL 1.1）。
+Fonts (none bundled; they are only candidates for the font stack): Iowan Old Style (macOS system font), Noto Serif CJK SC (SIL OFL 1.1), LXGW WenKai (SIL OFL 1.1), Maple Mono (SIL OFL 1.1).
 
-## 授权
+## License
 
 [MIT](LICENSE) © 2026 jiuxianzai

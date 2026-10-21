@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 文档：`README.md` 改为英文主文档，中文全文移到 `README.zh.md`，两边顶部互相链接；修复社区目录「README does not appear to contain English text」警告
+
 ## 1.1.1 · 2026-10-21
 
 - 表格：宽表格右缘增加纸色渐隐，滚动到最右自动退场；同时给表格滚动盒保留一条细横向滚动条。macOS 覆盖式滚动条下也能一眼看出「右边还有列」
