@@ -24,7 +24,7 @@ Octavo is a traditional Western book format — one eighth of a full sheet. The 
 | Callouts | Semantic colors for note / tip / important / warning / caution / example / quote |
 | Tables | Full width, evenly split columns, long content wraps; horizontal scroll only past the configured column count, with a right-edge fade in reading view, 3 columns on mobile by default |
 | Editor | Vermilion underline (`<u>text</u>`), warm yellow highlight, optional current-line highlight (off by default), hide Markdown syntax |
-| Interface | Quiet file explorer, restrained sidebar, focus mode, hidden scrollbars (on by default) |
+| Interface | Quiet file explorer, restrained sidebar, focus mode, and three scrollbar modes (fully hidden by default) |
 | Mobile | Opaque top bar, body aligned with reading view, table width and scroll fixes, date input fix |
 
 The theme itself depends on no plugins; the Style Settings block at the end of `theme.css` is only an optional control panel.
@@ -65,7 +65,7 @@ The theme itself depends on no plugins; the Style Settings block at the end of `
 
 ### Manual install
 
-1. Download the latest `octavo-v1.1.6.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
+1. Download the latest `octavo-v1.2.0.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
 2. Unzip it and put the `Octavo` folder into your vault:
 
 ```
@@ -126,7 +126,7 @@ Everything works without this; the variables are only for people who like to tin
 - **Headings**: H1–H6 sizes, space above headings
 - **Tables**: max columns per row, max columns on mobile, hide the table scrollbar (off by default)
 - **Layout**: centered title, title rules, justified text, first-line indent (all four off by default), focus mode, un-center the measure
-- **Focus**: hide scrollbars (on by default), hide the status bar
+- **Focus**: scrollbars (fully hidden / hairline / follow system; fully hidden by default), hide the status bar
 - **Editor**: current-line highlight (off by default), hide Markdown syntax
 - **Annotations**: vermilion underline
 - **File explorer**: compact row height, indent guides
@@ -141,12 +141,14 @@ Style Settings is only a remote control: without it, the theme's default layout 
 - **Highlight**: `==text==`, a warm yellow marker.
 - **Callouts**: `> [!note]`, `> [!tip]`, and five more; styled out of the box, no plugin needed.
 - **Wide tables**: in live preview and reading view, tables scroll horizontally past the configured column count. In reading view the right edge fades to paper, and the fade retires when you reach the last column. Tables inside callouts have no separate scroll box; they wrap to the container width, and headers and borders follow the callout's semantic color. Three columns on mobile by default.
+- **Scrollbars**: `Settings → Style Settings → Octavo → Focus → Scrollbars` has three modes. The default, **Fully hidden**, draws no scrollbars in the file explorer, editor, search, calendar, dashboard, and other panes; the wheel, trackpad, and keyboard still scroll. **Hairline** keeps a 16%-ink line that darkens on hover. **Follow system** restores native scrollbars. Without Style Settings, the default is still fully hidden.
 - **Book layout**: off by default (left-aligned, no indent, title not centered, no rules). For the book-page feel, enable "Centered title", "Title rules", "Justify text", and "First-line indent" in `Settings → Style Settings → Octavo → Layout`.
 - **Modern mode**: enable it in the Style Settings panel; without the plugin the theme stays Paper.
 
 ## Compatibility
 
 - Obsidian **1.5.0+**, desktop and mobile
+- The "Fully hidden" and "Hairline" scrollbar modes rely on `scrollbar-width` / `scrollbar-color` (Chromium 121+, i.e. Obsidian 1.6+); older clients fall back to WebKit or system scrollbars
 - Light / dark modes
 - No web fonts, no `@import`, no JavaScript
 - Does not modify any of Obsidian's settings files

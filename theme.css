@@ -1,5 +1,5 @@
 /* OCTAVO · 纸感 / 书卷气的 Obsidian 主题
-   v1.1.6 · 2026-10-21 · 纯 CSS：无插件、无脚本、无构建
+   v1.2.0 · 2026-11-10 · 纯 CSS：无插件、无脚本、无构建
    安装：<vault>/.obsidian/themes/Octavo/  →  Settings → Appearance → Themes */
 
 /* @settings
@@ -168,7 +168,7 @@ settings:
   -
     id: octavo-hide-table-scrollbar
     title: 隐藏表格滚动条
-    description: 默认关闭：宽表格下方保留一条纸色细滚动条，提示右边还有列。打开后滚动条完全隐藏，表格仍可横向滚动，只靠右缘的纸色渐隐提示还有内容
+    description: 默认关闭：宽表格下方保留一条纸色细滚动条，提示右边还有列。打开后表格滚动条完全隐藏，仍可横向滚动，只靠右缘的纸色渐隐提示还有内容。全局选「完全隐藏」时所有滚动条本来就不画，此项只在「极简细线 / 跟随系统」下有意义
     type: class-toggle
     default: false
   -
@@ -250,10 +250,18 @@ settings:
     type: heading
     level: 1
   -
-    id: octavo-hide-scrollbars
-    title: 隐藏滚动条
-    type: class-toggle
-    default: true
+    id: octavo-scrollbars
+    title: 滚动条
+    description: 完全隐藏：所有面板都不再绘制滚动条，滚轮 / 触控板 / 键盘仍可滚动；极简细线：保留一条很淡的细线，鼠标移入加深；跟随系统：恢复 Obsidian 原生滚动条（表格仍沿用主题的表格样式）
+    type: class-select
+    default: octavo-scrollbars-hidden
+    options:
+      - label: 完全隐藏（默认）
+        value: octavo-scrollbars-hidden
+      - label: 极简细线
+        value: octavo-scrollbars-subtle
+      - label: 跟随系统
+        value: octavo-scrollbars-system
   -
     id: octavo-hide-status-bar
     title: 隐藏底部状态栏
@@ -1293,14 +1301,8 @@ body.octavo-hide-status-bar .status-bar {
   display: none;
 }
 
-/* —— 隐藏滚动条（默认开启，可在 Style Settings 里关闭）—— */
-body.octavo-hide-scrollbars ::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
 /* —— 表格横向滚动条：细、暖灰、跟着纸面走 ——
-   全局滚动条被压成 0，但宽表格需要一条提示；只给 .el-table / .cm-table-widget /
+   全局滚动条默认不画，但宽表格需要一条提示；只给 .el-table / .cm-table-widget /
    .callout-content 破例。轨道取 paper-2，滑块 = paper-2 兑 18% 墨
    （浅 #CFCCC6 / 深 #44423F），悬停 34%。
    标准 scrollbar-color 给现行 Chromium，::-webkit-scrollbar 兜旧版 Electron。 */
@@ -1339,6 +1341,61 @@ body.octavo-hide-table-scrollbar :is(.el-table, .cm-table-widget, .callout-conte
 body.octavo-hide-table-scrollbar :is(.el-table, .cm-table-widget, .callout-content)::-webkit-scrollbar {
   height: 0;
 }
+
+/* —— 滚动条三档（Style Settings → 专注 → 滚动条）——
+   为什么不用 ::-webkit-scrollbar 收全局：macOS 的覆盖式滚动条不认
+   width: 0 / display: none，必须用标准 scrollbar-width。
+   反过来，::-webkit-scrollbar 的正宽度会把覆盖式强制成常驻经典条，
+   所以「极简细线」只用标准属性；WebKit 规则仅给旧 Electron 兜底
+   （新 Chromium 在 scrollbar-width != auto 时会自动忽略它们）。
+
+   默认（没装 Style Settings、body 上没有任何类）：完全隐藏。
+   选「极简细线」/「跟随系统」时 body 多一个类，下面的 :not 不再匹配；
+   「完全隐藏」对应的 octavo-scrollbars-hidden 不需要额外规则。 */
+body:not(.octavo-scrollbars-subtle):not(.octavo-scrollbars-system),
+body:not(.octavo-scrollbars-subtle):not(.octavo-scrollbars-system) * {
+  scrollbar-width: none;
+  /* 双保险：万一某个引擎不认 width: none，也别画出滑块 */
+  scrollbar-color: transparent transparent;
+}
+body:not(.octavo-scrollbars-subtle):not(.octavo-scrollbars-system) *::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* 极简细线：透明轨道 + 16% 墨色滑块（浅色 #DDDAD4 / 深色 #35322B 左右）。
+   鼠标移入容器时加深到 32%，给一点可发现性。 */
+body.octavo-scrollbars-subtle,
+body.octavo-scrollbars-subtle * {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--octavo-ink) 16%, transparent) transparent;
+}
+body.octavo-scrollbars-subtle:hover,
+body.octavo-scrollbars-subtle *:hover {
+  scrollbar-color: color-mix(in srgb, var(--octavo-ink) 32%, transparent) transparent;
+}
+/* 旧 Electron（Chromium < 121）兜底：8px 细条，轨道透明。
+   不计入新版：上面的 scrollbar-width / scrollbar-color 会让这些规则失效。 */
+body.octavo-scrollbars-subtle *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+body.octavo-scrollbars-subtle *::-webkit-scrollbar-track {
+  background: transparent;
+}
+body.octavo-scrollbars-subtle *::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--octavo-ink) 16%, transparent);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+body.octavo-scrollbars-subtle *::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--octavo-ink) 32%, transparent);
+}
+
+/* 跟随系统：不加规则，交给 Obsidian / 操作系统。
+   表格仍沿用上面那条主题细滚动条（「隐藏表格滚动条」可单独关掉）。 */
 
 /* —— 搜索 / 设置里的输入框：柔化 —— */
 input[type="text"],
