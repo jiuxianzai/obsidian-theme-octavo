@@ -66,7 +66,7 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 
 ### 手动安装
 
-1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.2.0.zip`
+1. 从 [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases) 下载最新的 `octavo-v1.2.1.zip`
 2. 解压，把 `Octavo` 文件夹放进你的库：
 
 ```
@@ -103,6 +103,10 @@ Octavo（八开本）是西方传统书籍的常见开本。它不追求「像�
 > **手机上（iOS）**：系统没有预装中文衬线，`Songti SC` 在 iOS 的 WebView 里也命中不了，
 > 正文中文会回落到系统无衬线（苹方），只有西文还是衬线。想要「宋体纸感」，
 > 得先在手机上装一款中文衬线（思源宋体 / Noto Serif SC / 宋体 SC）。
+
+> **Windows**：不需要额外装字体。正文的 CJK 回退到 **SimSun（宋体）**，西文回退到 Georgia；
+> 界面回退到 **Segoe UI + 微软雅黑**；代码回退到 **Cascadia Mono / Consolas**。
+> macOS 上的字体顺序不变，仍优先 Iowan Old Style / Songti SC。
 
 ## 可选调参（纯 CSS，不需要插件）
 

@@ -1,5 +1,5 @@
 /* OCTAVO · 纸感 / 书卷气的 Obsidian 主题
-   v1.2.0 · 2026-11-10 · 纯 CSS：无插件、无脚本、无构建
+   v1.2.1 · 2026-11-10 · 纯 CSS：无插件、无脚本、无构建
    安装：<vault>/.obsidian/themes/Octavo/  →  Settings → Appearance → Themes */
 
 /* @settings
@@ -17,64 +17,64 @@ settings:
     title: 正文字体
     description: 正文与标题的字体
     type: variable-select
-    default: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif'
+    default: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, "SimSun", serif'
     options:
       -
         label: 思源宋体 · 书卷（推荐）
-        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif'
+        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, "SimSun", serif'
       -
         label: 霞鹜文楷 · 纸感
-        value: '"LXGW WenKai", "Noto Serif CJK SC", "Songti SC", serif'
+        value: '"LXGW WenKai", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, "SimSun", serif'
       -
         label: 方正雅宋
-        value: '"Iowan Old Style", "FZYaSongS-R-GB", "Songti SC", serif'
+        value: '"Iowan Old Style", "FZYaSongS-R-GB", "Songti SC", "STSong", Georgia, "SimSun", serif'
       -
-        label: 系统宋体 Songti SC
-        value: '"Songti SC", "Iowan Old Style", Georgia, serif'
+        label: 系统宋体（Songti SC / SimSun）
+        value: '"Songti SC", "STSong", Georgia, "SimSun", serif'
       -
         label: 系统无衬线
-        value: '-apple-system, "SF Pro Text", "PingFang SC", sans-serif'
+        value: '-apple-system, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif'
   -
     id: octavo-tree-font
     title: 目录 / 文件树字体
     description: 左侧文件树与侧栏面板的字体
     type: variable-select
-    default: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif'
+    default: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif'
     options:
       -
         label: Bear Sans UI（推荐）
-        value: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif'
+        value: '"Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif'
       -
         label: 系统无衬线
-        value: '-apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif'
+        value: '-apple-system, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif'
       -
         label: 思源宋体 · 书卷
-        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", serif'
+        value: '"Iowan Old Style", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, "SimSun", serif'
       -
         label: 霞鹜文楷 · 纸感
-        value: '"LXGW WenKai", "Noto Sans SC", sans-serif'
+        value: '"LXGW WenKai", "Noto Sans SC", "Microsoft YaHei", sans-serif'
       -
         label: Maple Mono · 等宽
-        value: '"Maple Mono", ui-monospace, monospace'
+        value: '"Maple Mono", "Cascadia Mono", Consolas, ui-monospace, monospace'
   -
     id: octavo-mono-font
     title: 代码字体
     description: 代码块与行内代码的字体
     type: variable-select
-    default: '"Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace'
+    default: '"Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", "Cascadia Mono", Consolas, ui-monospace, monospace'
     options:
       -
         label: Maple Mono · 中文友好（推荐）
-        value: '"Maple Mono", "JetBrainsMono NFM", ui-monospace, monospace'
+        value: '"Maple Mono", "JetBrainsMono NFM", "Cascadia Mono", Consolas, ui-monospace, monospace'
       -
         label: IBM Plex Mono
-        value: '"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace'
+        value: '"IBM Plex Mono", "Cascadia Mono", Consolas, ui-monospace, SFMono-Regular, Menlo, monospace'
       -
         label: JetBrains Mono NF
-        value: '"JetBrainsMono NFM", ui-monospace, Menlo, monospace'
+        value: '"JetBrainsMono NFM", "Cascadia Mono", Consolas, ui-monospace, Menlo, monospace'
       -
         label: SF Mono
-        value: '"SF Mono", ui-monospace, Menlo, monospace'
+        value: '"SF Mono", "Cascadia Mono", Consolas, ui-monospace, Menlo, monospace'
   -
     id: octavo-line-height
     title: 正文行高
@@ -323,14 +323,14 @@ settings:
 
 body {
   /* —— 可覆盖的变量（Style Settings 或 CSS 片段）—— */
-  --octavo-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-  --octavo-sans-font: -apple-system, "SF Pro Text", "PingFang SC", "Helvetica Neue",
-    "Noto Sans SC", sans-serif;
-  --octavo-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, sans-serif;
+  --octavo-text-font: "Iowan Old Style", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, "SimSun", serif;
+  --octavo-sans-font: -apple-system, "SF Pro Text", "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", "Helvetica Neue", "Noto Sans SC", sans-serif;
+  --octavo-tree-font: "Bear Sans UI", "Noto Sans SC", "PingFang SC", -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
   /* 纸感模式的目录字体：书里的目录与正文同一副字。
      想回到无衬线，把这里换成 var(--octavo-sans-font) 即可。 */
   --octavo-tree-font-paper: var(--octavo-text-font);
-  --octavo-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", ui-monospace, monospace;
+  --octavo-mono-font: "Maple Mono", "JetBrainsMono NFM", "IBM Plex Mono", "Cascadia Mono", Consolas, ui-monospace, monospace;
 
   --octavo-line-height: 1.75;
   --octavo-para-spacing: 1.05em;
@@ -408,6 +408,10 @@ body {
   --blockquote-color: var(--octavo-ink-soft);
   --blockquote-font-style: italic;
   --blockquote-style: italic;
+  /* 引用块里的当前行：与代码块同理，不能用 transparent（会露出纸面，横切一道浅缝）。
+     用引用底色兑 4% 墨，得到同一支暖调、比底色深一档的当前行底色：
+     浅色约 #EDEAE1，深色约 #2D2B27。 */
+  --octavo-quote-line-active: color-mix(in srgb, var(--octavo-quote-bg) 96%, var(--octavo-ink));
 
   /* —— 界面字号，略微收一点，界面更安静 —— */
   --font-ui-small: 12px;
@@ -1641,10 +1645,26 @@ body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-embed-block:has(.is-sele
   opacity: 1;
 }
 
+/* 引用 / 代码块：底色铺在 .cm-line 上，整行 opacity 会把底色一起调淡，
+   一块引用或代码就被切成深浅不一的条。行本身保持不透明，只调暗行内文字；
+   当前行、悬停行再把文字恢复。 */
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-quote,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  opacity: 1;
+}
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-quote > *,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock > * {
+  transition: opacity 160ms ease;
+}
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-quote:not(.cm-active):not(.cm-activeLine):not(:hover) > *,
+body.octavo-focus-dim .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock:not(.cm-active):not(.cm-activeLine):not(:hover) > * {
+  opacity: 0.32;
+}
+
 /* 默认关闭：清掉 Obsidian 自带的当前行底色，避免「关了还亮」。
-   代码块行排除在外 —— 那里不能用 transparent，会露出纸面，见下文。 */
-body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active:not(.HyperMD-codeblock),
-body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activeLine:not(.HyperMD-codeblock) {
+   代码块 / 引用行排除在外 —— 那里不能用 transparent，会露出纸面，见下文。 */
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-active:not(.HyperMD-codeblock):not(.HyperMD-quote),
+body:not(.octavo-active-line) .markdown-source-view.mod-cm6 .cm-line.cm-activeLine:not(.HyperMD-codeblock):not(.HyperMD-quote) {
   background-color: transparent !important;
   box-shadow: none !important;
 }
@@ -1676,6 +1696,16 @@ body.octavo-active-line .markdown-source-view.mod-cm6 .cm-line.cm-active {
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-active,
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock.cm-activeLine {
   background-color: var(--octavo-code-line-active) !important;
+  box-shadow: none !important;
+}
+
+/* 引用块里的当前行：同一个问题。引用是一串 .HyperMD-quote 逐行铺底，
+   清成 transparent 同样会露出纸面，在整段引用里横切一道比底色更亮的缝。
+   改用引用底色兑 4% 墨的当前行色，光标所在行只比引用底深一档；
+   「当前行高亮」开启时的全宽 box-shadow 也一并压掉，避免横穿引用。 */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-quote.cm-active,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-quote.cm-activeLine {
+  background-color: var(--octavo-quote-line-active) !important;
   box-shadow: none !important;
 }
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 · 2026-11-10
+
+- 修复：引用块当前行被清成 `transparent`，露出纸面，在整段引用里横切一道浅色缝；改用引用底色兑 4% 墨的专用当前行色
+- 修复：专注模式把引用 / 代码块整行 `opacity` 调暗，底纹一起变淡、块面碎裂；改为行保持不透明，只调暗行内文字，当前行 / 悬停行再恢复
+- Windows：正文补 `SimSun`、界面补 `Segoe UI` / `Microsoft YaHei`、代码补 `Cascadia Mono` / `Consolas`；macOS 字体顺序不变
+- README 同步 Windows 字体说明
+
 ## 1.2.0 · 2026-11-10
 
 - 新增 Style Settings → 专注 →「滚动条」三档：完全隐藏（默认）/ 极简细线 / 跟随系统

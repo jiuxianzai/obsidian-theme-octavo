@@ -65,7 +65,7 @@ The theme itself depends on no plugins; the Style Settings block at the end of `
 
 ### Manual install
 
-1. Download the latest `octavo-v1.2.0.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
+1. Download the latest `octavo-v1.2.1.zip` from [Releases](https://github.com/jiuxianzai/obsidian-theme-octavo/releases).
 2. Unzip it and put the `Octavo` folder into your vault:
 
 ```
@@ -100,6 +100,8 @@ The theme uses system fonts by default and **works without installing anything**
 | Code | **Maple Mono** | Falls back to a system monospace font |
 
 > **On mobile (iOS)**: the system ships no Chinese serif, and `Songti SC` doesn't resolve inside iOS WebViews. Chinese body text falls back to the system sans-serif (PingFang); only Latin text stays serif. For the full paper feel, install a Chinese serif on the device (Noto Serif SC / Songti SC).
+
+> **On Windows**: no extra fonts are required. CJK body text falls back to **SimSun**, Latin to Georgia; the interface falls back to **Segoe UI + Microsoft YaHei**; code falls back to **Cascadia Mono / Consolas**. The macOS font order is unchanged (Iowan Old Style / Songti SC first).
 
 ## Tuning (pure CSS, no plugin)
 
